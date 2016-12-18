@@ -1,0 +1,37 @@
+@import "../../theme/variables.scss";
+
+.tours {
+  margin: 0 0 20px;
+}
+
+.controls {
+  margin: 0 0 20px;
+}
+
+.table {
+  border: 1px solid #999;
+  color: #999;
+  vertical-align: middle;
+}
+
+.tableCategory {
+  color: #666;
+  font-size: 24px;
+  padding: 0 20px;
+  width: 30%;
+}
+
+.tableCell {
+  cursor: pointer;
+  font-size: 48px;
+  text-align: center;
+  &:hover {
+    color: $brand-primary;
+  }
+  &.active {
+    color: $brand-danger;
+  }
+  &.completed {
+    color: #ccc;
+  }
+}

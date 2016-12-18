@@ -3,7 +3,7 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import config from '../src/config';
 import * as actions from './actions/index';
-import {mapUrl} from 'utils/url.js';
+import { mapUrl } from 'utils/url.js';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
 
-  const {action, params} = mapUrl(actions, splittedUrlPath);
+  const { action, params } = mapUrl(actions, splittedUrlPath);
 
   if (action) {
     action(req, params)
@@ -52,10 +52,6 @@ app.use((req, res) => {
 });
 
 
-const bufferSize = 100;
-const messageBuffer = new Array(bufferSize);
-let messageIndex = 0;
-
 if (config.apiPort) {
   const runnable = app.listen(config.apiPort, (err) => {
     if (err) {
@@ -65,26 +61,53 @@ if (config.apiPort) {
     console.info('==> 💻  Send requests to http://%s:%s', config.apiHost, config.apiPort);
   });
 
-  io.on('connection', (socket) => {
-    socket.emit('news', {msg: `'Hello World!' from server`});
+  let game = {};
 
-    socket.on('history', () => {
-      for (let index = 0; index < bufferSize; index++) {
-        const msgNo = (messageIndex + index) % bufferSize;
-        const msg = messageBuffer[msgNo];
-        if (msg) {
-          socket.emit('msg', msg);
-        }
-      }
+  io.on('connection', socket => {
+
+    socket.on('gameInit', data => {
+      console.log('gameInit');
+      game = Object.assign(data);
+      io.emit('gameInit', data);
     });
 
-    socket.on('msg', (data) => {
-      data.id = messageIndex;
-      messageBuffer[messageIndex % bufferSize] = data;
-      messageIndex++;
-      io.emit('msg', data);
+    socket.on('getGameInit', () => {
+      console.log('getGameInit');
+      io.emit('gameInit', game);
     });
+    
+    socket.on('tourSelect', data => {
+      console.log('tourSelect');
+      io.emit('tourSelect', data);
+    });
+
+    socket.on('questionSelect', data => {
+      console.log('questionSelect');
+      io.emit('questionSelect', data);
+    });
+
+    socket.on('play', () => {
+      console.log('play');
+      io.emit('play');
+    });
+
+    socket.on('buzz', data => {
+      console.log('buzz');
+      io.emit('buzz', data);
+    });
+
+    socket.on('completeQuestion', data => {
+      console.log('completeQuestion');
+      io.emit('completeQuestion', data);
+    });
+
+    socket.on('cancelQuestion', data => {
+      console.log('cancelQuestion');
+      io.emit('cancelQuestion', data);
+    });
+
   });
+
   io.listen(runnable);
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');

@@ -1,23 +1,24 @@
 import React from 'react';
-import {IndexRoute, Route} from 'react-router';
+import { IndexRoute, Route } from 'react-router';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import {
-    App,
-    Chat,
-    Home,
-    Widgets,
-    About,
-    Login,
-    LoginSuccess,
-    Survey,
-    NotFound,
-    Pagination,
-  } from 'containers';
+  Admin,
+  App,
+  Chat,
+  Game,
+  Home,
+  Widgets,
+  About,
+  Login,
+  LoginSuccess,
+  Survey,
+  NotFound,
+} from 'containers';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
     function checkAuth() {
-      const { auth: { user }} = store.getState();
+      const { auth: { user } } = store.getState();
       if (!user) {
         // oops, not logged in, so can't be here!
         replace('/');
@@ -47,14 +48,15 @@ export default (store) => {
       </Route>
 
       { /* Routes */ }
+      <Route path="admin" component={Admin}/>
       <Route path="about" component={About}/>
+      <Route path="game" component={Game}/>
       <Route path="login" component={Login}/>
-      <Route path="pagination" component={Pagination}/>
       <Route path="survey" component={Survey}/>
       <Route path="widgets" component={Widgets}/>
 
       { /* Catch all route */ }
-      <Route path="*" component={NotFound} status={404} />
+      <Route path="*" component={NotFound} status={404}/>
     </Route>
   );
 };
