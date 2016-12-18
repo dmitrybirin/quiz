@@ -132,6 +132,7 @@ export default class Game extends Component {
           <ReactPlayer url={questionSong} controls
                        height={50}
                        playing={playing}
+                       fileConfig={{ attributes: { preload: 'auto' } }}
                        onPlay={() => this.setState({ playing: true })}
                        onEnded={() => this.setState({ playing: false })}/>
         </div>}
@@ -167,6 +168,7 @@ export default class Game extends Component {
         <ReactPlayer url="/game/horn.mp3"
                      height={10}
                      playing={buzzPlaying}
+                     fileConfig={{ attributes: { preload: 'auto' } }}
                      onPlay={() => this.setState({ buzzPlaying: true })}
                      onEnded={() => this.setState({ buzzPlaying: false })}/>
       </div>
