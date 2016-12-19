@@ -35,8 +35,15 @@ export default class Html extends Component {
 
         <link rel="shortcut icon" href="/favicon.ico"/>
         <link rel="manifest" href="/manifest.json"/>
+        <link rel="apple-touch-icon" href="touch-icon-iphone.png"/>
+        <link rel="apple-touch-icon" sizes="152x152" href="launcher-icon-152.png"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="launcher-icon-180.png"/>
+        <link rel="apple-touch-icon" sizes="167x167" href="launcher-icon-167.png"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=cyrillic"
               rel="stylesheet"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="#161616">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="Своя Херда"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         {/* styles (will be present only in production with webpack extract text plugin) */}
         {Object.keys(assets.styles).map((style, key) =>
