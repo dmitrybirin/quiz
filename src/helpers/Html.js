@@ -39,6 +39,7 @@ export default class Html extends Component {
         <link rel="apple-touch-icon" sizes="152x152" href="launcher-icon-152.png"/>
         <link rel="apple-touch-icon" sizes="180x180" href="launcher-icon-180.png"/>
         <link rel="apple-touch-icon" sizes="167x167" href="launcher-icon-167.png"/>
+        <link rel="apple-touch-startup-image" href="/launch.png"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=cyrillic"
               rel="stylesheet"/>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
