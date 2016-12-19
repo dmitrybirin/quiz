@@ -41,8 +41,8 @@ export default class Html extends Component {
         <link rel="apple-touch-icon" sizes="167x167" href="launcher-icon-167.png"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=cyrillic"
               rel="stylesheet"/>
-        <meta name="apple-mobile-web-app-status-bar-style" content="#161616">
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="#161616"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
         <meta name="apple-mobile-web-app-title" content="Своя Херда"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         {/* styles (will be present only in production with webpack extract text plugin) */}
