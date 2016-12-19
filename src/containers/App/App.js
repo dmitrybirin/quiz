@@ -1,14 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IndexLink } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { push } from 'react-router-redux';
+import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import config from '../../config';
 import { asyncConnect } from 'redux-async-connect';
 
@@ -28,76 +22,30 @@ import { asyncConnect } from 'redux-async-connect';
 }])
 @connect(
   state => ({ user: state.auth.user }),
-  { logout, pushState: push })
+  { loadAuth })
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
+    loadAuth: PropTypes.func.isRequired
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      this.props.pushState('/loginSuccess');
-    } else if (this.props.user && !nextProps.user) {
-      // logout
-      this.props.pushState('/');
-    }
+  componentDidMount() {
+    this.props.loadAuth();
   }
 
-  handleLogout = (event) => {
-    event.preventDefault();
-    this.props.logout();
-  };
-
   render() {
-    const { user } = this.props;
     const styles = require('./App.scss');
 
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
-        <Navbar fixedTop>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
-                <div className={styles.brand}/>
-                <span>{config.app.title}</span>
-              </IndexLink>
-            </Navbar.Brand>
-            <Navbar.Toggle/>
-          </Navbar.Header>
-
-          <Navbar.Collapse eventKey={0}>
-            <Nav navbar>
-              {!user &&
-              <LinkContainer to="/login">
-                <NavItem eventKey={6}>Login</NavItem>
-              </LinkContainer>}
-              {user &&
-              <LinkContainer to="/logout">
-                <NavItem eventKey={7} className="logout-link" onClick={this.handleLogout}>
-                  Logout
-                </NavItem>
-              </LinkContainer>}
-            </Nav>
-            {user &&
-            <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
-            <Nav navbar pullRight>
-              <NavItem eventKey={1} target="_blank" title="View on Github"
-                       href="https://github.com/erikras/react-redux-universal-hot-example">
-                <i className="fa fa-github"/>
-              </NavItem>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-
+        <header className={styles.header}>
+          <img src={require('theme/images/logo.svg')} alt="Своя Херда"/>
+        </header>
         <div className={styles.appContent}>
           {this.props.children}
         </div>
