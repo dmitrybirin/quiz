@@ -17,16 +17,13 @@ export default class Admin extends Component {
 
   constructor() {
     super();
-    const game = store.get('game');
-    const defaultState = {
+    this.defaultState = {
       currentTour: 'tour-1',
       currentQuestion: null,
       completedQuestions: []
     };
-    this.state = Object.assign({}, defaultState, game || {});
-    if (game) {
-      socket.emit('gameInit', game);
-    }
+    this.state = Object.assign({}, this.defaultState);
+    this.init();
   }
 
   componentDidMount() {
@@ -45,12 +42,29 @@ export default class Admin extends Component {
     }
   }
 
+  init() {
+    const game = store.get('game');
+    this.state = Object.assign({}, this.defaultState, game || {});
+    if (game) {
+      socket.emit('gameInit', game);
+    }
+  }
+
   handleTourChange = (tour) => {
     this.setState({
       currentTour: tour
     });
     socket.emit('tourSelect', {
       tour
+    });
+  }
+
+  handleNewGameStart = () => {
+    this.setState({
+      completedQuestions: [],
+      currentQuestion: null
+    }, () => {
+      this.init();
     });
   }
 
@@ -98,9 +112,10 @@ export default class Admin extends Component {
     return (
       <div className="container">
         <Helmet title="Admin"/>
-        <div className={style.tours}>
-          {gameData.game.tours.map((tour, tourIndex) => (
-            <span key={tourIndex}>
+        <div className={style.game}>
+          <div className={style.tours}>
+            {gameData.game.tours.map((tour, tourIndex) => (
+              <span key={tourIndex}>
               <Button bsStyle={tour === currentTour ? 'primary' : 'default'}
                       bsSize="large"
                       onClick={() => {
@@ -108,9 +123,13 @@ export default class Admin extends Component {
                       }}>
               {gameData.tours[tour].name}
               </Button>
-              {' '}
+                {' '}
             </span>
-          ))}
+            ))}
+          </div>
+          <div className={style.newGame}>
+            <Button onClick={this.handleNewGameStart}>Новая игра</Button>
+          </div>
         </div>
         {currentQuestion &&
         <div>

@@ -67,11 +67,23 @@ export default class Game extends Component {
     console.log(data);
     const { question } = data;
     const quest = gameData.questions[question];
-    if (quest) {
+    if (!quest) {
+      return;
+    }
+
+    this.setState({
+      currentQuestion: question
+    });
+
+    if (quest.type === 'song') {
       this.setState({
-        currentQuestion: question,
-        questionImage: quest.type === 'image' && quest.file,
-        questionSong: quest.type === 'song' && quest.file,
+        questionImage: null,
+        questionSong: quest.file
+      });
+    } else if (quest.type === 'image') {
+      this.setState({
+        questionImage: quest.file,
+        questionSong: null
       });
     }
   }
@@ -101,6 +113,7 @@ export default class Game extends Component {
   onCompleteQuestion = (data) => {
     this.setState({
       completedQuestions: data.completedQuestions,
+      playing: false,
       player: null
     });
   }
@@ -120,25 +133,24 @@ export default class Game extends Component {
       player, playing
     } = this.state;
 
-    const quest = gameData.questions[currentQuestion] || {};
-
     return (
       <div className={'container'}>
         <Helmet title="Game"/>
         {currentTour &&
         <h1>{gameData.tours[currentTour].name}</h1>}
-        {quest.type === 'song' &&
+        {questionSong &&
         <div>
-          <ReactPlayer url={questionSong} controls
-                       height={50}
+          <ReactPlayer url={questionSong}
+                       height={0}
                        playing={playing}
                        fileConfig={{ attributes: { preload: 'auto' } }}
                        onPlay={() => this.setState({ playing: true })}
                        onEnded={() => this.setState({ playing: false })}/>
         </div>}
-        <div className={style.game}>
-          <h2>{player}</h2>
-        </div>
+        {player &&
+        <div className={style.player}>
+          <span>{player}</span>
+        </div>}
         {currentTour &&
         <div>
           <table className={style.table}>
@@ -161,8 +173,8 @@ export default class Game extends Component {
             </tbody>
           </table>
         </div>}
-        {quest.type === 'image' && (playing || player) &&
-        <div className={style.image}>
+        {questionImage &&
+        <div className={cx({[style.image]: true, [style.active]: playing})}>
           <img src={questionImage} alt=""/>
         </div>}
         <ReactPlayer url="/game/horn.mp3"

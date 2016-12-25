@@ -1,7 +1,16 @@
 @import "../../theme/variables.scss";
 
-.tours {
+.game {
   margin: 0 0 20px;
+  overflow: hidden;
+}
+
+.tours {
+  float: left;
+}
+
+.newGame {
+  float: right;
 }
 
 .controls {
@@ -11,6 +20,7 @@
 .table {
   border: 1px solid #999;
   vertical-align: middle;
+  width: 100%;
 }
 
 .tableCategory {
