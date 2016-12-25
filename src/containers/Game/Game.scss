@@ -1,5 +1,15 @@
 @import "../../theme/variables.scss";
 
+.modal {
+  background: rgba(0, 0, 0, 0.9);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  width: 100%;
+}
+
 .table {
   border: 1px solid #999;
   vertical-align: middle;
@@ -24,15 +34,10 @@
 }
 
 .player {
-  background: rgba(0, 0, 0, 0.9);
-  height: 100%;
+  @extend .modal;
   font-size: 20vh;
   line-height: 20vh;
-  left: 0;
-  position: fixed;
   text-align: center;
-  top: 0;
-  width: 100%;
   z-index: 20;
   span {
     display: block;
@@ -43,13 +48,10 @@
 }
 
 .image {
-  background: rgba(0, 0, 0, 0.9);
+  @extend .modal;
   height: 1px;
-  left: 0;
   position: fixed;
   text-align: center;
-  top: 0;
-  width: 1px;
   z-index: 10;
   &.active {
     height: 100%;
@@ -61,5 +63,31 @@
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+  }
+}
+
+.cat {
+  @extend .modal;
+  height: 1px;
+  width: 1px;
+  z-index: 10;
+  &.active {
+    height: 100%;
+    width: 100%;
+  }
+  img {
+    height: 100%;
+  }
+}
+
+.auction {
+  @extend .modal;
+  z-index: 10;
+  &.active {
+    height: 100%;
+    width: 100%;
+  }
+  img {
+    height: 100%;
   }
 }

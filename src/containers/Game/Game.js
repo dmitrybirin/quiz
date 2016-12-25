@@ -21,6 +21,8 @@ export default class Game extends Component {
     currentQuestion: null,
     questionImage: null,
     questionSong: null,
+    questionCat: false,
+    questionAuction: false,
     playing: false,
     player: null
   };
@@ -75,6 +77,20 @@ export default class Game extends Component {
       currentQuestion: question
     });
 
+    if (quest.cat) {
+      this.setState({
+        questionCat: true,
+        buzzPlaying: true
+      });
+    }
+
+    if (quest.auction) {
+      this.setState({
+        questionAuction: true,
+        buzzPlaying: true
+      });
+    }
+
     if (quest.type === 'song') {
       this.setState({
         questionImage: null,
@@ -93,6 +109,8 @@ export default class Game extends Component {
     const quest = gameData.questions[currentQuestion];
     if (quest) {
       this.setState({
+        questionCat: false,
+        questionAuction: false,
         player: null,
         playing: true
       });
@@ -112,6 +130,8 @@ export default class Game extends Component {
 
   onCompleteQuestion = (data) => {
     this.setState({
+      questionCat: false,
+      questionAuction: false,
       completedQuestions: data.completedQuestions,
       playing: false,
       player: null
@@ -120,6 +140,8 @@ export default class Game extends Component {
 
   onCancelQuestion = () => {
     this.setState({
+      questionCat: false,
+      questionAuction: false,
       currentQuestion: null,
       player: null,
       playing: false
@@ -130,6 +152,7 @@ export default class Game extends Component {
     const style = require('./Game.scss');
     const {
       buzzPlaying, completedQuestions, currentTour, currentQuestion, questionImage, questionSong,
+      questionCat, questionAuction,
       player, playing
     } = this.state;
 
@@ -146,6 +169,10 @@ export default class Game extends Component {
                        fileConfig={{ attributes: { preload: 'auto' } }}
                        onPlay={() => this.setState({ playing: true })}
                        onEnded={() => this.setState({ playing: false })}/>
+        </div>}
+        {questionImage &&
+        <div className={cx({[style.image]: true, [style.active]: playing})}>
+          <img src={questionImage} alt=""/>
         </div>}
         {player &&
         <div className={style.player}>
@@ -173,9 +200,13 @@ export default class Game extends Component {
             </tbody>
           </table>
         </div>}
-        {questionImage &&
-        <div className={cx({[style.image]: true, [style.active]: playing})}>
-          <img src={questionImage} alt=""/>
+        {questionCat &&
+        <div className={cx({[style.cat]: true, [style.active]: questionCat})}>
+          <img src="http://i.giphy.com/8mju7eCXDceU8.gif" alt=""/>
+        </div>}
+        {questionAuction &&
+        <div className={cx({[style.auction]: true, [style.active]: questionAuction})}>
+          <img src="http://i.giphy.com/m0MfjLtKOgTPG.gif" alt=""/>
         </div>}
         <ReactPlayer url="/game/horn.mp3"
                      height={10}
