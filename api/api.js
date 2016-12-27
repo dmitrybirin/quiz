@@ -67,18 +67,27 @@ if (config.apiPort) {
 
     socket.on('gameInit', data => {
       console.log('gameInit');
-      game = Object.assign(data);
+      console.log(game)
+      io.emit('gameInit', game);
+    });
+
+    socket.on('setGameInit', data => {
+      console.log('setGameInit');
+      game = Object.assign({}, data);
       io.emit('gameInit', data);
     });
 
     socket.on('getGameInit', () => {
       console.log('getGameInit');
+      console.log(game)
       io.emit('gameInit', game);
     });
     
     socket.on('tourSelect', data => {
       console.log('tourSelect');
       io.emit('tourSelect', data);
+      game.currentTour = data.tour;
+      console.log(game)
     });
 
     socket.on('questionSelect', data => {

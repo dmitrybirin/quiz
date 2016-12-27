@@ -46,7 +46,7 @@ export default class Admin extends Component {
     const game = store.get('game');
     this.state = Object.assign({}, this.defaultState, game || {});
     if (game) {
-      socket.emit('gameInit', game);
+      socket.emit('setGameInit', game);
     }
   }
 
