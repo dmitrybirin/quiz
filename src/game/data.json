@@ -1,6 +1,7 @@
 {
   "game": {
     "tours": [
+      "tour-test",
       "tour-1",
       "tour-2",
       "tour-3"
@@ -16,6 +17,12 @@
         "rifs",
         "pitchfork",
         "rain"
+      ]
+    },
+    "tour-test": {
+      "name": "ТЕСТ",
+      "categories": [
+        "test"
       ]
     },
     "tour-2": {
@@ -42,6 +49,16 @@
     }
   },
   "categories": {
+    "test": {
+      "name": "Рандомные вопросы",
+      "questions": [
+        "test-1",
+        "test-2",
+        "test-3",
+        "test-4",
+        "test-5"
+      ]
+    },
     "names": {
       "name": "Имя любимое твое",
       "questions": [
@@ -224,6 +241,31 @@
     }
   },
   "questions": {
+    "test-1": {
+      "type": "song",
+      "file": "/questions/tour-test/1.mp3",
+      "answer": "СНГ"
+    },
+    "test-2": {
+      "type": "song",
+      "file": "/questions/tour-test/2.mp3",
+      "answer": "СНГ"
+    },
+    "test-3": {
+      "type": "song",
+      "file": "/questions/tour-test/3.mp3",
+      "answer": "СНГ"
+    },
+    "test-4": {
+      "type": "image",
+      "file": "/questions/tour-test/4.jpg",
+      "answer": "СНГ"
+    },
+    "test-5": {
+      "type": "image",
+      "file": "/questions/tour-test/5.jpg",
+      "answer": "СНГ"
+    },
     "question-1-1": {
       "type": "song",
       "file": "/questions/tour-1/1-name/1-gromyka.mp3",
