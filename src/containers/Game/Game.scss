@@ -1,5 +1,14 @@
 @import "../../theme/variables.scss";
 
+.container {
+  padding: 0 20px;
+}
+
+.title {
+  margin: 0 0 20px;
+  text-align: center;
+}
+
 .modal {
   background: rgba(0, 0, 0, 0.9);
   height: 100%;
@@ -17,14 +26,21 @@
 }
 
 .tableCategory {
-  font-size: 24px;
+  border: 1px solid #999;
+  font-size: 32px;
+  line-height: 32px;
+  height: 12vh;
   padding: 0 20px;
-  width: 30%;
+  text-align: center;
+  width: 25%;
 }
 
 .tableCell {
+  border: 1px solid #999;
   font-size: 48px;
+  height: 12vh;
   text-align: center;
+  width: 15%;
   &.active {
     color: $brand-danger;
   }

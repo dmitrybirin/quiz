@@ -133,13 +133,13 @@ export default class Admin extends Component {
         </div>
         {currentQuestion &&
         <div>
-          <div><strong>Ответ:</strong> {gameData.questions[currentQuestion].answer}</div>
+          <p><strong>Ответ:</strong> {gameData.questions[currentQuestion].answer}</p>
           <div className={style.controls}>
             <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Play</Button>
             {' '}
-            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Done</Button>
+            <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Cancel</Button>
             {' '}
-            <Button bsStyle="danger" onClick={this.handleCancelQuestion}>Cancel</Button>
+            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Done</Button>
           </div>
         </div>}
 
@@ -156,7 +156,7 @@ export default class Admin extends Component {
                       [style.completed]: completedQuestions.includes(question)
                     })}
                     onClick={() => this.handleQuestionClick(question)}>
-                  {(questionIndex + 1) * 100}
+                  {(questionIndex + 1) * 100 * gameData.tours[currentTour].multiplier}
                 </td>
               ))}
             </tr>

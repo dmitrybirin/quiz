@@ -157,10 +157,10 @@ export default class Game extends Component {
     } = this.state;
 
     return (
-      <div className={'container'}>
+      <div className={style.container}>
         <Helmet title="Game"/>
         {currentTour &&
-        <h1>{gameData.tours[currentTour].name}</h1>}
+        <h1 className={style.title}>{gameData.tours[currentTour].name}</h1>}
         {questionSong &&
         <div>
           <ReactPlayer url={questionSong}
@@ -192,7 +192,7 @@ export default class Game extends Component {
                         [style.active]: question === currentQuestion,
                         [style.completed]: completedQuestions.includes(question)
                       })}>
-                    {(questionIndex + 1) * 100}
+                    {(questionIndex + 1) * 100 * gameData.tours[currentTour].multiplier}
                   </td>
                 ))}
               </tr>

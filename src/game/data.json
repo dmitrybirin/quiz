@@ -8,8 +8,16 @@
     ]
   },
   "tours": {
+    "tour-test": {
+      "multiplier": 1,
+      "name": "ТЕСТ",
+      "categories": [
+        "test"
+      ]
+    },
     "tour-1": {
       "name": "Тур 1",
+      "multiplier": 1,
       "categories": [
         "names",
         "covers-1",
@@ -19,14 +27,9 @@
         "rain"
       ]
     },
-    "tour-test": {
-      "name": "ТЕСТ",
-      "categories": [
-        "test"
-      ]
-    },
     "tour-2": {
       "name": "Тур 2",
+      "multiplier": 2,
       "categories": [
         "сity",
         "tv",
@@ -38,6 +41,7 @@
     },
     "tour-3": {
       "name": "Тур 3",
+      "multiplier": 3,
       "categories": [
         "alco",
         "covers-2",
@@ -70,7 +74,7 @@
       ]
     },
     "covers-1": {
-      "name": "Ковер вертолет",
+      "name": "Каверы",
       "questions": [
         "question-2-1",
         "question-2-2",
@@ -80,7 +84,7 @@
       ]
     },
     "tv-shows-1": {
-      "name": "Телесериалы",
+      "name": "Кураж-Бамбей",
       "questions": [
         "question-3-1",
         "question-3-2",
@@ -90,7 +94,7 @@
       ]
     },
     "rifs": {
-      "name": "Рифы",
+      "name": "Фендер Стратокастер",
       "questions": [
         "question-4-1",
         "question-4-2",
@@ -110,7 +114,7 @@
       ]
     },
     "rain": {
-      "name": "А дождь идет",
+      "name": "Перпл рейн",
       "questions": [
         "question-6-1",
         "question-6-2",
@@ -120,7 +124,7 @@
       ]
     },
     "сity": {
-      "name": "Город сказка",
+      "name": "Город твой",
       "questions": [
         "question-7-1",
         "question-7-2",
@@ -130,7 +134,7 @@
       ]
     },
     "tv": {
-      "name": "ТВ пауза",
+      "name": "Coffee and TV",
       "questions": [
         "question-8-1",
         "question-8-2",
@@ -160,7 +164,7 @@
       ]
     },
     "tv-shows-2": {
-      "name": "Телесериалы",
+      "name": "Кураж-Бамбей 2 сезон",
       "questions": [
         "question-11-1",
         "question-11-2",
@@ -170,7 +174,7 @@
       ]
     },
     "animals": {
-      "name": "Животные",
+      "name": "Святая нежность",
       "questions": [
         "question-12-1",
         "question-12-2",
@@ -200,7 +204,7 @@
       ]
     },
     "videos": {
-      "name": "Клипы",
+      "name": "Стоп-кадр",
       "questions": [
         "question-15-1",
         "question-15-2",
@@ -210,7 +214,7 @@
       ]
     },
     "ny": {
-      "name": "Джингл белз",
+      "name": "С новым годом, крошка",
       "questions": [
         "question-16-1",
         "question-16-2",
@@ -230,7 +234,7 @@
       ]
     },
     "ost": {
-      "name": "Саундтреки",
+      "name": "Кино-говно",
       "questions": [
         "question-18-1",
         "question-18-2",
