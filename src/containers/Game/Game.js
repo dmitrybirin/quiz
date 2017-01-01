@@ -168,7 +168,8 @@ export default class Game extends Component {
                        playing={playing}
                        fileConfig={{ attributes: { preload: 'auto' } }}
                        onPlay={() => this.setState({ playing: true })}
-                       onEnded={() => this.setState({ playing: false })}/>
+                       onEnded={() => this.setState({ playing: false })}
+                       volume={1}/>
         </div>}
         {questionImage &&
         <div className={cx({[style.image]: true, [style.active]: playing})}>
@@ -213,7 +214,8 @@ export default class Game extends Component {
                      playing={buzzPlaying}
                      fileConfig={{ attributes: { preload: 'auto' } }}
                      onPlay={() => this.setState({ buzzPlaying: true })}
-                     onEnded={() => this.setState({ buzzPlaying: false })}/>
+                     onEnded={() => this.setState({ buzzPlaying: false })}
+                     volume={0.7}/>
       </div>
     );
   }
