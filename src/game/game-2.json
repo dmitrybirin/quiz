@@ -303,8 +303,8 @@
     },
     "question-2-2": {
       "type": "song",
-      "file": "/questions/game-2/tour-1/2-covers/2-nrktk.mp3",
-      "answer": "Мумий Тролль - Карнавала.нет (NRKTK)"
+      "file": "/questions/game-2/tour-1/2-covers/2-adele.mp3",
+      "answer": "Adele - Hello (The Maccabees)"
     },
     "question-2-3": {
       "type": "song",
@@ -406,7 +406,7 @@
     "question-6-2": {
       "type": "song",
       "file": "/questions/game-2/tour-1/6-rain/2-propaganda.mp3",
-      "answer": "Creedence Clearwater Revival - Have You Ever Seen The Rain?"
+      "answer": "Пропаганда - Дождь по крышам"
     },
     "question-6-3": {
       "type": "song",
@@ -515,7 +515,7 @@
     "question-10-3": {
       "type": "song",
       "file": "/questions/game-2/tour-2/4-eh/3-drake.mp3",
-      "answer": "Alanis Morissette"
+      "answer": "Drake"
     },
     "question-10-4": {
       "type": "song",
@@ -565,11 +565,11 @@
     },
     "question-12-3": {
       "type": "image",
-      "file": "/questions/game-2/tour-2/6-arts/3-xx.jpg",
+      "file": "/questions/game-2/tour-2/6-arts/3-xx.png",
       "answer": "The XX"
     },
     "question-12-4": {
-      "type": "song",
+      "type": "image",
       "file": "/questions/game-2/tour-2/6-arts/4-am.mp3",
       "answer": "Arctic Monkeys"
     },
