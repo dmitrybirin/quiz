@@ -136,6 +136,7 @@ export default class Game extends Component {
       questionCat: false,
       questionAuction: false,
       completedQuestions: data.completedQuestions,
+      currentQuestion: null,
       playing: false,
       player: null
     });
