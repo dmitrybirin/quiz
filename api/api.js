@@ -61,7 +61,20 @@ if (config.apiPort) {
     console.info('==> 💻  Send requests to http://%s:%s', config.apiHost, config.apiPort);
   });
 
-  let game = {};
+  let game = {
+    players: []
+  };
+
+  function addPlayer(name)
+  {
+    if (!game.players.some(player => player.name === name)) {
+      game.players.push({
+        name,
+        score: 0
+      });
+      io.emit('updatePlayers', { players: game.players });
+    }
+  }
 
   io.on('connection', socket => {
 
@@ -82,7 +95,7 @@ if (config.apiPort) {
       console.log(game)
       io.emit('gameInit', game);
     });
-    
+
     socket.on('tourSelect', data => {
       console.log('tourSelect');
       io.emit('tourSelect', data);
@@ -102,6 +115,7 @@ if (config.apiPort) {
 
     socket.on('buzz', data => {
       console.log('buzz');
+      addPlayer(data.name);
       io.emit('buzz', data);
     });
 

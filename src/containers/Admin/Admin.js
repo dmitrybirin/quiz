@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Button } from 'react-bootstrap';
 import cx from 'classnames';
 import store from 'store';
-import gameData from 'game/data';
+import gameData from 'game/game-2';
 
 @connect(
   state => ({ user: state.auth.user })
@@ -20,7 +20,8 @@ export default class Admin extends Component {
     this.defaultState = {
       currentTour: 'tour-1',
       currentQuestion: null,
-      completedQuestions: []
+      completedQuestions: [],
+      players: []
     };
     this.state = Object.assign({}, this.defaultState);
     this.init();
@@ -29,6 +30,7 @@ export default class Admin extends Component {
   componentDidMount() {
     if (socket) {
       socket.on('msg', this.onMessageReceived);
+      socket.on('updatePlayers', this.onUpdatePlayers);
     }
   }
 
@@ -39,7 +41,15 @@ export default class Admin extends Component {
   componentWillUnmount() {
     if (socket) {
       socket.removeListener('msg', this.onMessageReceived);
+      socket.removeListener('updatePlayers', this.onUpdatePlayers);
     }
+  }
+
+  // Players
+  onUpdatePlayers = ({ players }) => {
+    this.setState({
+      players
+    });
   }
 
   init() {
@@ -105,6 +115,11 @@ export default class Admin extends Component {
     socket.emit('cancelQuestion');
   }
 
+  handleScoreChange(event, player) {
+    console.log(event.target.value);
+    console.log(player);
+  }
+
   render() {
     const style = require('./Admin.scss');
     const { completedQuestions, currentTour, currentQuestion } = this.state;
@@ -112,6 +127,20 @@ export default class Admin extends Component {
     return (
       <div className="container">
         <Helmet title="Admin"/>
+        {/** <table className={style.players}>
+          <tbody>
+          {players.map((plr, index) => (
+            <tr key={index}>
+              <td className={style.playersName}>{plr.name}</td>
+              <td className={style.playersScore}>
+                <Input bsSize="small" type="text" value={plr.score}
+                onChange={event => this.handleScoreChange(event, plr)}/>
+              </td>
+              <td><Button bsSize="small" bsStyle="danger">x</Button></td>
+            </tr>
+          ))}
+          </tbody>
+        </table >**/}
         <div className={style.game}>
           <div className={style.tours}>
             {gameData.game.tours.map((tour, tourIndex) => (
@@ -135,11 +164,11 @@ export default class Admin extends Component {
         <div>
           <p><strong>Ответ:</strong> {gameData.questions[currentQuestion].answer}</p>
           <div className={style.controls}>
-            <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Play</Button>
+            <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Играть</Button>
             {' '}
-            <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Cancel</Button>
+            <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
             {' '}
-            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Done</Button>
+            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Вопрос сыгран</Button>
           </div>
         </div>}
 

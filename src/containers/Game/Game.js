@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
 import Helmet from 'react-helmet';
-import gameData from 'game/data';
+import gameData from 'game/game-2';
 import cx from 'classnames';
 
 @connect(
@@ -24,7 +24,8 @@ export default class Game extends Component {
     questionCat: false,
     questionAuction: false,
     playing: false,
-    player: null
+    player: null,
+    players: []
   };
 
   componentDidMount() {
@@ -36,6 +37,7 @@ export default class Game extends Component {
       socket.on('buzz', this.onBuzz);
       socket.on('completeQuestion', this.onCompleteQuestion);
       socket.on('cancelQuestion', this.onCancelQuestion);
+      socket.on('updatePlayers', this.onUpdatePlayers);
 
       socket.emit('getGameInit');
     }
@@ -50,6 +52,7 @@ export default class Game extends Component {
       socket.removeListener('buzz', this.onBuzz);
       socket.removeListener('completeQuestion', this.onCompleteQuestion);
       socket.removeListener('cancelQuestion', this.onCancelQuestion);
+      socket.removeListener('updatePlayers', this.onUpdatePlayers);
     }
   }
 
@@ -148,6 +151,13 @@ export default class Game extends Component {
     });
   }
 
+  // Players
+  onUpdatePlayers = ({ players }) => {
+    this.setState({
+      players
+    });
+  }
+
   render() {
     const style = require('./Game.scss');
     const {
@@ -159,6 +169,16 @@ export default class Game extends Component {
     return (
       <div className={style.container}>
         <Helmet title="Game"/>
+        {/** <div className={style.players}>
+          <div className={style.playersWrap}>
+            {players.map((plr, index) => (
+              <div key={index} className={style.playersBlock}>
+                <div>{plr.name}</div>
+                <div>{plr.score}</div>
+              </div>
+            ))}
+          </div>
+        </div> **/}
         {currentTour &&
         <h1 className={style.title}>{gameData.tours[currentTour].name}</h1>}
         {questionSong &&
@@ -172,7 +192,7 @@ export default class Game extends Component {
                        volume={1}/>
         </div>}
         {questionImage &&
-        <div className={cx({[style.image]: true, [style.active]: playing})}>
+        <div className={cx({ [style.image]: true, [style.active]: playing })}>
           <img src={questionImage} alt=""/>
         </div>}
         {player &&
@@ -202,11 +222,11 @@ export default class Game extends Component {
           </table>
         </div>}
         {questionCat &&
-        <div className={cx({[style.cat]: true, [style.active]: questionCat})}>
+        <div className={cx({ [style.cat]: true, [style.active]: questionCat })}>
           <img src="http://i.giphy.com/8mju7eCXDceU8.gif" alt=""/>
         </div>}
         {questionAuction &&
-        <div className={cx({[style.auction]: true, [style.active]: questionAuction})}>
+        <div className={cx({ [style.auction]: true, [style.active]: questionAuction })}>
           <img src="http://i.giphy.com/m0MfjLtKOgTPG.gif" alt=""/>
         </div>}
         <ReactPlayer url="/game/horn.mp3"

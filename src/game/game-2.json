@@ -1,0 +1,736 @@
+{
+  "game": {
+    "tours": [
+      "tour-test",
+      "tour-1",
+      "tour-2",
+      "tour-3"
+    ]
+  },
+  "tours": {
+    "tour-test": {
+      "multiplier": 1,
+      "name": "ТЕСТ",
+      "categories": [
+        "test"
+      ]
+    },
+    "tour-1": {
+      "name": "Тур 1",
+      "multiplier": 1,
+      "categories": [
+        "names",
+        "covers-1",
+        "tv-shows-1",
+        "rifs",
+        "pitchfork",
+        "rain"
+      ]
+    },
+    "tour-2": {
+      "name": "Тур 2",
+      "multiplier": 2,
+      "categories": [
+        "сity",
+        "tv",
+        "lera",
+        "canada",
+        "tv-shows-2",
+        "animals"
+      ]
+    },
+    "tour-3": {
+      "name": "Тур 3",
+      "multiplier": 3,
+      "categories": [
+        "alco",
+        "covers-2",
+        "videos",
+        "ny",
+        "woman",
+        "ost"
+      ]
+    }
+  },
+  "categories": {
+    "test": {
+      "name": "Рандомные вопросы",
+      "questions": [
+        "test-1",
+        "test-2",
+        "test-3",
+        "test-4",
+        "test-5"
+      ]
+    },
+    "names": {
+      "name": "Имя любимое твое",
+      "questions": [
+        "question-1-1",
+        "question-1-2",
+        "question-1-3",
+        "question-1-4",
+        "question-1-5"
+      ]
+    },
+    "covers-1": {
+      "name": "Каверы",
+      "questions": [
+        "question-2-1",
+        "question-2-2",
+        "question-2-3",
+        "question-2-4",
+        "question-2-5"
+      ]
+    },
+    "tv-shows-1": {
+      "name": "Кураж-Бамбей",
+      "questions": [
+        "question-3-1",
+        "question-3-2",
+        "question-3-3",
+        "question-3-4",
+        "question-3-5"
+      ]
+    },
+    "rifs": {
+      "name": "Фендер Стратокастер",
+      "questions": [
+        "question-4-1",
+        "question-4-2",
+        "question-4-3",
+        "question-4-4",
+        "question-4-5"
+      ]
+    },
+    "pitchfork": {
+      "name": "10/10",
+      "questions": [
+        "question-5-1",
+        "question-5-2",
+        "question-5-3",
+        "question-5-4",
+        "question-5-5"
+      ]
+    },
+    "rain": {
+      "name": "Перпл рейн",
+      "questions": [
+        "question-6-1",
+        "question-6-2",
+        "question-6-3",
+        "question-6-4",
+        "question-6-5"
+      ]
+    },
+    "сity": {
+      "name": "Город твой",
+      "questions": [
+        "question-7-1",
+        "question-7-2",
+        "question-7-3",
+        "question-7-4",
+        "question-7-5"
+      ]
+    },
+    "tv": {
+      "name": "Coffee and TV",
+      "questions": [
+        "question-8-1",
+        "question-8-2",
+        "question-8-3",
+        "question-8-4",
+        "question-8-5"
+      ]
+    },
+    "lera": {
+      "name": "Любимые песни Рачилы",
+      "questions": [
+        "question-9-1",
+        "question-9-2",
+        "question-9-3",
+        "question-9-4",
+        "question-9-5"
+      ]
+    },
+    "canada": {
+      "name": "Eh?",
+      "questions": [
+        "question-10-1",
+        "question-10-2",
+        "question-10-3",
+        "question-10-4",
+        "question-10-5"
+      ]
+    },
+    "tv-shows-2": {
+      "name": "Кураж-Бамбей 2 сезон",
+      "questions": [
+        "question-11-1",
+        "question-11-2",
+        "question-11-3",
+        "question-11-4",
+        "question-11-5"
+      ]
+    },
+    "animals": {
+      "name": "Святая нежность",
+      "questions": [
+        "question-12-1",
+        "question-12-2",
+        "question-12-3",
+        "question-12-4",
+        "question-12-5"
+      ]
+    },
+    "alco": {
+      "name": "Бухло побеждает зло",
+      "questions": [
+        "question-13-1",
+        "question-13-2",
+        "question-13-3",
+        "question-13-4",
+        "question-13-5"
+      ]
+    },
+    "covers-2": {
+      "name": "Опять каверы",
+      "questions": [
+        "question-14-1",
+        "question-14-2",
+        "question-14-3",
+        "question-14-4",
+        "question-14-5"
+      ]
+    },
+    "videos": {
+      "name": "Стоп-кадр",
+      "questions": [
+        "question-15-1",
+        "question-15-2",
+        "question-15-3",
+        "question-15-4",
+        "question-15-5"
+      ]
+    },
+    "ny": {
+      "name": "С новым годом, крошка",
+      "questions": [
+        "question-16-1",
+        "question-16-2",
+        "question-16-3",
+        "question-16-4",
+        "question-16-5"
+      ]
+    },
+    "woman": {
+      "name": "Это не женщина",
+      "questions": [
+        "question-17-1",
+        "question-17-2",
+        "question-17-3",
+        "question-17-4",
+        "question-17-5"
+      ]
+    },
+    "ost": {
+      "name": "Кино-говно",
+      "questions": [
+        "question-18-1",
+        "question-18-2",
+        "question-18-3",
+        "question-18-4",
+        "question-18-5"
+      ]
+    }
+  },
+  "questions": {
+    "test-1": {
+      "type": "song",
+      "file": "/questions/tour-test/1.mp3",
+      "answer": "СНГ"
+    },
+    "test-2": {
+      "type": "song",
+      "file": "/questions/tour-test/2.mp3",
+      "answer": "СНГ"
+    },
+    "test-3": {
+      "type": "song",
+      "file": "/questions/tour-test/3.mp3",
+      "answer": "СНГ"
+    },
+    "test-4": {
+      "type": "image",
+      "file": "/questions/tour-test/4.jpg",
+      "answer": "СНГ"
+    },
+    "test-5": {
+      "type": "image",
+      "file": "/questions/tour-test/5.jpg",
+      "answer": "СНГ"
+    },
+    "question-1-1": {
+      "type": "song",
+      "file": "/questions/tour-1/1-name/1-gromyka.mp3",
+      "answer": "Громыка - Паустовский, Бианки, Пришвин",
+      "cat": true
+    },
+    "question-1-2": {
+      "type": "song",
+      "file": "/questions/tour-1/1-name/2-mgmt.mp3",
+      "answer": "Brian Eno (MGMT - Brian Eno)"
+    },
+    "question-1-3": {
+      "type": "song",
+      "file": "/questions/tour-1/1-name/3-splean.mp3",
+      "answer": "Люся (Сплин - Люся сидит дома)"
+    },
+    "question-1-4": {
+      "type": "song",
+      "file": "/questions/tour-1/1-name/4-cave.mp3",
+      "answer": "Elisa Day (Nick Cave - Where The Wild Roses Grow)"
+    },
+    "question-1-5": {
+      "type": "song",
+      "file": "/questions/tour-1/1-name/5-prince.mp3",
+      "answer": "Nikki (Prince - Darling Nikki)"
+    },
+    "question-2-1": {
+      "type": "song",
+      "file": "/questions/tour-1/2-covers/1-seether.mp3",
+      "answer": "George Michael - Careless Whisper (Seether)"
+    },
+    "question-2-2": {
+      "type": "song",
+      "file": "/questions/tour-1/2-covers/2-nrktk.mp3",
+      "answer": "Мумий Тролль - Карнавала.нет (NRKTK)"
+    },
+    "question-2-3": {
+      "type": "song",
+      "file": "/questions/tour-1/2-covers/3-smahing.mp3",
+      "answer": "Depeche Mode - Never Let Me Down Again (The Smashing Pumpkins)"
+    },
+    "question-2-4": {
+      "type": "song",
+      "file": "/questions/tour-1/2-covers/4-rasembaum.mp3",
+      "answer": "IOWA - Маршрутки (Розенбаум)"
+    },
+    "question-2-5": {
+      "type": "song",
+      "file": "/questions/tour-1/2-covers/5-vines.mp3",
+      "answer": "Outkast - Ms Jackson (The Vines)"
+    },
+    "question-3-1": {
+      "type": "song",
+      "file": "/questions/tour-1/3-tv/1-poirot.mp3",
+      "answer": "Agatha Christie's Poirot"
+    },
+    "question-3-2": {
+      "type": "song",
+      "file": "/questions/tour-1/3-tv/2-streets.mp3",
+      "answer": "Улицы разбитых фонарей"
+    },
+    "question-3-3": {
+      "type": "song",
+      "file": "/questions/tour-1/3-tv/3-gravity.mp3",
+      "answer": "Gravity Falls",
+      "auction": true
+    },
+    "question-3-4": {
+      "type": "song",
+      "file": "/questions/tour-1/3-tv/4-black.mp3",
+      "answer": "Black Books"
+    },
+    "question-3-5": {
+      "type": "song",
+      "file": "/questions/tour-1/3-tv/5-xena.mp3",
+      "answer": "Xena: Warrior Princess"
+    },
+    "question-4-1": {
+      "type": "song",
+      "file": "/questions/tour-1/4-riff/1-pearl.mp3",
+      "answer": "Pearl Jam – Alive"
+    },
+    "question-4-2": {
+      "type": "song",
+      "file": "/questions/tour-1/4-riff/2-lynyrd.mp3",
+      "answer": "Lynyrd Skynyrd - Sweet Home Alabama"
+    },
+    "question-4-3": {
+      "type": "song",
+      "file": "/questions/tour-1/4-riff/3-bowie.mp3",
+      "answer": "David Bowie - Ziggy Stardust"
+    },
+    "question-4-4": {
+      "type": "song",
+      "file": "/questions/tour-1/4-riff/4-muse.mp3",
+      "answer": "Muse - Plug In Baby"
+    },
+    "question-4-5": {
+      "type": "song",
+      "file": "/questions/tour-1/4-riff/5-stooges.mp3",
+      "answer": "The Stooges - I Wanna Be Your Dog"
+    },
+    "question-5-1": {
+      "type": "song",
+      "file": "/questions/tour-1/5-pitchfork/1-kanye.mp3",
+      "answer": "Kanye West - My Beautiful Dark Twisted Fantasy"
+    },
+    "question-5-2": {
+      "type": "song",
+      "file": "/questions/tour-1/5-pitchfork/2-luna.mp3",
+      "answer": "Луна - Бутылочка",
+      "cat": true
+    },
+    "question-5-3": {
+      "type": "song",
+      "file": "/questions/tour-1/5-pitchfork/3-wilco.mp3",
+      "answer": "Wilco - Yankee Hotel Foxtrot"
+    },
+    "question-5-4": {
+      "type": "song",
+      "file": "/questions/tour-1/5-pitchfork/4-lips.mp3",
+      "answer": "The Flaming Lips - The Soft Bulletin"
+    },
+    "question-5-5": {
+      "type": "song",
+      "file": "/questions/tour-1/5-pitchfork/5-boards.mp3",
+      "answer": "Boards of Canada - Music Has the Right to Children"
+    },
+    "question-6-1": {
+      "type": "song",
+      "file": "/questions/tour-1/6-rain/1-hleb.mp3",
+      "answer": "Марина Хлебникова - Косые дожди"
+    },
+    "question-6-2": {
+      "type": "song",
+      "file": "/questions/tour-1/6-rain/2-creedence.mp3",
+      "answer": "Creedence Clearwater Revival - Have You Ever Seen The Rain?"
+    },
+    "question-6-3": {
+      "type": "song",
+      "file": "/questions/tour-1/6-rain/3-travis.mp3",
+      "answer": "Travis - Why Does It Always Rain On Me?"
+    },
+    "question-6-4": {
+      "type": "song",
+      "file": "/questions/tour-1/6-rain/4-placebo.mp3",
+      "answer": "Placebo - English Summer Rain",
+      "auction": true
+    },
+    "question-6-5": {
+      "type": "song",
+      "file": "/questions/tour-1/6-rain/5-propaganda.mp3",
+      "answer": "Пропаганда - Дождь по крышам"
+    },
+    "question-7-1": {
+      "type": "song",
+      "file": "/questions/tour-2/1-city/1-san-fran.mp3",
+      "answer": "Кармен - Сан-Франциско"
+    },
+    "question-7-2": {
+      "type": "song",
+      "file": "/questions/tour-2/1-city/2-vienna.mp3",
+      "answer": "Clawfinger - Vienna",
+      "auction": true
+    },
+    "question-7-3": {
+      "type": "song",
+      "file": "/questions/tour-2/1-city/3-paris.mp3",
+      "answer": "Friendly Fires - Paris"
+    },
+    "question-7-4": {
+      "type": "song",
+      "file": "/questions/tour-2/1-city/4-moscow.mp3",
+      "answer": "Michael Jackson - Stranger In Moscow"
+    },
+    "question-7-5": {
+      "type": "song",
+      "file": "/questions/tour-2/1-city/5-spb.mp3",
+      "answer": "Гимн Санкт-Петербурга"
+    },
+    "question-8-1": {
+      "type": "song",
+      "file": "/questions/tour-2/2-tv/1-kalambur.mp3",
+      "answer": "Каламбур"
+    },
+    "question-8-2": {
+      "type": "song",
+      "file": "/questions/tour-2/2-tv/2-fakt.mp3",
+      "answer": "Невероятно но факт"
+    },
+    "question-8-3": {
+      "type": "song",
+      "file": "/questions/tour-2/2-tv/3-griby.mp3",
+      "answer": "Грибы - Интро",
+      "cat": true
+    },
+    "question-8-4": {
+      "type": "song",
+      "file": "/questions/tour-2/2-tv/4-health.mp3",
+      "answer": "Здоровье"
+    },
+    "question-8-5": {
+      "type": "song",
+      "file": "/questions/tour-2/2-tv/5-smart.mp3",
+      "answer": "Умники и умницы"
+    },
+    "question-9-1": {
+      "type": "song",
+      "file": "/questions/tour-2/3-lera/1-malikov.mp3",
+      "answer": "Дмитрий Маликов - Ты одна ты такая"
+    },
+    "question-9-2": {
+      "type": "song",
+      "file": "/questions/tour-2/3-lera/2-timberlake.mp3",
+      "answer": "Justin Timberlake - Can't Stop the Feeling!"
+    },
+    "question-9-3": {
+      "type": "song",
+      "file": "/questions/tour-2/3-lera/3-abba.mp3",
+      "answer": "ABBA - Mama Mia"
+    },
+    "question-9-4": {
+      "type": "song",
+      "file": "/questions/tour-2/3-lera/4-radiohead.mp3",
+      "answer": "Radiohead - Karma Police",
+      "cat": true
+    },
+    "question-9-5": {
+      "type": "song",
+      "file": "/questions/tour-2/3-lera/5-slowdive.mp3",
+      "answer": "Slowdive - Dagger"
+    },
+    "question-10-1": {
+      "type": "song",
+      "file": "/questions/tour-2/4-eh/1-arcade.mp3",
+      "answer": "Arcade Fire"
+    },
+    "question-10-2": {
+      "type": "song",
+      "file": "/questions/tour-2/4-eh/2-avril.mp3",
+      "answer": "Avril Lavigne"
+    },
+    "question-10-3": {
+      "type": "song",
+      "file": "/questions/tour-2/4-eh/3-alanis.mp3",
+      "answer": "Alanis Morissette"
+    },
+    "question-10-4": {
+      "type": "song",
+      "file": "/questions/tour-2/4-eh/4-hhh.mp3",
+      "answer": "Hot Hot Heat"
+    },
+    "question-10-5": {
+      "type": "song",
+      "file": "/questions/tour-2/4-eh/5-adams.mp3",
+      "answer": "Bryan Adams"
+    },
+    "question-11-1": {
+      "type": "song",
+      "file": "/questions/tour-2/5-serials/1-true.mp3",
+      "answer": "True Detective"
+    },
+    "question-11-2": {
+      "type": "song",
+      "file": "/questions/tour-2/5-serials/2-rick.mp3",
+      "answer": "Rick and Morty"
+    },
+    "question-11-3": {
+      "type": "song",
+      "file": "/questions/tour-2/5-serials/3-office.mp3",
+      "answer": "The Office"
+    },
+    "question-11-4": {
+      "type": "song",
+      "file": "/questions/tour-2/5-serials/4-ottepel.mp3",
+      "answer": "Оттепель"
+    },
+    "question-11-5": {
+      "type": "song",
+      "file": "/questions/tour-2/5-serials/5-alf.mp3",
+      "answer": "Альф"
+    },
+    "question-12-1": {
+      "type": "image",
+      "file": "/questions/tour-2/6-animals/1-pink.jpg",
+      "answer": "Pink Floyd - Atom Heart Mother",
+      "auction": true
+    },
+    "question-12-2": {
+      "type": "image",
+      "file": "/questions/tour-2/6-animals/2-weezer.jpg",
+      "answer": "Weezer - Rattitude"
+    },
+    "question-12-3": {
+      "type": "image",
+      "file": "/questions/tour-2/6-animals/3-odelay.jpg",
+      "answer": "Beck - Odelay"
+    },
+    "question-12-4": {
+      "type": "song",
+      "file": "/questions/tour-2/6-animals/4-gotye.mp3",
+      "answer": "Gotye feat. Kimbra - Somebody That I Used To Know"
+    },
+    "question-12-5": {
+      "type": "image",
+      "file": "/questions/tour-2/6-animals/5-aerosmith.jpg",
+      "answer": "Aerosmith - Get a Grip"
+    },
+    "question-13-1": {
+      "type": "song",
+      "file": "/questions/tour-3/1-alco/1-oasis.mp3",
+      "answer": "Oasis - Champagne Supernova"
+    },
+    "question-13-2": {
+      "type": "song",
+      "file": "/questions/tour-3/1-alco/2-doors.mp3",
+      "answer": "Doors - Alabama Song (Whisky Bar)"
+    },
+    "question-13-3": {
+      "type": "song",
+      "file": "/questions/tour-3/1-alco/3-whiskey.mp3",
+      "answer": "Наталья Ветлицкая - Глаза цвета виски"
+    },
+    "question-13-4": {
+      "type": "song",
+      "file": "/questions/tour-3/1-alco/4-beyonce.mp3",
+      "answer": "Drunk In Love - Beyoncé"
+    },
+    "question-13-5": {
+      "type": "song",
+      "file": "/questions/tour-3/1-alco/5-irakli.mp3",
+      "answer": "Иракли - Капли абсента"
+    },
+    "question-14-1": {
+      "type": "song",
+      "file": "/questions/tour-3/2-covers-2/1-gabriel.mp3",
+      "answer": "Radiohead - Street Spirit (Fade Out) (Peter Gabriel)"
+    },
+    "question-14-2": {
+      "type": "song",
+      "file": "/questions/tour-3/2-covers-2/2-river.mp3",
+      "answer": "Justin Timberlake - Cry Me A River (Ten Masked Men)"
+    },
+    "question-14-3": {
+      "type": "song",
+      "file": "/questions/tour-3/2-covers-2/3-brightside.mp3",
+      "answer": "Killers - Mr. Brightside (Postmodern - Jukebox)",
+      "auction": true
+    },
+    "question-14-4": {
+      "type": "song",
+      "file": "/questions/tour-3/2-covers-2/4-duhast.mp3",
+      "answer": "Rammstein - Du Hast (Dobranotch)"
+    },
+    "question-14-5": {
+      "type": "song",
+      "file": "/questions/tour-3/2-covers-2/5-kanye.mp3",
+      "answer": "Kanye West - Black Skinhead (Catfish and the Bottlemen)"
+    },
+    "question-15-1": {
+      "type": "image",
+      "file": "/questions/tour-3/3-videos/1-fbs.jpg",
+      "answer": "Fat Boy Slim - Weapon of Choice"
+    },
+    "question-15-2": {
+      "type": "song",
+      "file": "/questions/tour-3/3-videos/2-nickelback.mp3",
+      "answer": "Nickelback - How You Remind",
+      "cat": true
+    },
+    "question-15-3": {
+      "type": "image",
+      "file": "/questions/tour-3/3-videos/3-gorillaz.jpg",
+      "answer": "Gorillaz - Stylo"
+    },
+    "question-15-4": {
+      "type": "image",
+      "file": "/questions/tour-3/3-videos/4-carly.jpg",
+      "answer": "Carly Rae Jespen - I Really Like You"
+    },
+    "question-15-5": {
+      "type": "image",
+      "file": "/questions/tour-3/3-videos/5-vampire.jpg",
+      "answer": "Vampire Weekend - Giving Up The Gun"
+    },
+    "question-16-1": {
+      "type": "song",
+      "file": "/questions/tour-3/4-ny/1-snowflake.mp3",
+      "answer": "Д.Маликов и гр. Дайкири - Снежинка"
+    },
+    "question-16-2": {
+      "type": "song",
+      "file": "/questions/tour-3/4-ny/2-baby.mp3",
+      "answer": "Мумий Тролль - С новым годом, крошка"
+    },
+    "question-16-3": {
+      "type": "song",
+      "file": "/questions/tour-3/4-ny/3-avaria.mp3",
+      "answer": "Дискотека Авария - Новогодняя"
+    },
+    "question-16-4": {
+      "type": "song",
+      "file": "/questions/tour-3/4-ny/4-arrows.mp3",
+      "answer": "Стрелки - С Новым Годом!"
+    },
+    "question-16-5": {
+      "type": "song",
+      "file": "/questions/tour-3/4-ny/5-hil.mp3",
+      "answer": "Эдуард Хиль - Зима",
+      "auction": true
+    },
+    "question-17-1": {
+      "type": "song",
+      "file": "/questions/tour-3/5-woman/1-wurst.mp3",
+      "answer": "Conchita Wurst"
+    },
+    "question-17-2": {
+      "type": "song",
+      "file": "/questions/tour-3/5-woman/2-antony.mp3",
+      "answer": "Antony"
+    },
+    "question-17-3": {
+      "type": "song",
+      "file": "/questions/tour-3/5-woman/3-bee-gees.mp3",
+      "answer": "The Bee Gees"
+    },
+    "question-17-4": {
+      "type": "song",
+      "file": "/questions/tour-3/5-woman/4-bieber.mp3",
+      "answer": "Justin Bieber"
+    },
+    "question-17-5": {
+      "type": "song",
+      "file": "/questions/tour-3/5-woman/5-rhye.mp3",
+      "answer": "Rhye (Milosh)"
+    },
+    "question-18-1": {
+      "type": "song",
+      "file": "/questions/tour-3/6-ost/1-dals.mp3",
+      "answer": "Детективное агентство «Лунный свет» - Конфетный мальчик",
+      "cat": true
+    },
+    "question-18-2": {
+      "type": "song",
+      "file": "/questions/tour-3/6-ost/2-amelie.mp3",
+      "answer": "Amélie"
+    },
+    "question-18-3": {
+      "type": "song",
+      "file": "/questions/tour-3/6-ost/3-fountain.mp3",
+      "answer": "Fountain"
+    },
+    "question-18-4": {
+      "type": "song",
+      "file": "/questions/tour-3/6-ost/4-born-slippy.mp3",
+      "answer": "Trainspotting"
+    },
+    "question-18-5": {
+      "type": "song",
+      "file": "/questions/tour-3/6-ost/5-zoo.mp3",
+      "answer": "Zootopia"
+    }
+  }
+}
