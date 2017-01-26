@@ -50,10 +50,10 @@ export default class Player extends Component {
               <input ref="name"
                      className={style.loginInput}
                      type="text"
-                     placeholder="Как тебя зовут?"/>
+                     placeholder="Enter your name"/>
             </div>
             <div>
-              <button type="submit" className={style.loginSubmit}>Играть!</button>
+              <button type="submit" className={style.loginSubmit}>Play!</button>
             </div>
           </form>
         </div>}
@@ -64,7 +64,7 @@ export default class Player extends Component {
             <button className={style.buzzButton} onTouchStart={this.handleBuzz} onMouseDown={this.handleBuzz}/>
           </div>
           <div className={style.logout} onClick={this.props.logout}>
-            Сменить игрока
+            Change name
           </div>
         </div>}
       </div>
