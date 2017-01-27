@@ -44,7 +44,7 @@ export default class App extends Component {
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
         <header className={styles.header}>
-          {/* <img src={require('theme/images/logo.svg')} alt="Своя Херда"/> */}
+          {/* <img src={require('theme/images/logo.svg')} alt="Pop Music Quiz"/> */}
           <h1 className={styles.headerTitle}>Pop Music Quiz</h1>
         </header>
         <div className={styles.appContent}>
