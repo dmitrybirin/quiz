@@ -1,15 +1,15 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import surveyValidation from './surveyValidation';
-import * as surveyActions from 'redux/modules/survey';
+import React, {Component, PropTypes} from 'react'
+import {reduxForm} from 'redux-form'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import surveyValidation from './surveyValidation'
+import * as surveyActions from 'redux/modules/survey'
 
 function asyncValidate(data, dispatch, {isValidEmail}) {
   if (!data.email) {
-    return Promise.resolve({});
+    return Promise.resolve({})
   }
-  return isValidEmail(data);
+  return isValidEmail(data)
 }
 @connect(() => ({}),
   dispatch => bindActionCreators(surveyActions, dispatch)
@@ -46,8 +46,8 @@ class SurveyForm extends Component {
       resetForm,
       pristine,
       valid
-      } = this.props;
-    const styles = require('./SurveyForm.scss');
+      } = this.props
+    const styles = require('./SurveyForm.scss')
     const renderInput = (field, label, showAsyncValidating) =>
       <div className={'form-group' + (field.error && field.touched ? ' has-error' : '')}>
         <label htmlFor={field.name} className="col-sm-2">{label}</label>
@@ -62,7 +62,7 @@ class SurveyForm extends Component {
             {field.touched && <span className={styles.touched} title="Touched">T</span>}
           </div>
         </div>
-      </div>;
+      </div>
 
     return (
       <div>
@@ -124,6 +124,6 @@ class SurveyForm extends Component {
           </tbody>
         </table>
       </div>
-    );
+    )
   }
 }

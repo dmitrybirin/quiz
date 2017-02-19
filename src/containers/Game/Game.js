@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import ReactPlayer from 'react-player';
-import Helmet from 'react-helmet';
-import gameData from 'game/game-3';
-import cx from 'classnames';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import ReactPlayer from 'react-player'
+import Helmet from 'react-helmet'
+import gameData from 'game/game-3'
+import cx from 'classnames'
 
 @connect(
   state => ({ user: state.auth.user })
@@ -12,7 +12,7 @@ export default class Game extends Component {
 
   static propTypes = {
     user: PropTypes.object
-  };
+  }
 
   state = {
     buzzPlaying: false,
@@ -26,108 +26,108 @@ export default class Game extends Component {
     playing: false,
     player: null,
     players: []
-  };
+  }
 
   componentDidMount() {
     if (socket) {
-      socket.on('gameInit', this.onGameInit);
-      socket.on('tourSelect', this.onTourSelect);
-      socket.on('questionSelect', this.onQuestionSelect);
-      socket.on('play', this.onPlay);
-      socket.on('buzz', this.onBuzz);
-      socket.on('completeQuestion', this.onCompleteQuestion);
-      socket.on('cancelQuestion', this.onCancelQuestion);
-      socket.on('updatePlayers', this.onUpdatePlayers);
+      socket.on('gameInit', this.onGameInit)
+      socket.on('tourSelect', this.onTourSelect)
+      socket.on('questionSelect', this.onQuestionSelect)
+      socket.on('play', this.onPlay)
+      socket.on('buzz', this.onBuzz)
+      socket.on('completeQuestion', this.onCompleteQuestion)
+      socket.on('cancelQuestion', this.onCancelQuestion)
+      socket.on('updatePlayers', this.onUpdatePlayers)
 
-      socket.emit('getGameInit');
+      socket.emit('getGameInit')
     }
   }
 
   componentWillUnmount() {
     if (socket) {
-      socket.removeListener('gameInit', this.onGameInit);
-      socket.removeListener('tourSelect', this.onTourSelect);
-      socket.removeListener('questionSelect', this.onQuestionSelect);
-      socket.removeListener('play', this.onPlay);
-      socket.removeListener('buzz', this.onBuzz);
-      socket.removeListener('completeQuestion', this.onCompleteQuestion);
-      socket.removeListener('cancelQuestion', this.onCancelQuestion);
-      socket.removeListener('updatePlayers', this.onUpdatePlayers);
+      socket.removeListener('gameInit', this.onGameInit)
+      socket.removeListener('tourSelect', this.onTourSelect)
+      socket.removeListener('questionSelect', this.onQuestionSelect)
+      socket.removeListener('play', this.onPlay)
+      socket.removeListener('buzz', this.onBuzz)
+      socket.removeListener('completeQuestion', this.onCompleteQuestion)
+      socket.removeListener('cancelQuestion', this.onCancelQuestion)
+      socket.removeListener('updatePlayers', this.onUpdatePlayers)
     }
   }
 
   onGameInit = (data) => {
-    console.log(data);
-    this.setState(data);
+    console.log(data)
+    this.setState(data)
   }
 
   onTourSelect = (data) => {
-    console.log(data);
+    console.log(data)
     this.setState({
       currentTour: data.tour
-    });
+    })
   }
 
   onQuestionSelect = (data) => {
-    console.log(data);
-    const { question } = data;
-    const quest = gameData.questions[question];
+    console.log(data)
+    const { question } = data
+    const quest = gameData.questions[question]
     if (!quest) {
-      return;
+      return
     }
 
     this.setState({
       currentQuestion: question
-    });
+    })
 
     if (quest.cat) {
       this.setState({
         questionCat: true,
         buzzPlaying: true
-      });
+      })
     }
 
     if (quest.auction) {
       this.setState({
         questionAuction: true,
         buzzPlaying: true
-      });
+      })
     }
 
     if (quest.type === 'song') {
       this.setState({
         questionImage: null,
         questionSong: quest.file
-      });
+      })
     } else if (quest.type === 'image') {
       this.setState({
         questionImage: quest.file,
         questionSong: null
-      });
+      })
     }
   }
 
   onPlay = () => {
-    const { currentQuestion } = this.state;
-    const quest = gameData.questions[currentQuestion];
+    const { currentQuestion } = this.state
+    const quest = gameData.questions[currentQuestion]
     if (quest) {
       this.setState({
         questionCat: false,
         questionAuction: false,
         player: null,
         playing: true
-      });
+      })
     }
   }
 
   onBuzz = (data) => {
-    const { playing, player } = this.state;
+    const { playing, player } = this.state
     if (data.name && playing && !player) {
       this.setState({
         buzzPlaying: true,
         player: data.name,
         playing: false
-      });
+      })
     }
   }
 
@@ -139,7 +139,7 @@ export default class Game extends Component {
       currentQuestion: null,
       playing: false,
       player: null
-    });
+    })
   }
 
   onCancelQuestion = () => {
@@ -149,23 +149,23 @@ export default class Game extends Component {
       currentQuestion: null,
       player: null,
       playing: false
-    });
+    })
   }
 
   // Players
   onUpdatePlayers = ({ players }) => {
     this.setState({
       players
-    });
+    })
   }
 
   render() {
-    const style = require('./Game.scss');
+    const style = require('./Game.scss')
     const {
       buzzPlaying, completedQuestions, currentTour, currentQuestion, questionImage, questionSong,
       questionCat, questionAuction,
       player, playing
-    } = this.state;
+    } = this.state
 
     return (
       <div className={style.container}>
@@ -238,6 +238,6 @@ export default class Game extends Component {
                      onEnded={() => this.setState({ buzzPlaying: false })}
                      volume={0.7}/>
       </div>
-    );
+    )
   }
 }

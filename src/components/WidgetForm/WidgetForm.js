@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {reduxForm} from 'redux-form';
-import widgetValidation, {colors} from './widgetValidation';
-import * as widgetActions from 'redux/modules/widgets';
+import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {reduxForm} from 'redux-form'
+import widgetValidation, {colors} from './widgetValidation'
+import * as widgetActions from 'redux/modules/widgets'
 
 @connect(
   state => ({
@@ -28,12 +28,12 @@ export default class WidgetForm extends Component {
     saveError: PropTypes.object,
     formKey: PropTypes.string.isRequired,
     values: PropTypes.object.isRequired
-  };
+  }
 
   render() {
     const { editStop, fields: {id, color, sprocketCount, owner}, formKey, handleSubmit, invalid,
-      pristine, save, submitting, saveError: { [formKey]: saveError }, values } = this.props;
-    const styles = require('containers/Widgets/Widgets.scss');
+      pristine, save, submitting, saveError: { [formKey]: saveError }, values } = this.props
+    const styles = require('containers/Widgets/Widgets.scss')
     return (
       <tr className={submitting ? styles.saving : ''}>
         <td className={styles.idCol}>{id.value}</td>
@@ -61,7 +61,7 @@ export default class WidgetForm extends Component {
                   onClick={handleSubmit(() => save(values)
                     .then(result => {
                       if (result && typeof result.error === 'object') {
-                        return Promise.reject(result.error);
+                        return Promise.reject(result.error)
                       }
                     })
                   )}
@@ -71,6 +71,6 @@ export default class WidgetForm extends Component {
           {saveError && <div className="text-danger">{saveError}</div>}
         </td>
       </tr>
-    );
+    )
   }
 }

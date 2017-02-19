@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
-import { Button } from 'react-bootstrap';
-import cx from 'classnames';
-import store from 'store';
-import gameData from 'game/game-3';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import Helmet from 'react-helmet'
+import { Button } from 'react-bootstrap'
+import cx from 'classnames'
+import store from 'store'
+import gameData from 'game/game-3'
 
 @connect(
   state => ({ user: state.auth.user })
@@ -13,35 +13,35 @@ export default class Admin extends Component {
 
   static propTypes = {
     user: PropTypes.object
-  };
+  }
 
   constructor() {
-    super();
+    super()
     this.defaultState = {
       currentTour: 'tour-1',
       currentQuestion: null,
       completedQuestions: [],
       players: []
-    };
-    this.state = Object.assign({}, this.defaultState);
-    this.init();
+    }
+    this.state = Object.assign({}, this.defaultState)
+    this.init()
   }
 
   componentDidMount() {
     if (socket) {
-      socket.on('msg', this.onMessageReceived);
-      socket.on('updatePlayers', this.onUpdatePlayers);
+      socket.on('msg', this.onMessageReceived)
+      socket.on('updatePlayers', this.onUpdatePlayers)
     }
   }
 
   componentDidUpdate() {
-    store.set('game', this.state);
+    store.set('game', this.state)
   }
 
   componentWillUnmount() {
     if (socket) {
-      socket.removeListener('msg', this.onMessageReceived);
-      socket.removeListener('updatePlayers', this.onUpdatePlayers);
+      socket.removeListener('msg', this.onMessageReceived)
+      socket.removeListener('updatePlayers', this.onUpdatePlayers)
     }
   }
 
@@ -49,24 +49,24 @@ export default class Admin extends Component {
   onUpdatePlayers = ({ players }) => {
     this.setState({
       players
-    });
+    })
   }
 
   init() {
-    const game = store.get('game');
-    this.state = Object.assign({}, this.defaultState, game || {});
+    const game = store.get('game')
+    this.state = Object.assign({}, this.defaultState, game || {})
     if (game) {
-      socket.emit('setGameInit', game);
+      socket.emit('setGameInit', game)
     }
   }
 
   handleTourChange = (tour) => {
     this.setState({
       currentTour: tour
-    });
+    })
     socket.emit('tourSelect', {
       tour
-    });
+    })
   }
 
   handleNewGameStart = () => {
@@ -74,55 +74,55 @@ export default class Admin extends Component {
       completedQuestions: [],
       currentQuestion: null
     }, () => {
-      this.init();
-    });
+      this.init()
+    })
   }
 
   handleQuestionClick = (question) => {
-    const { completedQuestions, currentQuestion } = this.state;
+    const { completedQuestions, currentQuestion } = this.state
     if (currentQuestion || completedQuestions.includes(question)) {
-      return;
+      return
     }
     this.setState({
       currentQuestion: question
-    });
+    })
     socket.emit('questionSelect', {
       question
-    });
+    })
   }
 
   handlePlay = () => {
-    socket.emit('play');
+    socket.emit('play')
   }
 
   handleCompleteQuestion = () => {
-    const { completedQuestions, currentQuestion } = this.state;
+    const { completedQuestions, currentQuestion } = this.state
     if (!currentQuestion) {
-      return;
+      return
     }
-    completedQuestions.push(currentQuestion);
+    completedQuestions.push(currentQuestion)
     this.setState({
       completedQuestions,
       currentQuestion: null
-    });
-    socket.emit('completeQuestion', { completedQuestions });
+    })
+    socket.emit('completeQuestion', { completedQuestions })
   }
 
   handleCancelQuestion = () => {
     this.setState({
       currentQuestion: null
-    });
-    socket.emit('cancelQuestion');
+    })
+    socket.emit('cancelQuestion')
   }
 
   handleScoreChange(event, player) {
-    console.log(event.target.value);
-    console.log(player);
+    console.log(event.target.value)
+    console.log(player)
   }
 
   render() {
-    const style = require('./Admin.scss');
-    const { completedQuestions, currentTour, currentQuestion } = this.state;
+    const style = require('./Admin.scss')
+    const { completedQuestions, currentTour, currentQuestion } = this.state
 
     return (
       <div className="container">
@@ -148,7 +148,7 @@ export default class Admin extends Component {
               <Button bsStyle={tour === currentTour ? 'primary' : 'default'}
                       bsSize="large"
                       onClick={() => {
-                        this.handleTourChange(tour);
+                        this.handleTourChange(tour)
                       }}>
               {gameData.tours[tour].name}
               </Button>
@@ -193,6 +193,6 @@ export default class Admin extends Component {
           </tbody>
         </table>
       </div>
-    );
+    )
   }
 }

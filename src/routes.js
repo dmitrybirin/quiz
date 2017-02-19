@@ -1,12 +1,12 @@
-import React from 'react';
-import { IndexRoute, Route } from 'react-router';
+import React from 'react'
+import { IndexRoute, Route } from 'react-router'
 import {
   Admin,
   App,
   Game,
   Player,
   NotFound,
-} from 'containers';
+} from 'containers'
 
 export default () => {
   return (
@@ -21,5 +21,5 @@ export default () => {
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404}/>
     </Route>
-  );
-};
+  )
+}

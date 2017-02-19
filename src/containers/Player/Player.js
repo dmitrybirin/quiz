@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import Helmet from 'react-helmet';
-import { connect } from 'react-redux';
-import * as authActions from 'redux/modules/auth';
+import React, { Component, PropTypes } from 'react'
+import Helmet from 'react-helmet'
+import { connect } from 'react-redux'
+import * as authActions from 'redux/modules/auth'
 
 @connect(
   state => ({user: state.auth.user}),
@@ -12,33 +12,33 @@ export default class Player extends Component {
     login: PropTypes.func,
     logout: PropTypes.func,
     user: PropTypes.object
-  };
+  }
 
   state = {
     message: '',
     messages: []
-  };
+  }
 
   handleLoginSubmit = (event) => {
-    const name = this.refs.name.value;
+    const name = this.refs.name.value
     if (name) {
-      this.props.login(name);
+      this.props.login(name)
     }
-    event.preventDefault();
+    event.preventDefault()
   }
 
   handleBuzz = () => {
-    const { user } = this.props;
+    const { user } = this.props
     if (user) {
       socket.emit('buzz', {
         name: this.props.user.name
-      });
+      })
     }
   }
 
   render() {
-    const style = require('./Player.scss');
-    const { user } = this.props;
+    const style = require('./Player.scss')
+    const { user } = this.props
 
     return (
       <div className={style.container}>
@@ -68,6 +68,6 @@ export default class Player extends Component {
           </div>
         </div>}
       </div>
-    );
+    )
   }
 }

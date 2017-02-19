@@ -1,8 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import Helmet from 'react-helmet';
-import {initialize} from 'redux-form';
-import {SurveyForm} from 'components';
+import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
+import Helmet from 'react-helmet'
+import {initialize} from 'redux-form'
+import {SurveyForm} from 'components'
 
 @connect(
   () => ({}),
@@ -13,8 +13,8 @@ export default class Survey extends Component {
   }
 
   handleSubmit = (data) => {
-    window.alert('Data submitted! ' + JSON.stringify(data));
-    this.props.initialize('survey', {});
+    window.alert('Data submitted! ' + JSON.stringify(data))
+    this.props.initialize('survey', {})
   }
 
   handleInitialize = () => {
@@ -24,7 +24,7 @@ export default class Survey extends Component {
       occupation: 'Redux Wizard',
       currentlyEmployed: true,
       sex: 'male'
-    });
+    })
   }
 
   render() {
@@ -70,6 +70,6 @@ export default class Survey extends Component {
 
         <SurveyForm onSubmit={this.handleSubmit}/>
       </div>
-    );
+    )
   }
 }

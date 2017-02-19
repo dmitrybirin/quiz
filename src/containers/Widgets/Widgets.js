@@ -1,17 +1,17 @@
-import React, {Component, PropTypes} from 'react';
-import Helmet from 'react-helmet';
-import {connect} from 'react-redux';
-import * as widgetActions from 'redux/modules/widgets';
-import {isLoaded, load as loadWidgets} from 'redux/modules/widgets';
-import {initializeWithKey} from 'redux-form';
-import { WidgetForm } from 'components';
-import { asyncConnect } from 'redux-async-connect';
+import React, {Component, PropTypes} from 'react'
+import Helmet from 'react-helmet'
+import {connect} from 'react-redux'
+import * as widgetActions from 'redux/modules/widgets'
+import {isLoaded, load as loadWidgets} from 'redux/modules/widgets'
+import {initializeWithKey} from 'redux-form'
+import { WidgetForm } from 'components'
+import { asyncConnect } from 'redux-async-connect'
 
 @asyncConnect([{
   deferred: true,
   promise: ({store: {dispatch, getState}}) => {
     if (!isLoaded(getState())) {
-      return dispatch(loadWidgets());
+      return dispatch(loadWidgets())
     }
   }
 }])
@@ -32,19 +32,19 @@ export default class Widgets extends Component {
     editing: PropTypes.object.isRequired,
     load: PropTypes.func.isRequired,
     editStart: PropTypes.func.isRequired
-  };
+  }
 
   render() {
     const handleEdit = (widget) => {
-      const {editStart} = this.props; // eslint-disable-line no-shadow
-      return () => editStart(String(widget.id));
-    };
-    const {widgets, error, editing, loading, load} = this.props;
-    let refreshClassName = 'fa fa-refresh';
-    if (loading) {
-      refreshClassName += ' fa-spin';
+      const {editStart} = this.props // eslint-disable-line no-shadow
+      return () => editStart(String(widget.id))
     }
-    const styles = require('./Widgets.scss');
+    const {widgets, error, editing, loading, load} = this.props
+    let refreshClassName = 'fa fa-refresh'
+    if (loading) {
+      refreshClassName += ' fa-spin'
+    }
+    const styles = require('./Widgets.scss')
     return (
       <div className={styles.widgets + ' container'}>
         <h1>
@@ -100,7 +100,7 @@ export default class Widgets extends Component {
           </tbody>
         </table>}
       </div>
-    );
+    )
   }
 }
 
