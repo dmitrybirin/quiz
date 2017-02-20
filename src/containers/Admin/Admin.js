@@ -4,14 +4,22 @@ import Helmet from 'react-helmet'
 import { Button } from 'react-bootstrap'
 import cx from 'classnames'
 import store from 'store'
-import gameData from 'game/game-2'
+import gameData from 'game/game-3'
+import { firebaseConnect, helpers } from 'react-redux-firebase'
+const { dataToJS } = helpers
 
+@firebaseConnect([
+  '/questions'
+])
 @connect(
-  state => ({ user: state.auth.user })
+  ({ firebase }) => ({
+    questions: dataToJS(firebase, '/questions'),
+  })
 )
 export default class Admin extends Component {
 
   static propTypes = {
+    questions: PropTypes.object,
     user: PropTypes.object
   }
 
@@ -24,10 +32,10 @@ export default class Admin extends Component {
       players: []
     }
     this.state = Object.assign({}, this.defaultState)
-    this.init()
   }
 
   componentDidMount() {
+    this.init()
     if (socket) {
       socket.on('msg', this.onMessageReceived)
       socket.on('updatePlayers', this.onUpdatePlayers)
@@ -54,7 +62,8 @@ export default class Admin extends Component {
 
   init() {
     const game = store.get('game')
-    this.state = Object.assign({}, this.defaultState, game || {})
+    const state = Object.assign({}, this.defaultState, game || {})
+    this.setState(state)
     if (game) {
       socket.emit('setGameInit', game)
     }
@@ -123,6 +132,7 @@ export default class Admin extends Component {
   render() {
     const style = require('./Admin.scss')
     const { completedQuestions, currentTour, currentQuestion } = this.state
+    console.log(this.props.questions)
 
     return (
       <div className="container">
