@@ -1,12 +1,11 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
-import {
-  Admin,
-  App,
-  Game,
-  Player,
-  NotFound,
-} from 'containers'
+import Admin from 'containers/Admin/Admin'
+import AdminQuestions from 'containers/AdminQuestions/AdminQuestions'
+import App from 'containers/App/App'
+import Game from 'containers/Game/Game'
+import NotFound from 'containers/NotFound/NotFound'
+import Player from 'containers/Player/Player'
 
 export default () => {
   return (
@@ -16,6 +15,7 @@ export default () => {
 
       { /* Routes */ }
       <Route path="admin" component={Admin}/>
+      <Route path="admin/questions" component={AdminQuestions}/>
       <Route path="game" component={Game}/>
 
       { /* Catch all route */ }
