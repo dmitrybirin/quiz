@@ -6,6 +6,7 @@ import autobind from 'autobind-decorator'
 import { is } from 'ramda'
 const { dataToJS } = helpers
 import addQuestionValidation from './addQuestionValidation'
+import ReactPlayer from 'react-player'
 // Component
 import { Button, Input } from 'react-bootstrap'
 import RadioGroup from 'react-radio'
@@ -35,7 +36,15 @@ class AddQuestionForm extends Component {
     firebase: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     initialize: PropTypes.func,
-    resetForm: PropTypes.func.isRequired
+    resetForm: PropTypes.func.isRequired,
+    uploadedFiles: PropTypes.object
+  }
+
+  constructor() {
+    super()
+    this.state = {
+      fileUrl: null
+    }
   }
 
   componentDidMount() {
@@ -47,7 +56,13 @@ class AddQuestionForm extends Component {
   handleFilesDrop(files) {
     this.props.firebase.uploadFiles(FILES_PATH, files, FILES_PATH).then(res => {
       if (is(Array, res)) {
-        this.props.dispatch(this.props.change('question', 'file', res[0].getKey()))
+        const file = res[0].getKey()
+        if (file) {
+          this.props.dispatch(this.props.change('question', 'file', file))
+          this.setState({
+            fileUrl: this.props.uploadedFiles[file].downloadURL
+          })
+        }
       }
     })
   }
@@ -58,6 +73,7 @@ class AddQuestionForm extends Component {
       fields: { answer, file, text, type, video },
       handleSubmit,
     } = this.props
+    const { fileUrl } = this.state
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -79,14 +95,23 @@ class AddQuestionForm extends Component {
               </div>
             </Dropzone>
             {file.touched && file.error && <div className="text-danger">{file.error}</div>}
-            {file.value}
+            {file.value && fileUrl &&
+            <div>
+              {type.value === 'sound' &&
+              <ReactPlayer url={fileUrl}
+                           controls/>}
+              {type.value === 'image' &&
+              <img className={styles.image} src={fileUrl}/>}
+            </div>}
           </div>}
           {type.value === 'video' &&
           <div className={styles.row}>
             <Input type="text" placeholder="Video URL" {...video}/>
             {video.touched && video.error && <div className="text-danger">{video.error}</div>}
-          </div>
-          }
+            {video.value &&
+            <ReactPlayer url={video.value}
+                         controls/>}
+          </div>}
           <div className={styles.row}>
             <Input type="textarea" placeholder="Question" {...text}/>
             {text.touched && text.error && <div className="text-danger">{text.error}</div>}
