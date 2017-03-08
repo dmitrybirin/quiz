@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import ReactPlayer from 'react-player'
 import Helmet from 'react-helmet'
-import gameData from 'game/game-3'
+import gameData from 'game/game-2'
 import cx from 'classnames'
 
 @connect(

@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import { Button } from 'react-bootstrap'
 import cx from 'classnames'
 import store from 'store'
-import gameData from 'game/game-3'
+import gameData from 'game/game-2'
 
 @connect(
   state => ({ user: state.auth.user })
