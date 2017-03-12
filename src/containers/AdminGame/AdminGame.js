@@ -4,6 +4,7 @@ import Helmet from 'react-helmet'
 import { initialize } from 'redux-form'
 import autobind from 'autobind-decorator'
 import { path } from 'ramda'
+
 // Components
 import { Button, Input } from 'react-bootstrap'
 import { Link } from 'react-router'
@@ -15,11 +16,11 @@ const CATEGORIES_PATH = 'categories'
 const GAMES_PATH = 'games'
 const QUESTION_PATH = 'questions'
 
-@firebaseConnect([
+@firebaseConnect(({ params }) => ([
   CATEGORIES_PATH,
-  GAMES_PATH,
+  `${GAMES_PATH}/${params.key}`,
   QUESTION_PATH,
-])
+]))
 @connect(
   ({ firebase }) => ({
     categories: dataToJS(firebase, CATEGORIES_PATH),
@@ -105,9 +106,30 @@ export default class AdminGame extends Component {
     })
   }
 
+  renderQuestions(categoryQuestions) {
+    const { questions } = this.props
+    if (!categoryQuestions || !questions) {
+      return null
+    }
+    const sortedCategoryQuestions = Object.keys(categoryQuestions).sort((key1, key2) => categoryQuestions[key1].order - categoryQuestions[key2].order)
+    return (
+      <div>
+        {categoryQuestions && questions &&
+        <ul>
+          {sortedCategoryQuestions.map(questionKey => (
+            <li key={questionKey}>
+              {questions[questionKey].answer}
+              <span> {categoryQuestions[questionKey].order}</span>
+            </li>
+          ))}
+        </ul>}
+      </div>
+    )
+  }
+
   render() {
     const style = require('./AdminGame.scss')
-    const { categories, games, params: { key }, questions } = this.props
+    const { categories, games, params: { key } } = this.props
     const { addQuestionCategoryKey, categoryName, gameName } = this.state
     const game = path([key], games)
     const gameCategories = path([key, 'categories'], games)
@@ -134,12 +156,7 @@ export default class AdminGame extends Component {
                   <h4>{categories[categoryKey].name}</h4>
                   <div>
                     Questions
-                    {categories[categoryKey].questions &&
-                    <ul>
-                      {Object.keys(categories[categoryKey].questions).map(questionKey => (
-                        <li key={questionKey}>{questions[questionKey].answer}</li>
-                      ))}
-                    </ul>}
+                    {this.renderQuestions(categories[categoryKey].questions)}
                     <Button bsStyle="primary"
                             onClick={() => this.handleAddQuestionClick(categoryKey)}>
                       + Add question
