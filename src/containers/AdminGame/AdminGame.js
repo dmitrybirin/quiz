@@ -8,7 +8,7 @@ import { path } from 'ramda'
 // Components
 import { Button, Input } from 'react-bootstrap'
 import { Link } from 'react-router'
-import AddQuestionFrom from 'components/AddQuestionForm/AddQuestionForm'
+import QuestionForm from 'components/QuestionForm/QuestionForm'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 const { dataToJS } = helpers
@@ -44,7 +44,8 @@ export default class AdminGame extends Component {
     super()
     this.state = {
       gameName: '',
-      addQuestionCategoryKey: null
+      addQuestionCategoryKey: null,
+      editQuestionKey: null
     }
   }
 
@@ -81,6 +82,8 @@ export default class AdminGame extends Component {
     })
   }
 
+  // Add question
+
   handleAddQuestionClick(addQuestionCategoryKey) {
     this.setState({
       addQuestionCategoryKey
@@ -103,11 +106,54 @@ export default class AdminGame extends Component {
       this.props.firebase.update(`${CATEGORIES_PATH}/${addQuestionCategoryKey}/questions/${questionKey}`, {
         order: 0
       })
+      this.handleAddQuestionCancel()
     })
   }
 
-  renderQuestions(categoryQuestions) {
+  handleAddQuestionCancel() {
+    this.setState({
+      addQuestionCategoryKey: null,
+    })
+  }
+
+  // Edit question
+  handleEditQuestionClick(editQuestionKey) {
+    this.setState({
+      editQuestionKey
+    })
+  }
+
+  handleEditQuestion({ answer, file = '', text, type, video = '' }) {
+    const { editQuestionKey } = this.state
+    this.props.firebase.update(`${QUESTION_PATH}/${editQuestionKey}`, {
+      answer, file, text, type, video
+    }).then(() => {
+      this.props.initialize('question', {
+        answer: '',
+        file: '',
+        text: '',
+        type,
+        video: '',
+      })
+      this.handleEditQuestionCancel()
+    })
+  }
+
+  handleEditQuestionCancel() {
+    this.setState({
+      editQuestionKey: null
+    })
+  }
+
+  // Delete question
+  handleDeleteQuestionClick(categoryKey, questionKey) {
+    this.props.firebase.remove(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`)
+    this.props.firebase.remove(`${QUESTION_PATH}/${questionKey}`)
+  }
+
+  renderQuestions(categoryKey, categoryQuestions) {
     const { questions } = this.props
+    const { editQuestionKey } = this.state
     if (!categoryQuestions || !questions) {
       return null
     }
@@ -116,10 +162,18 @@ export default class AdminGame extends Component {
       <div>
         {categoryQuestions && questions &&
         <ul>
-          {sortedCategoryQuestions.map(questionKey => (
+          {sortedCategoryQuestions.filter(questionKey => questions[questionKey]).map(questionKey => (
             <li key={questionKey}>
               {questions[questionKey].answer}
               <span> {categoryQuestions[questionKey].order}</span>
+              {' '} <Button bsSize="small">Up</Button>
+              {' '} <Button bsSize="small">Down</Button>
+              {' '} <Button bsSize="small" onClick={() => this.handleEditQuestionClick(questionKey)}>Edit</Button>
+              {' '} <Button bsSize="small" onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>Delete</Button>
+              {editQuestionKey === questionKey &&
+              <QuestionForm question={questions[questionKey]}
+                            onSubmit={this.handleEditQuestion}
+                            onCancel={this.handleEditQuestionCancel}/>}
             </li>
           ))}
         </ul>}
@@ -140,7 +194,7 @@ export default class AdminGame extends Component {
         <div>
           <Link to="/admin/games/">All games</Link>
         </div>
-        {game &&
+        {game && categories &&
         <div className={style.game}>
           <h3>Game {game.name || key}</h3>
           <div>
@@ -156,14 +210,15 @@ export default class AdminGame extends Component {
                   <h4>{categories[categoryKey].name}</h4>
                   <div>
                     Questions
-                    {this.renderQuestions(categories[categoryKey].questions)}
+                    {this.renderQuestions(categoryKey, categories[categoryKey].questions)}
                     <Button bsStyle="primary"
                             onClick={() => this.handleAddQuestionClick(categoryKey)}>
                       + Add question
                     </Button>
                     {categoryKey === addQuestionCategoryKey &&
                     <div className={style.addQuestionFrom}>
-                      <AddQuestionFrom onSubmit={this.handleAddQuestion}/>
+                      <QuestionForm onSubmit={this.handleAddQuestion}
+                                    onCancel={this.handleAddQuestionCancel}/>
                     </div>}
                   </div>
                 </div>

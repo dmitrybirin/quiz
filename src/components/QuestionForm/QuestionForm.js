@@ -5,8 +5,9 @@ import { firebaseConnect, helpers } from 'react-redux-firebase'
 import autobind from 'autobind-decorator'
 import { is } from 'ramda'
 const { dataToJS } = helpers
-import addQuestionValidation from './addQuestionValidation'
+import questionFormValidation from './questionFormValidation'
 import ReactPlayer from 'react-player'
+import { path } from 'ramda'
 // Component
 import { Button, Input } from 'react-bootstrap'
 import RadioGroup from 'react-radio'
@@ -17,7 +18,7 @@ const FILES_PATH = 'uploadedFiles'
 @reduxForm({
   form: 'question',
   fields: ['answer', 'file', 'text', 'type', 'video'],
-  validate: addQuestionValidation
+  validate: questionFormValidation
 })
 @firebaseConnect([
   FILES_PATH
@@ -28,29 +29,35 @@ const FILES_PATH = 'uploadedFiles'
   }), { change, initialize }
 )
 @autobind
-class AddQuestionForm extends Component {
+class QuestionForm extends Component {
   static propTypes = {
     change: PropTypes.func,
     dispatch: PropTypes.func,
-    fields: PropTypes.object.isRequired,
-    firebase: PropTypes.object.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
+    fields: PropTypes.object,
+    firebase: PropTypes.object,
+    handleSubmit: PropTypes.func,
     initialize: PropTypes.func,
-    resetForm: PropTypes.func.isRequired,
+    onCancel: PropTypes.func,
+    question: PropTypes.object,
+    resetForm: PropTypes.func,
     uploadedFiles: PropTypes.object
   }
 
-  constructor() {
-    super()
-    this.state = {
-      fileUrl: null
-    }
-  }
-
   componentDidMount() {
-    this.props.initialize('question', {
-      type: 'text'
-    })
+    const { question } = this.props
+    if (question) {
+      this.props.initialize('question', {
+        answer: question.answer,
+        file: question.file,
+        text: question.text,
+        type: question.type,
+        video: question.video,
+      })
+    } else {
+      this.props.initialize('question', {
+        type: 'text'
+      })
+    }
   }
 
   handleFilesDrop(files) {
@@ -59,21 +66,18 @@ class AddQuestionForm extends Component {
         const file = res[0].getKey()
         if (file) {
           this.props.dispatch(this.props.change('question', 'file', file))
-          this.setState({
-            fileUrl: this.props.uploadedFiles[file].downloadURL
-          })
         }
       }
     })
   }
 
   render() {
-    const styles = require('./AddQuestionForm.scss')
+    const styles = require('./QuestionForm.scss')
     const {
       fields: { answer, file, text, type, video },
-      handleSubmit,
+      handleSubmit, uploadedFiles
     } = this.props
-    const { fileUrl } = this.state
+    const fileUrl = path([file.value, 'downloadURL'], uploadedFiles)
     return (
       <div>
         <form onSubmit={handleSubmit}>
@@ -120,11 +124,12 @@ class AddQuestionForm extends Component {
             <Input type="textarea" placeholder="Answer" {...answer}/>
             {answer.touched && answer.error && <div className="text-danger">{answer.error}</div>}
           </div>
-          <Button bsStyle="primary" type="submit">Add question</Button>
+          <Button bsStyle="primary" type="submit">Save</Button>
+          <Button onClick={this.props.onCancel}>Cancel</Button>
         </form>
       </div>
     )
   }
 }
 
-export default AddQuestionForm
+export default QuestionForm

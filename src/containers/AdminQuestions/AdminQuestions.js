@@ -7,7 +7,7 @@ import { firebaseConnect, helpers } from 'react-redux-firebase'
 const { dataToJS } = helpers
 // Components
 import { Col, Grid, Row } from 'react-bootstrap'
-import AddQuestionForm from './components/AddQuestionForm/AddQuestionForm'
+import QuestionForm from 'components/QuestionForm/QuestionForm'
 
 const QUESTION_PATH = 'questions'
 
@@ -57,7 +57,7 @@ class AdminQuestions extends Component {
                 <h4>New question</h4>
                 <Row>
                   <Col xs={12} md={6}>
-                    <AddQuestionForm firebase={firebase} onSubmit={this.handleFormSubmit}/>
+                    <QuestionForm firebase={firebase} onSubmit={this.handleFormSubmit}/>
                   </Col>
                 </Row>
               </div>
