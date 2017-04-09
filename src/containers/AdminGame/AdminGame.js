@@ -90,8 +90,7 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleAddQuestion({ answer, file = '', text, type, video = '' }) {
-    const { addQuestionCategoryKey } = this.state
+  handleAddQuestion(categoryKey, { answer, file = '', text, type, video = '' }) {
     this.props.firebase.push(QUESTION_PATH, {
       answer, file, text, type, video
     }).then(res => {
@@ -103,8 +102,10 @@ export default class AdminGame extends Component {
         video: '',
       })
       const questionKey = res.getKey()
-      this.props.firebase.update(`${CATEGORIES_PATH}/${addQuestionCategoryKey}/questions/${questionKey}`, {
-        order: 0
+      const categoryQuestions = path([categoryKey, 'questions'], this.props.categories)
+      const order = categoryQuestions ? (Object.keys(categoryQuestions).length + 1) * 100 : 100
+      this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
+        order
       })
       this.handleAddQuestionCancel()
     })
@@ -123,9 +124,8 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleEditQuestion({ answer, file = '', text, type, video = '' }) {
-    const { editQuestionKey } = this.state
-    this.props.firebase.update(`${QUESTION_PATH}/${editQuestionKey}`, {
+  handleEditQuestion(questionKey, { answer, file = '', text, type, video = '' }) {
+    this.props.firebase.update(`${QUESTION_PATH}/${questionKey}`, {
       answer, file, text, type, video
     }).then(() => {
       this.props.initialize('question', {
@@ -172,7 +172,7 @@ export default class AdminGame extends Component {
               {' '} <Button bsSize="small" onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>Delete</Button>
               {editQuestionKey === questionKey &&
               <QuestionForm question={questions[questionKey]}
-                            onSubmit={this.handleEditQuestion}
+                            onSubmit={data => this.handleEditQuestion(questionKey, data)}
                             onCancel={this.handleEditQuestionCancel}/>}
             </li>
           ))}
@@ -194,7 +194,7 @@ export default class AdminGame extends Component {
         <div>
           <Link to="/admin/games/">All games</Link>
         </div>
-        {game && categories &&
+        {game &&
         <div className={style.game}>
           <h3>Game {game.name || key}</h3>
           <div>
@@ -205,7 +205,7 @@ export default class AdminGame extends Component {
             <h3>Categories</h3>
             {gameCategories &&
             <div>
-              {Object.keys(gameCategories).map(categoryKey => (
+              {Object.keys(gameCategories).filter(categoryKey => categories[categoryKey]).map(categoryKey => (
                 <div key={categoryKey}>
                   <h4>{categories[categoryKey].name}</h4>
                   <div>
@@ -217,7 +217,7 @@ export default class AdminGame extends Component {
                     </Button>
                     {categoryKey === addQuestionCategoryKey &&
                     <div className={style.addQuestionFrom}>
-                      <QuestionForm onSubmit={this.handleAddQuestion}
+                      <QuestionForm onSubmit={data => this.handleAddQuestion(categoryKey, data)}
                                     onCancel={this.handleAddQuestionCancel}/>
                     </div>}
                   </div>
