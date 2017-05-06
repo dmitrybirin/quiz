@@ -117,6 +117,34 @@ export default class AdminGame extends Component {
     })
   }
 
+  handleUpClick(categoryKey, questionKey) {
+    const { categories } = this.props
+    const questions = categories[categoryKey].questions
+    const questionOrder = questions[questionKey].order
+    const prevOrder = questionOrder - 100
+    const prevQuestionKey = Object.keys(questions).find(key => questions[key].order === prevOrder)
+    this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${prevQuestionKey}`, {
+      order: questionOrder
+    })
+    this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
+      order: prevOrder
+    })
+  }
+
+  handleDownClick(categoryKey, questionKey) {
+    const { categories } = this.props
+    const questions = categories[categoryKey].questions
+    const questionOrder = questions[questionKey].order
+    const nextOrder = questionOrder + 100
+    const nextQuestionKey = Object.keys(questions).find(key => questions[key].order === nextOrder)
+    this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${nextQuestionKey}`, {
+      order: questionOrder
+    })
+    this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
+      order: nextOrder
+    })
+  }
+
   // Edit question
   handleEditQuestionClick(editQuestionKey) {
     this.setState({
@@ -158,18 +186,25 @@ export default class AdminGame extends Component {
       return null
     }
     const sortedCategoryQuestions = Object.keys(categoryQuestions).sort((key1, key2) => categoryQuestions[key1].order - categoryQuestions[key2].order)
+    const filteredCategoryQuestions = sortedCategoryQuestions.filter(questionKey => questions[questionKey])
     return (
       <div>
         {categoryQuestions && questions &&
         <ul>
-          {sortedCategoryQuestions.filter(questionKey => questions[questionKey]).map(questionKey => (
+          {filteredCategoryQuestions.map((questionKey, index) => (
             <li key={questionKey}>
               {questions[questionKey].answer}
               <span> {categoryQuestions[questionKey].order}</span>
-              {' '} <Button bsSize="small">Up</Button>
-              {' '} <Button bsSize="small">Down</Button>
-              {' '} <Button bsSize="small" onClick={() => this.handleEditQuestionClick(questionKey)}>Edit</Button>
-              {' '} <Button bsSize="small" onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>Delete</Button>
+              {' '}
+              {index !== 0 &&
+              <Button bsSize="small" onClick={() => this.handleUpClick(categoryKey, questionKey)}>Up</Button>}
+              {' '}
+              {index !== filteredCategoryQuestions.length - 1 &&
+              <Button bsSize="small" onClick={() => this.handleDownClick(categoryKey, questionKey)}>Down</Button>}
+              {' '}
+              <Button bsSize="small" onClick={() => this.handleEditQuestionClick(questionKey)}>Edit</Button>
+              {' '}
+              <Button bsSize="small" onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>Delete</Button>
               {editQuestionKey === questionKey &&
               <QuestionForm question={questions[questionKey]}
                             onSubmit={data => this.handleEditQuestion(questionKey, data)}
@@ -203,7 +238,7 @@ export default class AdminGame extends Component {
           </div>
           <div>
             <h3>Categories</h3>
-            {gameCategories &&
+            {categories && gameCategories &&
             <div>
               {Object.keys(gameCategories).filter(categoryKey => categories[categoryKey]).map(categoryKey => (
                 <div key={categoryKey}>
