@@ -1,0 +1,214 @@
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import Helmet from 'react-helmet'
+import { Button } from 'react-bootstrap'
+import cx from 'classnames'
+import store from 'store'
+import { firebaseConnect, helpers } from 'react-redux-firebase'
+const { dataToJS } = helpers
+import { path } from 'ramda'
+import autobind from 'autobind-decorator'
+
+const CATEGORIES_PATH = 'categories'
+const GAMES_PATH = 'games'
+const PLAYS_PATH = 'plays'
+const QUESTION_PATH = 'questions'
+const TOURS_PATH = 'tours'
+
+@firebaseConnect(() => ([
+  CATEGORIES_PATH,
+  GAMES_PATH,
+  PLAYS_PATH,
+  QUESTION_PATH,
+  TOURS_PATH,
+]))
+@connect(
+  ({ firebase }) => ({
+    categories: dataToJS(firebase, CATEGORIES_PATH),
+    games: dataToJS(firebase, GAMES_PATH),
+    plays: dataToJS(firebase, PLAYS_PATH),
+    questions: dataToJS(firebase, QUESTION_PATH),
+    tours: dataToJS(firebase, TOURS_PATH),
+  })
+)
+@autobind
+export default class AdminPlay extends Component {
+
+  static propTypes = {
+    categories: PropTypes.object,
+    firebase: PropTypes.object,
+    games: PropTypes.object,
+    params: PropTypes.object,
+    plays: PropTypes.object,
+    questions: PropTypes.object,
+    tours: PropTypes.object,
+    user: PropTypes.object,
+  }
+
+  constructor() {
+    super()
+    this.defaultState = {
+      currentQuestion: null,
+      completedQuestions: [],
+      players: []
+    }
+    this.state = Object.assign({}, this.defaultState)
+  }
+
+  componentDidMount() {
+    this.init()
+    if (socket) {
+      socket.on('msg', this.onMessageReceived)
+      socket.on('updatePlayers', this.onUpdatePlayers)
+    }
+  }
+
+  componentDidUpdate() {
+    store.set('game', this.state)
+  }
+
+  componentWillUnmount() {
+    if (socket) {
+      socket.removeListener('msg', this.onMessageReceived)
+      socket.removeListener('updatePlayers', this.onUpdatePlayers)
+    }
+  }
+
+  // Players
+  onUpdatePlayers = ({ players }) => {
+    this.setState({
+      players
+    })
+  }
+
+  init() {
+    const game = store.get('game')
+    const state = Object.assign({}, this.defaultState, game || {})
+    this.setState(state)
+    if (game) {
+      socket.emit('setGameInit', game)
+    }
+  }
+
+  handleTourChange(currentTourKey) {
+    const { params: { key } } = this.props
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      currentTourKey
+    })
+  }
+
+  handleNewGameStart = () => {
+    this.setState({
+      completedQuestions: [],
+      currentQuestion: null
+    }, () => {
+      this.init()
+    })
+  }
+
+  handleQuestionClick(questionKey) {
+    const { params: { key }, plays } = this.props
+    const { completedQuestions, currentQuestionKey } = plays[key]
+    if (currentQuestionKey || (completedQuestions && completedQuestions[questionKey])) {
+      return
+    }
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      currentQuestionKey: questionKey
+    })
+  }
+
+  handlePlay = () => {
+    socket.emit('plays')
+  }
+
+  handleCompleteQuestion = () => {
+    const { completedQuestions, currentQuestion } = this.state
+    if (!currentQuestion) {
+      return
+    }
+    completedQuestions.push(currentQuestion)
+    this.setState({
+      completedQuestions,
+      currentQuestion: null
+    })
+    socket.emit('completeQuestion', { completedQuestions })
+  }
+
+  handleCancelQuestion() {
+    const { params: { key } } = this.props
+    this.props.firebase.remove(`${PLAYS_PATH}/${key}/currentQuestionKey`)
+  }
+
+  handleScoreChange(event, player) {
+    console.log(event.target.value)
+    console.log(player)
+  }
+
+  render() {
+    const style = require('./AdminPlay.scss')
+    const { categories, games, params: { key }, plays, questions, tours } = this.props
+    const play = path([key], plays)
+    const gameKey = path(['game'], play)
+    const game = path([gameKey], games)
+    const gameTours = path(['tours'], game)
+    const currentTourKey = path(['currentTourKey'], play)
+    const currentQuestionKey = path(['currentQuestionKey'], play)
+    const completedQuestions = path(['completedQuestions'], play) || []
+
+    return (
+      <div className="container">
+        <Helmet title="AdminPlay"/>
+        <div className={style.game}>
+          <div className={style.tours}>
+            {tours && gameTours && Object.keys(gameTours).map(tourKey => (
+              <span key={tourKey}>
+              <Button bsStyle={tourKey === currentTourKey ? 'primary' : 'default'}
+                      bsSize="large"
+                      onClick={() => {
+                        this.handleTourChange(tourKey)
+                      }}>
+              {tours[tourKey].name}
+              </Button>
+                {' '}
+            </span>
+            ))}
+          </div>
+          <div className={style.newGame}>
+            <Button onClick={this.handleNewGameStart}>Новая игра</Button>
+          </div>
+        </div>
+        {currentQuestionKey && questions &&
+        <div>
+          <p><strong>Ответ:</strong> {questions[currentQuestionKey].answer}</p>
+          <div className={style.controls}>
+            <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Играть</Button>
+            {' '}
+            <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
+            {' '}
+            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Вопрос сыгран</Button>
+          </div>
+        </div>}
+
+        <table className={style.table}>
+          <tbody>
+          {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
+            <tr key={categoryKey}>
+              <td className={style.tableCategory}>{categories[categoryKey].name}</td>
+              {Object.keys(categories[categoryKey].questions).map((questionKey, questionIndex) => (
+                <td key={questionKey}
+                    className={cx({
+                      [style.tableCell]: true,
+                      [style.active]: questionKey === currentQuestionKey,
+                      [style.completed]: completedQuestions.includes(questionKey)
+                    })}
+                    onClick={() => this.handleQuestionClick(questionKey)}>
+                  {(questionIndex + 1) * 100}
+                </td>
+              ))}
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      </div>)
+  }
+}

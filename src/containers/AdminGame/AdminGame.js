@@ -4,29 +4,36 @@ import Helmet from 'react-helmet'
 import { initialize } from 'redux-form'
 import autobind from 'autobind-decorator'
 import { path } from 'ramda'
-
+import { push } from 'react-router-redux'
 // Components
 import { Button, Input } from 'react-bootstrap'
 import { Link } from 'react-router'
 import QuestionForm from 'components/QuestionForm/QuestionForm'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
+import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
 const GAMES_PATH = 'games'
+const PLAYS_PATH = 'plays'
 const QUESTION_PATH = 'questions'
+const TOURS_PATH = 'tours'
 
 @firebaseConnect(({ params }) => ([
   CATEGORIES_PATH,
   `${GAMES_PATH}/${params.key}`,
+  PLAYS_PATH,
   QUESTION_PATH,
+  TOURS_PATH,
 ]))
 @connect(
   ({ firebase }) => ({
     categories: dataToJS(firebase, CATEGORIES_PATH),
     games: dataToJS(firebase, GAMES_PATH),
+    plays: dataToJS(firebase, PLAYS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
-  }), { initialize }
+    tours: dataToJS(firebase, TOURS_PATH),
+  }), { initialize, push }
 )
 @autobind
 export default class AdminGame extends Component {
@@ -37,7 +44,10 @@ export default class AdminGame extends Component {
     games: PropTypes.object,
     initialize: PropTypes.func,
     params: PropTypes.object,
+    plays: PropTypes.object,
+    push: PropTypes.func,
     questions: PropTypes.object,
+    tours: PropTypes.object,
   }
 
   constructor() {
@@ -47,6 +57,17 @@ export default class AdminGame extends Component {
       addQuestionCategoryKey: null,
       editQuestionKey: null
     }
+  }
+
+  handlePlayClick() {
+    const { games, params: { key } } = this.props
+    this.props.firebase.push(PLAYS_PATH, {
+      game: key,
+      currentTourKey: Object.keys(games[key].tours)[0]
+    }).then(res => {
+      const playKey = res.getKey()
+      this.props.push(`/admin/play/${playKey}`)
+    })
   }
 
   handleGameNameChange(event) {
@@ -63,27 +84,32 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleCategoryNameChange(event) {
-    this.setState({
-      categoryName: event.target.value
+  // Tour
+  handleAddTourClick() {
+    const { params: { key } } = this.props
+    this.props.firebase.push(TOURS_PATH, {
+      name: 'tour'
+    }).then(res => {
+      const tourKey = res.getKey()
+      this.props.firebase.update(`${GAMES_PATH}/${key}/tours/${tourKey}`, {
+        order: 0
+      })
     })
   }
 
-  handleAddCategoryClick() {
-    const { params: { key } } = this.props
-    const { categoryName } = this.state
+  // Category
+  handleAddCategory({ name }, tourKey) {
     this.props.firebase.push(CATEGORIES_PATH, {
-      name: categoryName
+      name
     }).then(res => {
       const categoryKey = res.getKey()
-      this.props.firebase.update(`${GAMES_PATH}/${key}/categories/${categoryKey}`, {
+      this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${categoryKey}`, {
         order: 0
       })
     })
   }
 
   // Add question
-
   handleAddQuestionClick(addQuestionCategoryKey) {
     this.setState({
       addQuestionCategoryKey
@@ -204,7 +230,8 @@ export default class AdminGame extends Component {
               {' '}
               <Button bsSize="small" onClick={() => this.handleEditQuestionClick(questionKey)}>Edit</Button>
               {' '}
-              <Button bsSize="small" onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>Delete</Button>
+              <Button bsSize="small"
+                      onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>Delete</Button>
               {editQuestionKey === questionKey &&
               <QuestionForm question={questions[questionKey]}
                             onSubmit={data => this.handleEditQuestion(questionKey, data)}
@@ -218,10 +245,10 @@ export default class AdminGame extends Component {
 
   render() {
     const style = require('./AdminGame.scss')
-    const { categories, games, params: { key } } = this.props
-    const { addQuestionCategoryKey, categoryName, gameName } = this.state
+    const { categories, games, params: { key }, tours } = this.props
+    const { addQuestionCategoryKey, gameName } = this.state
     const game = path([key], games)
-    const gameCategories = path([key, 'categories'], games)
+    const gameTours = path(['tours'], game)
 
     return (
       <div className="container">
@@ -229,38 +256,54 @@ export default class AdminGame extends Component {
         <div>
           <Link to="/admin/games/">All games</Link>
         </div>
+        <div>
+          <Button bsStyle="primary" onClick={this.handlePlayClick}>Play</Button>
+        </div>
         {game &&
         <div className={style.game}>
-          <h3>Game {game.name || key}</h3>
+          <h1>Game {game.name || key}</h1>
           <div>
-            <Input type="text" value={gameName} onChange={this.handleGameNameChange}/>
-            <Button bsStyle="primary" onClick={this.handleEditNameClick}>Edit Name</Button>
+            <Input type="text"
+                   value={gameName}
+                   onChange={this.handleGameNameChange}
+                   buttonAfter={<Button bsStyle="primary" onClick={this.handleEditNameClick}>Edit Name</Button>}/>
           </div>
           <div>
-            <h3>Categories</h3>
-            {categories && gameCategories &&
-            <div>
-              {Object.keys(gameCategories).filter(categoryKey => categories[categoryKey]).map(categoryKey => (
-                <div key={categoryKey}>
-                  <h4>{categories[categoryKey].name}</h4>
+            {gameTours && Object.keys(gameTours).map((tourKey, index) => (
+              <div key={tourKey}>
+                <h2>Tour {index + 1}</h2>
+                {tours && tours[tourKey] &&
+                <div>
                   <div>
-                    Questions
-                    {this.renderQuestions(categoryKey, categories[categoryKey].questions)}
-                    <Button bsStyle="primary"
-                            onClick={() => this.handleAddQuestionClick(categoryKey)}>
-                      + Add question
-                    </Button>
-                    {categoryKey === addQuestionCategoryKey &&
-                    <div className={style.addQuestionFrom}>
-                      <QuestionForm onSubmit={data => this.handleAddQuestion(categoryKey, data)}
-                                    onCancel={this.handleAddQuestionCancel}/>
+                    {categories &&
+                    <div>
+                      {tours[tourKey].categories && Object.keys(tours[tourKey].categories).map(categoryKey => (
+                        <div key={categoryKey}>
+                          <h4>{categories[categoryKey].name}</h4>
+                          <div>
+                            {this.renderQuestions(categoryKey, categories[categoryKey].questions)}
+                            <Button bsStyle="primary"
+                                    onClick={() => this.handleAddQuestionClick(categoryKey)}>
+                              + Add question
+                            </Button>
+                            {categoryKey === addQuestionCategoryKey &&
+                            <div className={style.addQuestionFrom}>
+                              <QuestionForm onSubmit={data => this.handleAddQuestion(categoryKey, data)}
+                                            onCancel={this.handleAddQuestionCancel}/>
+                            </div>}
+                          </div>
+                        </div>
+                      ))}
                     </div>}
+                    <AddCategoryForm form={`tour-${tourKey}`}
+                                     onSubmit={data => this.handleAddCategory(data, tourKey)}/>
                   </div>
-                </div>
-              ))}
-            </div>}
-            <Input type="text" value={categoryName} onChange={this.handleCategoryNameChange}/>
-            <Button bsStyle="primary" onClick={this.handleAddCategoryClick}>+ Add category</Button>
+                </div>}
+              </div>
+            ))}
+          </div>
+          <div>
+            <Button bsStyle="primary" onClick={this.handleAddTourClick}>+ Add tour</Button>
           </div>
         </div>}
       </div>

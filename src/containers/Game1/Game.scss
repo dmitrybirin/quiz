@@ -1,0 +1,124 @@
+@import "../../theme/variables.scss";
+
+.container {
+  padding: 0 20px;
+}
+
+.title {
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.9);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  width: 100%;
+}
+
+.players {
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.playersWrap {
+  display: inline-block;
+}
+
+.playersBlock {
+  display: inline-block;
+  font-size: 24px;
+  padding: 0 20px;
+}
+
+.table {
+  border: 1px solid #999;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.tableCategory {
+  border: 1px solid #999;
+  font-size: 32px;
+  line-height: 32px;
+  height: 12vh;
+  padding: 0 20px;
+  text-align: center;
+  width: 25%;
+}
+
+.tableCell {
+  border: 1px solid #999;
+  font-size: 48px;
+  height: 12vh;
+  text-align: center;
+  width: 15%;
+  &.active {
+    background-color: $brand-danger;
+  }
+  &.completed {
+    color: #333;
+  }
+}
+
+.player {
+  @extend .modal;
+  font-size: 20vh;
+  line-height: 20vh;
+  text-align: center;
+  z-index: 20;
+  span {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.image {
+  @extend .modal;
+  height: 1px;
+  position: fixed;
+  text-align: center;
+  z-index: 10;
+  &.active {
+    height: 100%;
+    width: 100%;
+  }
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.cat {
+  @extend .modal;
+  height: 1px;
+  width: 1px;
+  z-index: 10;
+  &.active {
+    height: 100%;
+    width: 100%;
+  }
+  img {
+    height: 100%;
+  }
+}
+
+.auction {
+  @extend .modal;
+  z-index: 10;
+  &.active {
+    height: 100%;
+    width: 100%;
+  }
+  img {
+    height: 100%;
+  }
+}
