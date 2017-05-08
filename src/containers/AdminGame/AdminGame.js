@@ -116,16 +116,16 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleAddQuestion(categoryKey, { answer, file = '', text, type, video = '' }) {
+  handleAddQuestion(categoryKey, { answer, file = '', stream = '', text, type }) {
     this.props.firebase.push(QUESTION_PATH, {
-      answer, file, text, type, video
+      answer, file, stream, text, type
     }).then(res => {
       this.props.initialize('question', {
         answer: '',
         file: '',
+        stream: '',
         text: '',
         type,
-        video: '',
       })
       const questionKey = res.getKey()
       const categoryQuestions = path([categoryKey, 'questions'], this.props.categories)
@@ -178,16 +178,16 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleEditQuestion(questionKey, { answer, file = '', text, type, video = '' }) {
+  handleEditQuestion(questionKey, { answer, file = '', stream = '', text, type, }) {
     this.props.firebase.update(`${QUESTION_PATH}/${questionKey}`, {
-      answer, file, text, type, video
+      answer, file, stream, text, type
     }).then(() => {
       this.props.initialize('question', {
         answer: '',
         file: '',
+        stream: '',
         text: '',
         type,
-        video: '',
       })
       this.handleEditQuestionCancel()
     })

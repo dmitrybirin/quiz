@@ -9,6 +9,7 @@ import { path } from 'ramda'
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
+const FILES_PATH = 'uploadedFiles'
 const GAMES_PATH = 'games'
 const PLAYS_PATH = 'plays'
 const QUESTION_PATH = 'questions'
@@ -16,6 +17,7 @@ const TOURS_PATH = 'tours'
 
 @firebaseConnect(() => ([
   CATEGORIES_PATH,
+  FILES_PATH,
   GAMES_PATH,
   PLAYS_PATH,
   QUESTION_PATH,
@@ -28,6 +30,7 @@ const TOURS_PATH = 'tours'
     plays: dataToJS(firebase, PLAYS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
+    uploadedFiles: dataToJS(firebase, FILES_PATH)
   })
 )
 export default class Game extends Component {
@@ -39,6 +42,7 @@ export default class Game extends Component {
     plays: PropTypes.object,
     questions: PropTypes.object,
     tours: PropTypes.object,
+    uploadedFiles: PropTypes.object,
     user: PropTypes.object,
   }
 
@@ -194,20 +198,28 @@ export default class Game extends Component {
       questionCat, questionAuction,
       player, playing
     } = this.state
-    const { categories, games, params: { key }, plays, tours } = this.props
+    const { categories, games, params: { key }, plays, questions, tours, uploadedFiles } = this.props
     const play = path([key], plays)
     const gameKey = path(['game'], play)
     const game = path([gameKey], games)
     const currentTourKey = path(['currentTourKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
     const completedQuestions = path(['completedQuestions'], play) || []
+    const isPlaying = path(['isPlaying'], play)
+    // Question
+    const question = path([currentQuestionKey], questions)
+    const questionType = path(['type'], question)
+    const questionStream = path(['stream'], question)
+    const questionText = path(['text'], question)
+    const questionFile = path([path(['file'], question), 'downloadURL'], uploadedFiles)
+    // const questionAnswer = path(['answer'], question)
 
     return (
       <div className={style.container}>
         <Helmet title="Game"/>
         {game &&
         <div>
-          <h1 className={style.title}>{tours[currentTourKey].name}</h1>
+          <h1 className={style.title}>{tours && tours[currentTourKey].name}</h1>
           <table className={style.table}>
             <tbody>
             {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
@@ -228,11 +240,40 @@ export default class Game extends Component {
             </tbody>
           </table>
         </div>}
+        {isPlaying &&
+        <div>
+          {questionType === 'stream' &&
+          <div>
+            STREAM
+            {questionFile}
+            <ReactPlayer url={questionStream}
+                         height={0}
+                         playing={isPlaying}
+                         fileConfig={{ attributes: { preload: 'auto' } }}
+                         onPlay={() => this.setState({ playing: true })}
+                         onEnded={() => this.setState({ playing: false })}
+                         volume={1}/>
+          </div>}
+          {questionType === 'sound' &&
+          <div>
+            SOUND
+            {questionFile}
+            <ReactPlayer url={questionFile}
+                         height={0}
+                         playing={isPlaying}
+                         fileConfig={{ attributes: { preload: 'auto' } }}
+                         onPlay={() => this.setState({ playing: true })}
+                         onEnded={() => this.setState({ playing: false })}
+                         volume={1}/>
+          </div>}
+          {questionType === 'text' &&
+          <div>{questionText}</div>}
+        </div>}
         {questionSong &&
         <div>
           <ReactPlayer url={questionSong}
                        height={0}
-                       playing={playing}
+                       playing={isPlaying}
                        fileConfig={{ attributes: { preload: 'auto' } }}
                        onPlay={() => this.setState({ playing: true })}
                        onEnded={() => this.setState({ playing: false })}

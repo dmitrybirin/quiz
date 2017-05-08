@@ -10,8 +10,8 @@ const surveyValidation = createValidator({
   }],
   text: [required],
   type: [required],
-  video: [(value, data) => {
-    if (data.type === 'video' && !value) {
+  stream: [(value, data) => {
+    if (data.type === 'stream' && !value) {
       return 'Required'
     }
   }]

@@ -118,7 +118,11 @@ export default class AdminPlay extends Component {
   }
 
   handlePlay = () => {
+    const { params: { key } } = this.props
     socket.emit('plays')
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      isPlaying: true
+    })
   }
 
   handleCompleteQuestion = () => {
@@ -136,7 +140,10 @@ export default class AdminPlay extends Component {
 
   handleCancelQuestion() {
     const { params: { key } } = this.props
-    this.props.firebase.remove(`${PLAYS_PATH}/${key}/currentQuestionKey`)
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      currentQuestionKey: null,
+      isPlaying: false
+    })
   }
 
   handleScoreChange(event, player) {

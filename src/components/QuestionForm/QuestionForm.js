@@ -17,7 +17,7 @@ const FILES_PATH = 'uploadedFiles'
 
 @reduxForm({
   form: 'question',
-  fields: ['answer', 'file', 'text', 'type', 'video'],
+  fields: ['answer', 'file', 'stream', 'text', 'type'],
   validate: questionFormValidation
 })
 @firebaseConnect([
@@ -49,13 +49,13 @@ class QuestionForm extends Component {
       this.props.initialize('question', {
         answer: question.answer,
         file: question.file,
+        stream: question.stream,
         text: question.text,
         type: question.type,
-        video: question.video,
       })
     } else {
       this.props.initialize('question', {
-        type: 'text'
+        type: 'stream'
       })
     }
   }
@@ -74,7 +74,7 @@ class QuestionForm extends Component {
   render() {
     const styles = require('./QuestionForm.scss')
     const {
-      fields: { answer, file, text, type, video },
+      fields: { answer, file, stream, text, type },
       handleSubmit, uploadedFiles
     } = this.props
     const fileUrl = path([file.value, 'downloadURL'], uploadedFiles)
@@ -83,10 +83,11 @@ class QuestionForm extends Component {
         <form onSubmit={handleSubmit}>
           <div className={styles.row}>
             <RadioGroup name="type" {...type}>
-              <label className={styles.label}><input type="radio" value="text"/> Text</label>
+              <label className={styles.label}><input type="radio" value="stream"/> Stream</label>
               <label className={styles.label}><input type="radio" value="sound"/> Sound</label>
-              <label className={styles.label}><input type="radio" value="image"/> Image</label>
               <label className={styles.label}><input type="radio" value="video"/> Video</label>
+              <label className={styles.label}><input type="radio" value="image"/> Image</label>
+              <label className={styles.label}><input type="radio" value="text"/> Text</label>
             </RadioGroup>
           </div>
           {['sound', 'image'].includes(type.value) &&
@@ -110,10 +111,19 @@ class QuestionForm extends Component {
           </div>}
           {type.value === 'video' &&
           <div className={styles.row}>
-            <Input type="text" placeholder="Video URL" {...video}/>
-            {video.touched && video.error && <div className="text-danger">{video.error}</div>}
-            {video.value &&
-            <ReactPlayer url={video.value}
+            <Input type="text" placeholder="Video URL" {...stream}/>
+            {stream.touched && stream.error && <div className="text-danger">{stream.error}</div>}
+            {stream.value &&
+            <ReactPlayer url={stream.value}
+                         controls/>}
+          </div>}
+          {type.value === 'stream' &&
+          <div className={styles.row}>
+            <Input type="text" placeholder="Stream URL" {...stream}/>
+            {stream.touched && stream.error && <div className="text-danger">{stream.error}</div>}
+            {stream.value &&
+            <ReactPlayer url={stream.value}
+                         height={200}
                          controls/>}
           </div>}
           <div className={styles.row}>
