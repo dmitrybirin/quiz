@@ -10,12 +10,14 @@ import { firebaseConnect, helpers } from 'react-redux-firebase'
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
 const GAMES_PATH = 'games'
+const PLAYS_PATH = 'plays'
 const QUESTION_PATH = 'questions'
 const TOURS_PATH = 'tours'
 
-@firebaseConnect(({ params }) => ([
+@firebaseConnect(() => ([
   CATEGORIES_PATH,
-  `${GAMES_PATH}/${params.key}`,
+  GAMES_PATH,
+  PLAYS_PATH,
   QUESTION_PATH,
   TOURS_PATH,
 ]))
@@ -23,6 +25,7 @@ const TOURS_PATH = 'tours'
   ({ firebase }) => ({
     categories: dataToJS(firebase, CATEGORIES_PATH),
     games: dataToJS(firebase, GAMES_PATH),
+    plays: dataToJS(firebase, PLAYS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
   })
@@ -33,6 +36,7 @@ export default class Game extends Component {
     categories: PropTypes.object,
     games: PropTypes.object,
     params: PropTypes.object,
+    plays: PropTypes.object,
     questions: PropTypes.object,
     tours: PropTypes.object,
     user: PropTypes.object,
@@ -186,35 +190,34 @@ export default class Game extends Component {
   render() {
     const style = require('./Game.scss')
     const {
-      buzzPlaying, completedQuestions, currentQuestion, questionImage, questionSong,
+      buzzPlaying, questionImage, questionSong,
       questionCat, questionAuction,
       player, playing
     } = this.state
-    const { categories, games, questions, params: { key }, tours } = this.props
-    const game = path([key], games)
-    const gameTours = path(['tours'], game)
-    const tourKey = '-KjYRxnfe-2JYiWH4Csp'
-    const tourCategories = tours && tours[tourKey].categories && Object.keys(tours[tourKey].categories).map(categoryKey => categories[categoryKey])
-    console.log(gameTours)
-    console.log(questions)
-    console.log(tourCategories)
+    const { categories, games, params: { key }, plays, tours } = this.props
+    const play = path([key], plays)
+    const gameKey = path(['game'], play)
+    const game = path([gameKey], games)
+    const currentTourKey = path(['currentTourKey'], play)
+    const currentQuestionKey = path(['currentQuestionKey'], play)
+    const completedQuestions = path(['completedQuestions'], play) || []
 
     return (
       <div className={style.container}>
         <Helmet title="Game"/>
         {game &&
         <div>
-          <h1 className={style.title}>{tours[tourKey].name}</h1>
+          <h1 className={style.title}>{tours[currentTourKey].name}</h1>
           <table className={style.table}>
             <tbody>
-            {tourCategories && tourCategories.map((category, index) => (
-              <tr key={index}>
-                <td className={style.tableCategory}>{category.name}</td>
-                {category.questions && Object.keys(category.questions).map((questionKey, questionIndex) => (
+            {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
+              <tr key={categoryKey}>
+                <td className={style.tableCategory}>{categories[categoryKey].name}</td>
+                {categories[categoryKey].questions && Object.keys(categories[categoryKey].questions).map((questionKey, questionIndex) => (
                   <td key={questionKey}
                       className={cx({
                         [style.tableCell]: true,
-                        [style.active]: questionKey === currentQuestion,
+                        [style.active]: questionKey === currentQuestionKey,
                         [style.completed]: completedQuestions.includes(questionKey)
                       })}>
                     {(questionIndex + 1) * 100}
