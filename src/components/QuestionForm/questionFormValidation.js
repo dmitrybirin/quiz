@@ -8,7 +8,11 @@ const surveyValidation = createValidator({
       return 'Required'
     }
   }],
-  text: [required],
+  text: [(value, data) => {
+    if (['text'].includes(data.type) && !value) {
+      return 'Required'
+    }
+  }],
   type: [required],
   stream: [(value, data) => {
     if (data.type === 'stream' && !value) {

@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import ReactPlayer from 'react-player'
 import Helmet from 'react-helmet'
-import gameData from 'game/game-3'
 import cx from 'classnames'
 import { path } from 'ramda'
 // Firebase
@@ -51,113 +50,16 @@ export default class Game extends Component {
     completedQuestions: [],
     currentTour: null,
     currentQuestion: null,
-    questionImage: null,
-    questionSong: null,
     questionCat: false,
     questionAuction: false,
     playing: false,
-    player: null,
-    players: []
-  }
-
-  componentDidMount() {
-    if (socket) {
-      socket.on('gameInit', this.onGameInit)
-      socket.on('tourSelect', this.onTourSelect)
-      socket.on('questionSelect', this.onQuestionSelect)
-      socket.on('play', this.onPlay)
-      socket.on('buzz', this.onBuzz)
-      socket.on('completeQuestion', this.onCompleteQuestion)
-      socket.on('cancelQuestion', this.onCancelQuestion)
-      socket.on('updatePlayers', this.onUpdatePlayers)
-
-      socket.emit('getGameInit')
-    }
-  }
-
-  componentWillUnmount() {
-    if (socket) {
-      socket.removeListener('gameInit', this.onGameInit)
-      socket.removeListener('tourSelect', this.onTourSelect)
-      socket.removeListener('questionSelect', this.onQuestionSelect)
-      socket.removeListener('play', this.onPlay)
-      socket.removeListener('buzz', this.onBuzz)
-      socket.removeListener('completeQuestion', this.onCompleteQuestion)
-      socket.removeListener('cancelQuestion', this.onCancelQuestion)
-      socket.removeListener('updatePlayers', this.onUpdatePlayers)
-    }
-  }
-
-  onGameInit = (data) => {
-    console.log(data)
-    this.setState(data)
-  }
-
-  onTourSelect = (data) => {
-    console.log(data)
-    this.setState({
-      currentTour: data.tour
-    })
-  }
-
-  onQuestionSelect = (data) => {
-    console.log(data)
-    const { question } = data
-    const quest = gameData.questions[question]
-    if (!quest) {
-      return
-    }
-
-    this.setState({
-      currentQuestion: question
-    })
-
-    if (quest.cat) {
-      this.setState({
-        questionCat: true,
-        buzzPlaying: true
-      })
-    }
-
-    if (quest.auction) {
-      this.setState({
-        questionAuction: true,
-        buzzPlaying: true
-      })
-    }
-
-    if (quest.type === 'song') {
-      this.setState({
-        questionImage: null,
-        questionSong: quest.file
-      })
-    } else if (quest.type === 'image') {
-      this.setState({
-        questionImage: quest.file,
-        questionSong: null
-      })
-    }
-  }
-
-  onPlay = () => {
-    const { currentQuestion } = this.state
-    const quest = gameData.questions[currentQuestion]
-    if (quest) {
-      this.setState({
-        questionCat: false,
-        questionAuction: false,
-        player: null,
-        playing: true
-      })
-    }
   }
 
   onBuzz = (data) => {
-    const { playing, player } = this.state
-    if (data.name && playing && !player) {
+    const { playing } = this.state
+    if (data.name && playing) {
       this.setState({
         buzzPlaying: true,
-        player: data.name,
         playing: false
       })
     }
@@ -170,7 +72,6 @@ export default class Game extends Component {
       completedQuestions: data.completedQuestions,
       currentQuestion: null,
       playing: false,
-      player: null
     })
   }
 
@@ -179,24 +80,15 @@ export default class Game extends Component {
       questionCat: false,
       questionAuction: false,
       currentQuestion: null,
-      player: null,
       playing: false
-    })
-  }
-
-  // Players
-  onUpdatePlayers = ({ players }) => {
-    this.setState({
-      players
     })
   }
 
   render() {
     const style = require('./Game.scss')
     const {
-      buzzPlaying, questionImage, questionSong,
-      questionCat, questionAuction,
-      player, playing
+      buzzPlaying,
+      questionCat, questionAuction
     } = this.state
     const { categories, games, params: { key }, plays, questions, tours, uploadedFiles } = this.props
     const play = path([key], plays)
@@ -230,7 +122,7 @@ export default class Game extends Component {
                       className={cx({
                         [style.tableCell]: true,
                         [style.active]: questionKey === currentQuestionKey,
-                        [style.completed]: completedQuestions.includes(questionKey)
+                        [style.completed]: completedQuestions[questionKey]
                       })}>
                     {(questionIndex + 1) * 100}
                   </td>
@@ -240,12 +132,10 @@ export default class Game extends Component {
             </tbody>
           </table>
         </div>}
-        {isPlaying &&
+        {currentQuestionKey &&
         <div>
           {questionType === 'stream' &&
           <div>
-            STREAM
-            {questionFile}
             <ReactPlayer url={questionStream}
                          height={0}
                          playing={isPlaying}
@@ -256,8 +146,6 @@ export default class Game extends Component {
           </div>}
           {questionType === 'sound' &&
           <div>
-            SOUND
-            {questionFile}
             <ReactPlayer url={questionFile}
                          height={0}
                          playing={isPlaying}
@@ -266,26 +154,25 @@ export default class Game extends Component {
                          onEnded={() => this.setState({ playing: false })}
                          volume={1}/>
           </div>}
-          {questionType === 'text' &&
-          <div>{questionText}</div>}
-        </div>}
-        {questionSong &&
-        <div>
-          <ReactPlayer url={questionSong}
-                       height={0}
-                       playing={isPlaying}
-                       fileConfig={{ attributes: { preload: 'auto' } }}
-                       onPlay={() => this.setState({ playing: true })}
-                       onEnded={() => this.setState({ playing: false })}
-                       volume={1}/>
-        </div>}
-        {questionImage &&
-        <div className={cx({ [style.image]: true, [style.active]: playing })}>
-          <img src={questionImage} alt=""/>
-        </div>}
-        {player &&
-        <div className={style.player}>
-          <span>{player}</span>
+          {questionType === 'image' && isPlaying &&
+          <div className={style.image}>
+            <i style={{ backgroundImage: `url(${questionFile})` }}/>
+          </div>}
+          {questionType === 'video' &&
+          <div className={style.video}>
+            <ReactPlayer url={questionStream}
+                         height={window.innerHeight - 100}
+                         width={window.innerWidth - 100}
+                         playing={isPlaying}
+                         fileConfig={{ attributes: { preload: 'auto' } }}
+                         onPlay={() => this.setState({ playing: true })}
+                         onEnded={() => this.setState({ playing: false })}
+                         volume={1}/>
+          </div>}
+          {questionType === 'text' && isPlaying &&
+          <div className={style.text}>
+            <div>{questionText}</div>
+          </div>}
         </div>}
         {questionCat &&
         <div className={cx({ [style.cat]: true, [style.active]: questionCat })}>

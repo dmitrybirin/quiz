@@ -5,6 +5,7 @@ import { initialize } from 'redux-form'
 import autobind from 'autobind-decorator'
 import { path } from 'ramda'
 import { push } from 'react-router-redux'
+import moment from 'moment'
 // Components
 import { Button, Input } from 'react-bootstrap'
 import { Link } from 'react-router'
@@ -59,11 +60,16 @@ export default class AdminGame extends Component {
     }
   }
 
+  handleConinuePlayClick(playKey) {
+    this.props.push(`/admin/play/${playKey}`)
+  }
+
   handlePlayClick() {
     const { games, params: { key } } = this.props
     this.props.firebase.push(PLAYS_PATH, {
       game: key,
-      currentTourKey: Object.keys(games[key].tours)[0]
+      currentTourKey: Object.keys(games[key].tours)[0],
+      startedAt: new Date().getTime()
     }).then(res => {
       const playKey = res.getKey()
       this.props.push(`/admin/play/${playKey}`)
@@ -245,10 +251,11 @@ export default class AdminGame extends Component {
 
   render() {
     const style = require('./AdminGame.scss')
-    const { categories, games, params: { key }, tours } = this.props
+    const { categories, games, params: { key }, plays, tours } = this.props
     const { addQuestionCategoryKey, gameName } = this.state
     const game = path([key], games)
     const gameTours = path(['tours'], game)
+    const currentGamePlays = plays && Object.keys(plays).filter(playKey => plays[playKey].game === key)
 
     return (
       <div className="container">
@@ -257,7 +264,16 @@ export default class AdminGame extends Component {
           <Link to="/admin/games/">All games</Link>
         </div>
         <div>
-          <Button bsStyle="primary" onClick={this.handlePlayClick}>Play</Button>
+          {currentGamePlays && currentGamePlays.map(playKey => (
+            <div>
+              <Button bsStyle="primary" onClick={() => this.handleConinuePlayClick(playKey)}>
+                Continue game started {moment(plays[playKey].startedAt).format('DD MM HH:mm')}
+              </Button>
+            </div>
+          ))}
+        </div>
+        <div>
+          <Button bsStyle="primary" onClick={this.handlePlayClick}>New Play</Button>
         </div>
         {game &&
         <div className={style.game}>

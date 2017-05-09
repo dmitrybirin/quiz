@@ -97,12 +97,10 @@ export default class AdminPlay extends Component {
     })
   }
 
-  handleNewGameStart = () => {
-    this.setState({
-      completedQuestions: [],
-      currentQuestion: null
-    }, () => {
-      this.init()
+  handleNewGameStart() {
+    const { params: { key } } = this.props
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      completedQuestions: null
     })
   }
 
@@ -117,7 +115,7 @@ export default class AdminPlay extends Component {
     })
   }
 
-  handlePlay = () => {
+  handlePlay() {
     const { params: { key } } = this.props
     socket.emit('plays')
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
@@ -125,17 +123,16 @@ export default class AdminPlay extends Component {
     })
   }
 
-  handleCompleteQuestion = () => {
-    const { completedQuestions, currentQuestion } = this.state
-    if (!currentQuestion) {
-      return
-    }
-    completedQuestions.push(currentQuestion)
-    this.setState({
-      completedQuestions,
-      currentQuestion: null
+  handleCompleteQuestion() {
+    const { params: { key }, plays } = this.props
+    const { currentQuestionKey } = plays[key]
+    this.props.firebase.update(`${PLAYS_PATH}/${key}/completedQuestions`, {
+      [currentQuestionKey]: true
     })
-    socket.emit('completeQuestion', { completedQuestions })
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      currentQuestionKey: null,
+      isPlaying: false
+    })
   }
 
   handleCancelQuestion() {
@@ -206,7 +203,7 @@ export default class AdminPlay extends Component {
                     className={cx({
                       [style.tableCell]: true,
                       [style.active]: questionKey === currentQuestionKey,
-                      [style.completed]: completedQuestions.includes(questionKey)
+                      [style.completed]: completedQuestions[questionKey]
                     })}
                     onClick={() => this.handleQuestionClick(questionKey)}>
                   {(questionIndex + 1) * 100}

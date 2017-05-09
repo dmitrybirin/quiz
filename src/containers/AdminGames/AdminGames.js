@@ -40,7 +40,7 @@ export default class AdminGames extends Component {
     })
   }
 
-  handleAddGameClick() {
+  handleAddGame() {
     const { name } = this.state
     this.props.firebase.push(GAMES_PATH, {
       name
@@ -57,13 +57,18 @@ export default class AdminGames extends Component {
         <Helmet title="Admin - Games"/>
         <div className={style.games}>
           <h3>Games</h3>
-          <Input type="text" value={name} onChange={this.handleGameNameChange}/>
-          <Button bsStyle="primary" onClick={this.handleAddGameClick}>+ Add game</Button>
-          {games && Object.keys(games).map(key => (
-            <div key={key}>
-              <Link to={`/admin/games/${key}`}>{games[key].name || key}</Link>
-            </div>
-          ))}
+          <form onSubmit={this.handleAddGame}>
+            <Input type="text" value={name} onChange={this.handleGameNameChange}
+                   buttonAfter={<Button bsStyle="primary">+ Add game</Button>}/>
+          </form>
+          <br/><br/>
+          <ul>
+            {games && Object.keys(games).map(key => (
+              <li key={key}>
+                <Link to={`/admin/games/${key}`}>{games[key].name || key}</Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     )

@@ -135,6 +135,7 @@ class QuestionForm extends Component {
             {answer.touched && answer.error && <div className="text-danger">{answer.error}</div>}
           </div>
           <Button bsStyle="primary" type="submit">Save</Button>
+          {' '}
           <Button onClick={this.props.onCancel}>Cancel</Button>
         </form>
       </div>
