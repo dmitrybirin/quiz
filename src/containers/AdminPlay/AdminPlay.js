@@ -12,6 +12,7 @@ import autobind from 'autobind-decorator'
 const CATEGORIES_PATH = 'categories'
 const GAMES_PATH = 'games'
 const PLAYS_PATH = 'plays'
+const PLAYERS_PATH = 'players'
 const QUESTION_PATH = 'questions'
 const TOURS_PATH = 'tours'
 
@@ -19,6 +20,7 @@ const TOURS_PATH = 'tours'
   CATEGORIES_PATH,
   GAMES_PATH,
   PLAYS_PATH,
+  PLAYERS_PATH,
   QUESTION_PATH,
   TOURS_PATH,
 ]))
@@ -27,6 +29,7 @@ const TOURS_PATH = 'tours'
     categories: dataToJS(firebase, CATEGORIES_PATH),
     games: dataToJS(firebase, GAMES_PATH),
     plays: dataToJS(firebase, PLAYS_PATH),
+    players: dataToJS(firebase, PLAYERS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
   })
@@ -40,6 +43,7 @@ export default class AdminPlay extends Component {
     games: PropTypes.object,
     params: PropTypes.object,
     plays: PropTypes.object,
+    players: PropTypes.object,
     questions: PropTypes.object,
     tours: PropTypes.object,
     user: PropTypes.object,
@@ -119,7 +123,8 @@ export default class AdminPlay extends Component {
     const { params: { key } } = this.props
     socket.emit('plays')
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
-      isPlaying: true
+      isPlaying: true,
+      player: null
     })
   }
 
@@ -131,7 +136,8 @@ export default class AdminPlay extends Component {
     })
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
       currentQuestionKey: null,
-      isPlaying: false
+      isPlaying: false,
+      player: null
     })
   }
 
@@ -150,7 +156,7 @@ export default class AdminPlay extends Component {
 
   render() {
     const style = require('./AdminPlay.scss')
-    const { categories, games, params: { key }, plays, questions, tours } = this.props
+    const { categories, games, params: { key }, plays, players, questions, tours } = this.props
     const play = path([key], plays)
     const gameKey = path(['game'], play)
     const game = path([gameKey], games)
@@ -158,11 +164,20 @@ export default class AdminPlay extends Component {
     const currentTourKey = path(['currentTourKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
     const completedQuestions = path(['completedQuestions'], play) || []
+    // Player
+    const player = path(['player'], play)
+    const playerName = path([player, 'name'], players)
 
     return (
       <div className="container">
         <Helmet title="AdminPlay"/>
         <div className={style.game}>
+          <div>
+            <a href={`/games/${key}`} target="_blank"><Button>Game Board</Button></a>
+            {' '}
+            <a href={`/play/${key}`} target="_blank"><Button>Player Screen</Button></a>
+          </div>
+          <br/><br/>
           <div className={style.tours}>
             {tours && gameTours && Object.keys(gameTours).map(tourKey => (
               <span key={tourKey}>
@@ -190,6 +205,14 @@ export default class AdminPlay extends Component {
             <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
             {' '}
             <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Вопрос сыгран</Button>
+          </div>
+        </div>}
+        {playerName &&
+        <div>
+          Отвечает {playerName}
+          <div>
+            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Правильно</Button>
+            <Button bsStyle="danger" bsSize="large" onClick={this.handleCompleteQuestion}>Неправильно</Button>
           </div>
         </div>}
 

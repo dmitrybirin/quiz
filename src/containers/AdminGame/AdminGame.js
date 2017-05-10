@@ -10,13 +10,14 @@ import moment from 'moment'
 import { Button, Input } from 'react-bootstrap'
 import { Link } from 'react-router'
 import QuestionForm from 'components/QuestionForm/QuestionForm'
+import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
-import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
 const GAMES_PATH = 'games'
 const PLAYS_PATH = 'plays'
+const PLAYERS_PATH = 'players'
 const QUESTION_PATH = 'questions'
 const TOURS_PATH = 'tours'
 
@@ -24,6 +25,7 @@ const TOURS_PATH = 'tours'
   CATEGORIES_PATH,
   `${GAMES_PATH}/${params.key}`,
   PLAYS_PATH,
+  PLAYERS_PATH,
   QUESTION_PATH,
   TOURS_PATH,
 ]))
@@ -32,6 +34,7 @@ const TOURS_PATH = 'tours'
     categories: dataToJS(firebase, CATEGORIES_PATH),
     games: dataToJS(firebase, GAMES_PATH),
     plays: dataToJS(firebase, PLAYS_PATH),
+    players: dataToJS(firebase, PLAYERS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
   }), { initialize, push }
@@ -46,6 +49,7 @@ export default class AdminGame extends Component {
     initialize: PropTypes.func,
     params: PropTypes.object,
     plays: PropTypes.object,
+    players: PropTypes.object,
     push: PropTypes.func,
     questions: PropTypes.object,
     tours: PropTypes.object,

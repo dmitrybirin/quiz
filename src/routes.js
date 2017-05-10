@@ -7,7 +7,6 @@ import AdminPlay from 'containers/AdminPlay/AdminPlay'
 import AdminQuestions from 'containers/AdminQuestions/AdminQuestions'
 import App from 'containers/App/App'
 import Game from 'containers/Game/Game'
-import Game1 from 'containers/Game1/Game'
 import NotFound from 'containers/NotFound/NotFound'
 import Player from 'containers/Player/Player'
 
@@ -23,8 +22,8 @@ export default () => {
       <Route path="admin/games/:key" component={AdminGame}/>
       <Route path="admin/play/:key" component={AdminPlay}/>
       <Route path="admin/questions" component={AdminQuestions}/>
-      <Route path="game" component={Game}/>
-      <Route path="games/:key" component={Game1}/>
+      <Route path="games/:key" component={Game}/>
+      <Route path="play/:key" component={Player}/>
 
       { /* Catch all route */ }
       <Route path="*" component={NotFound} status={404}/>
