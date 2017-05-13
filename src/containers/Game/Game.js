@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player'
 import Helmet from 'react-helmet'
 import cx from 'classnames'
 import { path } from 'ramda'
+import autobind from 'autobind-decorator'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 const { dataToJS } = helpers
@@ -35,6 +36,7 @@ const TOURS_PATH = 'tours'
     uploadedFiles: dataToJS(firebase, FILES_PATH)
   })
 )
+@autobind
 export default class Game extends Component {
 
   static propTypes = {
@@ -49,47 +51,41 @@ export default class Game extends Component {
     user: PropTypes.object,
   }
 
-  state = {
-    completedQuestions: [],
-    currentTour: null,
-    currentQuestion: null,
-    questionCat: false,
-    questionAuction: false,
-    playing: false,
-  }
-
-  onBuzz = (data) => {
-    const { playing } = this.state
-    if (data.name && playing) {
-      this.setState({
-        playing: false
-      })
+  constructor() {
+    super()
+    this.state = {
+      completedQuestions: [],
+      currentTour: null,
+      currentQuestion: null,
+      questionCat: false,
+      questionAuction: false,
+      preload: false
     }
   }
 
-  onCompleteQuestion = (data) => {
+  handlePlayerReady() {
     this.setState({
-      questionCat: false,
-      questionAuction: false,
-      completedQuestions: data.completedQuestions,
-      currentQuestion: null,
-      playing: false,
+      preload: true
+    }, () => {
+      setTimeout(() => {
+        this.setState({
+          preload: false
+        })
+      }, 10)
     })
   }
 
-  onCancelQuestion = () => {
-    this.setState({
-      questionCat: false,
-      questionAuction: false,
-      currentQuestion: null,
-      playing: false
-    })
+  sortQuestions(questions) {
+    if (!questions) {
+      return []
+    }
+    return Object.keys(questions).sort((key1, key2) => questions[key1].price - questions[key2].price)
   }
 
   render() {
     const style = require('./Game.scss')
     const {
-      questionCat, questionAuction
+      questionCat, questionAuction, preload
     } = this.state
     const { categories, games, params: { key }, plays, players, questions, tours, uploadedFiles } = this.props
     const play = path([key], plays)
@@ -121,14 +117,14 @@ export default class Game extends Component {
             {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
               <tr key={categoryKey}>
                 <td className={style.tableCategory}>{categories[categoryKey].name}</td>
-                {categories[categoryKey].questions && Object.keys(categories[categoryKey].questions).map((questionKey, questionIndex) => (
+                {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
                   <td key={questionKey}
                       className={cx({
                         [style.tableCell]: true,
                         [style.active]: questionKey === currentQuestionKey,
                         [style.completed]: completedQuestions[questionKey]
                       })}>
-                    {(questionIndex + 1) * 100}
+                    {categories[categoryKey].questions[questionKey].price}
                   </td>
                 ))}
               </tr>
@@ -142,10 +138,10 @@ export default class Game extends Component {
           <div>
             <ReactPlayer url={questionStream}
                          height={0}
-                         playing={isPlaying}
-                         fileConfig={{ attributes: { preload: 'auto' } }}
-                         onPlay={() => this.setState({ playing: true })}
-                         onEnded={() => this.setState({ playing: false })}
+                         playing={preload || isPlaying}
+                         vimeoConfig={{ preload: true }}
+                         youtubeConfig={{ preload: true }}
+                         onReady={this.handlePlayerReady}
                          volume={1}/>
           </div>}
           {questionType === 'sound' &&
@@ -154,23 +150,21 @@ export default class Game extends Component {
                          height={0}
                          playing={isPlaying}
                          fileConfig={{ attributes: { preload: 'auto' } }}
-                         onPlay={() => this.setState({ playing: true })}
-                         onEnded={() => this.setState({ playing: false })}
                          volume={1}/>
           </div>}
-          {questionType === 'image' && isPlaying &&
-          <div className={style.image}>
+          {questionType === 'image' &&
+          <div className={cx({ [style.image]: true, [style.active]: isPlaying })}>
             <i style={{ backgroundImage: `url(${questionFile})` }}/>
           </div>}
           {questionType === 'video' &&
-          <div className={style.video}>
+          <div className={cx({ [style.video]: true, [style.active]: isPlaying })}>
             <ReactPlayer url={questionStream}
                          height={window.innerHeight - 100}
                          width={window.innerWidth - 100}
-                         playing={isPlaying}
-                         fileConfig={{ attributes: { preload: 'auto' } }}
-                         onPlay={() => this.setState({ playing: true })}
-                         onEnded={() => this.setState({ playing: false })}
+                         playing={preload || isPlaying}
+                         vimeoConfig={{ preload: true }}
+                         youtubeConfig={{ preload: true }}
+                         onReady={this.handlePlayerReady}
                          volume={1}/>
           </div>}
           {questionType === 'text' && isPlaying &&

@@ -88,7 +88,7 @@ export default class Player extends Component {
         </div>}
         {player &&
         <div>
-          <h1 className={style.name}>{name} / {score}</h1>
+          <h1 className={style.name}>{name} / {Number.isInteger(score) && score.toLocaleString('ru-RU')}</h1>
           <div className={style.buzz}>
             <button className={style.buzzButton} onTouchStart={this.handleBuzz} onMouseDown={this.handleBuzz}/>
           </div>

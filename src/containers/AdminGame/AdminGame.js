@@ -139,9 +139,9 @@ export default class AdminGame extends Component {
       })
       const questionKey = res.getKey()
       const categoryQuestions = path([categoryKey, 'questions'], this.props.categories)
-      const order = categoryQuestions ? (Object.keys(categoryQuestions).length + 1) * 100 : 100
+      const price = categoryQuestions ? (Object.keys(categoryQuestions).length + 1) * 100 : 100
       this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
-        order
+        price
       })
       this.handleAddQuestionCancel()
     })
@@ -156,28 +156,28 @@ export default class AdminGame extends Component {
   handleUpClick(categoryKey, questionKey) {
     const { categories } = this.props
     const questions = categories[categoryKey].questions
-    const questionOrder = questions[questionKey].order
-    const prevOrder = questionOrder - 100
-    const prevQuestionKey = Object.keys(questions).find(key => questions[key].order === prevOrder)
+    const questionPrice = questions[questionKey].price
+    const prevQuestionPrice = questionPrice - 100
+    const prevQuestionKey = Object.keys(questions).find(key => questions[key].price === prevQuestionPrice)
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${prevQuestionKey}`, {
-      order: questionOrder
+      price: questionPrice
     })
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
-      order: prevOrder
+      price: prevQuestionPrice
     })
   }
 
   handleDownClick(categoryKey, questionKey) {
     const { categories } = this.props
     const questions = categories[categoryKey].questions
-    const questionOrder = questions[questionKey].order
-    const nextOrder = questionOrder + 100
-    const nextQuestionKey = Object.keys(questions).find(key => questions[key].order === nextOrder)
+    const questionPrice = questions[questionKey].price
+    const nextQuestionPrice = questionPrice + 100
+    const nextQuestionKey = Object.keys(questions).find(key => questions[key].price === nextQuestionPrice)
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${nextQuestionKey}`, {
-      order: questionOrder
+      price: questionPrice
     })
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
-      order: nextOrder
+      price: nextQuestionPrice
     })
   }
 
@@ -221,7 +221,7 @@ export default class AdminGame extends Component {
     if (!categoryQuestions || !questions) {
       return null
     }
-    const sortedCategoryQuestions = Object.keys(categoryQuestions).sort((key1, key2) => categoryQuestions[key1].order - categoryQuestions[key2].order)
+    const sortedCategoryQuestions = Object.keys(categoryQuestions).sort((key1, key2) => categoryQuestions[key1].price - categoryQuestions[key2].price)
     const filteredCategoryQuestions = sortedCategoryQuestions.filter(questionKey => questions[questionKey])
     return (
       <div>
@@ -230,7 +230,7 @@ export default class AdminGame extends Component {
           {filteredCategoryQuestions.map((questionKey, index) => (
             <li key={questionKey}>
               {questions[questionKey].answer}
-              <span> {categoryQuestions[questionKey].order}</span>
+              <span> {categoryQuestions[questionKey].price}</span>
               {' '}
               {index !== 0 &&
               <Button bsSize="small" onClick={() => this.handleUpClick(categoryKey, questionKey)}>Up</Button>}

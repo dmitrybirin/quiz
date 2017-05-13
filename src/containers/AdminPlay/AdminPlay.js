@@ -108,13 +108,14 @@ export default class AdminPlay extends Component {
     })
   }
 
-  handleQuestionClick(questionKey) {
+  handleQuestionClick(questionKey, categoryKey) {
     const { params: { key }, plays } = this.props
     const { completedQuestions, currentQuestionKey } = plays[key]
     if (currentQuestionKey || (completedQuestions && completedQuestions[questionKey])) {
       return
     }
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      currentCategoryKey: categoryKey,
       currentQuestionKey: questionKey
     })
   }
@@ -149,9 +150,42 @@ export default class AdminPlay extends Component {
     })
   }
 
-  handleScoreChange(event, player) {
-    console.log(event.target.value)
-    console.log(player)
+  handleRightAnswer() {
+    const { categories, params: { key }, plays } = this.props
+    const play = plays[key]
+    const player = path(['player'], play)
+    const currentCategoryKey = path(['currentCategoryKey'], play)
+    const currentQuestionKey = path(['currentQuestionKey'], play)
+    const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories)
+    const score = path(['players', player, 'score'], play)
+    this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
+      score: score + price
+    })
+    this.handleCompleteQuestion()
+  }
+
+  handleWrongAnswer() {
+    const { categories, params: { key }, plays } = this.props
+    const play = plays[key]
+    const player = path(['player'], play)
+    const currentCategoryKey = path(['currentCategoryKey'], play)
+    const currentQuestionKey = path(['currentQuestionKey'], play)
+    const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories)
+    const score = path(['players', player, 'score'], play)
+    this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
+      score: score - price
+    })
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      currentQuestionKey: null,
+      player: null
+    })
+  }
+
+  sortQuestions(questions) {
+    if (!questions) {
+      return []
+    }
+    return Object.keys(questions).sort((key1, key2) => questions[key1].price - questions[key2].price)
   }
 
   render() {
@@ -211,8 +245,8 @@ export default class AdminPlay extends Component {
         <div>
           Отвечает {playerName}
           <div>
-            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Правильно</Button>
-            <Button bsStyle="danger" bsSize="large" onClick={this.handleCompleteQuestion}>Неправильно</Button>
+            <Button bsStyle="success" bsSize="large" onClick={this.handleRightAnswer}>Правильно</Button>
+            <Button bsStyle="danger" bsSize="large" onClick={this.handleWrongAnswer}>Неправильно</Button>
           </div>
         </div>}
 
@@ -221,15 +255,15 @@ export default class AdminPlay extends Component {
           {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
             <tr key={categoryKey}>
               <td className={style.tableCategory}>{categories[categoryKey].name}</td>
-              {Object.keys(categories[categoryKey].questions).map((questionKey, questionIndex) => (
+              {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
                 <td key={questionKey}
                     className={cx({
                       [style.tableCell]: true,
                       [style.active]: questionKey === currentQuestionKey,
                       [style.completed]: completedQuestions[questionKey]
                     })}
-                    onClick={() => this.handleQuestionClick(questionKey)}>
-                  {(questionIndex + 1) * 100}
+                    onClick={() => this.handleQuestionClick(questionKey, categoryKey)}>
+                  {categories[categoryKey].questions[questionKey].price}
                 </td>
               ))}
             </tr>
