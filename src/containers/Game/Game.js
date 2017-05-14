@@ -179,7 +179,7 @@ export default class Game extends Component {
         </div>}
         {currentQuestionKey && player &&
         <div className={style.text}>
-          <div>{playerName}</div>
+          <Textfit mode="single">{playerName}</Textfit>
         </div>}
         {questionCat &&
         <div className={cx({ [style.cat]: true, [style.active]: questionCat })}>

@@ -242,8 +242,8 @@ export default class AdminPlay extends Component {
           </div>
         </div>}
         {playerName &&
-        <div>
-          Отвечает {playerName}
+        <div className={style.controls}>
+          Отвечает <strong>{playerName}</strong>
           <div>
             <Button bsStyle="success" bsSize="large" onClick={this.handleRightAnswer}>Правильно</Button>
             <Button bsStyle="danger" bsSize="large" onClick={this.handleWrongAnswer}>Неправильно</Button>
