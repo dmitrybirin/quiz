@@ -118,7 +118,7 @@ export default class Game extends Component {
             {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
               <tr key={categoryKey}>
                 <td className={style.tableCategory}>
-                  <Textfit mode={categories[categoryKey].name.includes(' ') ? 'multi' : 'single'}>
+                  <Textfit mode={categories[categoryKey].name.length > 16 ? 'multi' : 'single'}>
                     {categories[categoryKey].name}
                   </Textfit>
                 </td>
