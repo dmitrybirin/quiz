@@ -23,7 +23,14 @@ export default function createStore(history, client, data) {
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(_createStore)
   } else {
-    finalCreateStore = applyMiddleware(...middleware)(_createStore)
+    if (__CLIENT__) {
+      finalCreateStore = compose(
+        applyMiddleware(...middleware),
+        reactReduxFirebase(config.firebase, config.firebasePaths)
+      )(_createStore)
+    } else {
+      finalCreateStore = applyMiddleware(...middleware)(_createStore)
+    }
   }
 
   const reducer = require('./modules/reducer')
