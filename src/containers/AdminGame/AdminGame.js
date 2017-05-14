@@ -387,12 +387,18 @@ export default class AdminGame extends Component {
         {categoryQuestions && questions &&
         <ul className={styles.questions}>
           {filteredCategoryQuestions.map((questionKey, index) => (
-            <li key={questionKey} className={styles.questionsItem}>
+            <li key={questionKey} className={styles.questionsItem}
+                onClick={() => this.handleEditQuestionClick(categoryKey, questionKey)}>
               <div>
+                <div><strong>{categoryQuestions[questionKey].price}</strong></div>
                 {questions[questionKey].answer}
-                <div>{categoryQuestions[questionKey].price}</div>
               </div>
-              <div>
+              <div key={questionKey} className={styles.questionsItemActions}>
+                <Button bsSize="small"
+                        onClick={() => this.handleEditQuestionClick(categoryKey, questionKey)}>
+                  <i className="fa fa-pencil"/>
+                </Button>
+                {' '}
                 {index !== 0 &&
                 <Button bsSize="small"
                         onClick={() => this.handleQuestionUp(categoryKey, questionKey)}>
@@ -404,11 +410,6 @@ export default class AdminGame extends Component {
                         onClick={() => this.handleQuestionDown(categoryKey, questionKey)}>
                   <i className="fa fa-arrow-right"/>
                 </Button>}
-                {' '}
-                <Button bsSize="small"
-                        onClick={() => this.handleEditQuestionClick(categoryKey, questionKey)}>
-                  <i className="fa fa-pencil"/>
-                </Button>
                 {' '}
                 <Button bsSize="small"
                         onClick={() => this.handleDeleteQuestionClick(categoryKey, questionKey)}>
@@ -472,19 +473,19 @@ export default class AdminGame extends Component {
                              addonBefore={<span>Тур</span>}/>
                     </Col>
                     {/* <Button bsSize="small"
-                            onClick={() => this.handleTourUp(tourKey)}>
-                      <i className="fa fa-arrow-up"/>
-                    </Button>
-                    {' '}
-                    <Button bsSize="small"
-                            onClick={() => this.handleTourDown(tourKey)}>
-                      <i className="fa fa-arrow-down"/>
-                    </Button>
-                    {' '}
-                    <Button bsSize="small"
-                            onClick={() => this.handleTourDelete(tourKey)}>
-                      <i className="fa fa-trash"/>
-                    </Button> */}
+                     onClick={() => this.handleTourUp(tourKey)}>
+                     <i className="fa fa-arrow-up"/>
+                     </Button>
+                     {' '}
+                     <Button bsSize="small"
+                     onClick={() => this.handleTourDown(tourKey)}>
+                     <i className="fa fa-arrow-down"/>
+                     </Button>
+                     {' '}
+                     <Button bsSize="small"
+                     onClick={() => this.handleTourDelete(tourKey)}>
+                     <i className="fa fa-trash"/>
+                     </Button> */}
                   </Row>
                 </div>
                 {tours && tours[tourKey] &&
@@ -502,10 +503,10 @@ export default class AdminGame extends Component {
             ))}
           </div>
           {/* <Row>
-            <Col xs={12} md={6}>
-              <AddTourForm onSubmit={this.handleAddTour}/>
-            </Col>
-          </Row >*/}
+           <Col xs={12} md={6}>
+           <AddTourForm onSubmit={this.handleAddTour}/>
+           </Col>
+           </Row >*/}
         </div>}
       </div>
     )

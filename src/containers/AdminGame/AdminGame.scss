@@ -22,11 +22,26 @@
 
 .questionsItem {
   border: 1px solid #eee;
+  cursor: pointer;
   display: inline-block;
   padding: 10px;
   vertical-align: top;
   flex: 20% 1;
+  margin: 0 10px 0 0;
   max-width: 20%;
+  position: relative;
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    .questionsItemActions {
+      display: block;
+    }
+  }
+}
+
+.questionsItemActions {
+  bottom: 10px;
+  display: none;
+  position: absolute;
 }
 
 .row {
