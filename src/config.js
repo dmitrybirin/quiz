@@ -40,7 +40,8 @@ module.exports = Object.assign({
     authDomain: 'quiz-950e3.firebaseapp.com',
     databaseURL: 'https://quiz-950e3.firebaseio.com',
     storageBucket: 'quiz-950e3.appspot.com',
-    messagingSenderId: '728110861753'
+    messagingSenderId: '728110861753',
+    enableRedirectHandling: false
   },
   firebasePaths: {
     userProfile: '/users'
