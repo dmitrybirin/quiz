@@ -64,7 +64,7 @@ $border: 10px solid $text-color;
     background-color: $brand-danger;
   }
   &.completed {
-    color: #333;
+    color: rgba(255, 255, 255, 0.2);
   }
 }
 
