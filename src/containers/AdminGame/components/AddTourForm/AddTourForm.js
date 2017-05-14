@@ -8,7 +8,7 @@ import { Button, Input } from 'react-bootstrap'
   fields: ['name'],
   validate: validation
 })
-class AddCategoryForm extends Component {
+class AddTourForm extends Component {
   static propTypes = {
     fields: PropTypes.object,
     handleSubmit: PropTypes.func,
@@ -25,7 +25,7 @@ class AddCategoryForm extends Component {
         <form onSubmit={handleSubmit}>
           <Input type="text" {...name}
                  buttonAfter={<Button bsStyle="primary" type="submit">
-                   <i className="fa fa-plus"/> Добавить категорию
+                   <i className="fa fa-plus"/> Добавить тур
                  </Button>}/>
         </form>
       </div>
@@ -33,4 +33,4 @@ class AddCategoryForm extends Component {
   }
 }
 
-export default AddCategoryForm
+export default AddTourForm

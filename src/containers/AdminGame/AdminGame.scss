@@ -1,7 +1,42 @@
 @import "../../theme/variables.scss";
 
 .addQuestionFrom {
-  border: 1px solid #fff;
-  border-radius: 3px;
+  border: 1px solid #eee;
+  margin: 0 0 10px;
   padding: 10px;
+}
+
+.tour {
+  margin: 0 0 20px;
+}
+
+.category {
+  margin: 0 0 20px;
+}
+
+.questions {
+  display: flex;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.questionsItem {
+  border: 1px solid #eee;
+  display: inline-block;
+  padding: 10px;
+  vertical-align: top;
+  flex: 20% 1;
+}
+
+.row {
+  margin: 0 0 10px;
+}
+
+@media (max-width: 720px) {
+  .questions {
+    display: block;
+  }
+  .questionsItem {
+    display: block;
+  }
 }

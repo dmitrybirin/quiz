@@ -83,11 +83,11 @@ class QuestionForm extends Component {
         <form onSubmit={handleSubmit}>
           <div className={styles.row}>
             <RadioGroup name="type" {...type}>
-              <label className={styles.label}><input type="radio" value="stream"/> Stream</label>
-              <label className={styles.label}><input type="radio" value="sound"/> Sound</label>
-              <label className={styles.label}><input type="radio" value="video"/> Video</label>
-              <label className={styles.label}><input type="radio" value="image"/> Image</label>
-              <label className={styles.label}><input type="radio" value="text"/> Text</label>
+              <label className={styles.label}><input type="radio" value="stream"/> Аудио</label>
+              <label className={styles.label}><input type="radio" value="video"/> Видео</label>
+              <label className={styles.label}><input type="radio" value="sound"/> Файл</label>
+              <label className={styles.label}><input type="radio" value="image"/> Картинка</label>
+              <label className={styles.label}><input type="radio" value="text"/> Текст</label>
             </RadioGroup>
           </div>
           {['sound', 'image'].includes(type.value) &&
@@ -96,7 +96,7 @@ class QuestionForm extends Component {
                       onDrop={this.handleFilesDrop}
                       className={styles.dropzone}>
               <div>
-                Drag and drop file here or click to select
+                Перетащи сюда файл или просто кликни
               </div>
             </Dropzone>
             {file.touched && file.error && <div className="text-danger">{file.error}</div>}
@@ -111,7 +111,7 @@ class QuestionForm extends Component {
           </div>}
           {type.value === 'video' &&
           <div className={styles.row}>
-            <Input type="text" placeholder="Video URL" {...stream}/>
+            <Input type="text" placeholder="Ссылка на YouTube или Vimeo" {...stream}/>
             {stream.touched && stream.error && <div className="text-danger">{stream.error}</div>}
             {stream.value &&
             <ReactPlayer url={stream.value}
@@ -119,7 +119,7 @@ class QuestionForm extends Component {
           </div>}
           {type.value === 'stream' &&
           <div className={styles.row}>
-            <Input type="text" placeholder="Stream URL" {...stream}/>
+            <Input type="text" placeholder="Ссылка на YouTube или SoundCloud" {...stream}/>
             {stream.touched && stream.error && <div className="text-danger">{stream.error}</div>}
             {stream.value &&
             <ReactPlayer url={stream.value}
@@ -127,16 +127,16 @@ class QuestionForm extends Component {
                          controls/>}
           </div>}
           <div className={styles.row}>
-            <Input type="textarea" placeholder="Question" {...text}/>
+            <Input type="textarea" placeholder="Вопрос" {...text}/>
             {text.touched && text.error && <div className="text-danger">{text.error}</div>}
           </div>
           <div className={styles.row}>
-            <Input type="textarea" placeholder="Answer" {...answer}/>
+            <Input type="textarea" placeholder="Ответ" {...answer}/>
             {answer.touched && answer.error && <div className="text-danger">{answer.error}</div>}
           </div>
-          <Button bsStyle="primary" type="submit">Save</Button>
+          <Button bsStyle="primary" type="submit">Добавить</Button>
           {' '}
-          <Button onClick={this.props.onCancel}>Cancel</Button>
+          <Button onClick={this.props.onCancel}>Отмена</Button>
         </form>
       </div>
     )
