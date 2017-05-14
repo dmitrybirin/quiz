@@ -1,10 +1,12 @@
 @import "../../theme/variables.scss";
+$border: 10px solid $text-color;
 
 .container {
   padding: 0 20px;
 }
 
 .title {
+  font-weight: bold;
   margin: 0 0 20px;
   text-align: center;
 }
@@ -35,13 +37,15 @@
 }
 
 .table {
-  border: 1px solid #999;
+  border: $border;
+  font-weight: bold;
+  height: 70vh;
   vertical-align: middle;
   width: 100%;
 }
 
 .tableCategory {
-  border: 1px solid #999;
+  border: $border;
   font-size: 32px;
   line-height: 32px;
   height: 12vh;
@@ -51,9 +55,9 @@
 }
 
 .tableCell {
-  border: 1px solid #999;
+  border: $border;
   font-size: 48px;
-  height: 12vh;
+  height: 8vh;
   text-align: center;
   width: 15%;
   &.active {

@@ -3,6 +3,13 @@
  *
  */
 
+@import "variables";
+
+a {
+  color: $text-color;
+  text-decoration: underline;
+}
+
 .navbar-brand {
   position: relative;
   padding-left: 50px;

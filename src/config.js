@@ -15,10 +15,10 @@ module.exports = Object.assign({
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
   app: {
-    title: 'Pop Music Quiz',
+    title: 'Оргия корги',
     description: 'All the modern best practices in one example.',
     head: {
-      titleTemplate: 'Pop Music Quiz: %s',
+      titleTemplate: 'Оргия корги: %s',
       meta: [
         { name: 'description', content: 'All the modern best practices in one example.' },
         { charset: 'utf-8' },

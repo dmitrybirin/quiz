@@ -26,6 +26,7 @@
   padding: 10px;
   vertical-align: top;
   flex: 20% 1;
+  max-width: 20%;
 }
 
 .row {
@@ -38,5 +39,6 @@
   }
   .questionsItem {
     display: block;
+    max-width: none;
   }
 }

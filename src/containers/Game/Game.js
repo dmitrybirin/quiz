@@ -5,6 +5,7 @@ import Helmet from 'react-helmet'
 import cx from 'classnames'
 import { path } from 'ramda'
 import autobind from 'autobind-decorator'
+import { Textfit } from 'react-textfit'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 const { dataToJS } = helpers
@@ -116,7 +117,11 @@ export default class Game extends Component {
             <tbody>
             {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
               <tr key={categoryKey}>
-                <td className={style.tableCategory}>{categories[categoryKey].name}</td>
+                <td className={style.tableCategory}>
+                  <Textfit mode={categories[categoryKey].name.includes(' ') ? 'multi' : 'single'}>
+                    {categories[categoryKey].name}
+                  </Textfit>
+                </td>
                 {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
                   <td key={questionKey}
                       className={cx({
