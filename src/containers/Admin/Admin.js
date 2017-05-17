@@ -49,6 +49,7 @@ export default class Main extends Component {
     const style = require('./Admin.scss')
     const { auth, profile } = this.props
     const isLoggedIn = path(['uid'], auth)
+    const displayName = path(['displayName'], profile)
 
     return (
       <div className={style.container}>
@@ -58,7 +59,7 @@ export default class Main extends Component {
             <Col xs={12}>
               {isLoggedIn &&
               <div>
-                <p>{profile.displayName}</p>
+                <p>{displayName}</p>
                 <Link to="/admin/games/"><Button>Управление играми</Button></Link>
               </div>}
               {!isLoggedIn &&
