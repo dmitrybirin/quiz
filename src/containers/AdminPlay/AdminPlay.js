@@ -111,8 +111,8 @@ export default class AdminPlay extends Component {
 
   handleQuestionClick(questionKey, categoryKey) {
     const { params: { key }, plays } = this.props
-    const { completedQuestions, currentQuestionKey } = plays[key]
-    if (currentQuestionKey || (completedQuestions && completedQuestions[questionKey])) {
+    const { currentQuestionKey } = plays[key]
+    if (currentQuestionKey) {
       return
     }
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
