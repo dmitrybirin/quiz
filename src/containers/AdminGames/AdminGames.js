@@ -5,7 +5,7 @@ import { push } from 'react-router-redux'
 import autobind from 'autobind-decorator'
 import { path } from 'ramda'
 // Components
-import { Button, Input } from 'react-bootstrap'
+import { Button, Col, Grid, Input, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
 
 import { firebaseConnect, helpers, pathToJS } from 'react-redux-firebase'
@@ -94,25 +94,31 @@ export default class AdminGames extends Component {
     return (
       <div className="container">
         <Helmet title="Admin - Games"/>
-        <div className={style.games}>
-          <h3>Игры</h3>
-          <form onSubmit={this.handleAddGame}>
-            <Input type="text"
-                   value={name}
-                   onChange={this.handleGameNameChange}
-                   buttonAfter={<Button type="submit" bsStyle="primary">
-                     <i className="fa fa-plus"/> Добавить игру
-                   </Button>}/>
-          </form>
-          <br/><br/>
-          <ul>
-            {userGames && userGames.map(key => (
-              <li key={key}>
-                <Link to={`/admin/games/${key}`}>{games[key].name || key}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Grid>
+          <div className={style.games}>
+            <h3>Игры</h3>
+            <Row>
+              <Col xs={12} md={6}>
+                <form onSubmit={this.handleAddGame}>
+                  <Input type="text"
+                         value={name}
+                         onChange={this.handleGameNameChange}
+                         buttonAfter={<Button type="submit" bsStyle="primary">
+                           <i className="fa fa-plus"/> Добавить игру
+                         </Button>}/>
+                </form>
+              </Col>
+            </Row>
+            <br/><br/>
+            <ul>
+              {userGames && userGames.map(key => (
+                <li key={key}>
+                  <Link to={`/admin/games/${key}`}>{games[key].name || key}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Grid>
       </div>
     )
   }
