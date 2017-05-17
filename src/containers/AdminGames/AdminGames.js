@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 import { push } from 'react-router-redux'
 import autobind from 'autobind-decorator'
+import { path } from 'ramda'
 // Components
 import { Button, Input } from 'react-bootstrap'
 import { Link } from 'react-router'
 
-import { firebaseConnect, helpers } from 'react-redux-firebase'
+import { firebaseConnect, helpers, pathToJS } from 'react-redux-firebase'
+
 const { dataToJS } = helpers
 
 const GAMES_PATH = 'games'
@@ -19,6 +21,7 @@ const TOURS_PATH = 'tours'
 ])
 @connect(
   ({ firebase }) => ({
+    auth: pathToJS(firebase, 'auth'),
     games: dataToJS(firebase, GAMES_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
   }), { push }
@@ -27,6 +30,7 @@ const TOURS_PATH = 'tours'
 export default class AdminGames extends Component {
 
   static propTypes = {
+    auth: PropTypes.object,
     firebase: PropTypes.object,
     games: PropTypes.object,
     push: PropTypes.func,
@@ -47,11 +51,15 @@ export default class AdminGames extends Component {
   }
 
   handleAddGame(event) {
+    const { auth } = this.props
     const { name } = this.state
     const tours = [1, 2, 3]
 
+    const uid = path(['uid'], auth)
+
     this.props.firebase.push(GAMES_PATH, {
-      name
+      name,
+      owner: uid
     }).then(gameRes => {
       const gameKey = gameRes.getKey()
       tours.forEach(tour => {
@@ -73,8 +81,16 @@ export default class AdminGames extends Component {
 
   render() {
     const style = require('./AdminGames.scss')
-    const { games } = this.props
+    const { auth, games } = this.props
     const { name } = this.state
+    const uid = path(['uid'], auth)
+    console.log(uid)
+
+    const userGames = games && Object.keys(games).filter(gameKey => games[gameKey].owner === uid)
+
+    if (!uid) {
+      return <div/>
+    }
 
     return (
       <div className="container">
@@ -85,13 +101,13 @@ export default class AdminGames extends Component {
             <Input type="text"
                    value={name}
                    onChange={this.handleGameNameChange}
-                   buttonAfter={<Button role="submit" bsStyle="primary">
+                   buttonAfter={<Button type="submit" bsStyle="primary">
                      <i className="fa fa-plus"/> Добавить игру
                    </Button>}/>
           </form>
           <br/><br/>
           <ul>
-            {games && Object.keys(games).map(key => (
+            {userGames && userGames.map(key => (
               <li key={key}>
                 <Link to={`/admin/games/${key}`}>{games[key].name || key}</Link>
               </li>

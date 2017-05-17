@@ -207,9 +207,9 @@ export default class AdminPlay extends Component {
         <Helmet title="AdminPlay"/>
         <div className={style.game}>
           <div>
-            <a href={`/games/${key}`} target="_blank"><Button>Game Board</Button></a>
+            <a href={`/games/${key}`} target="_blank"><Button>Табло</Button></a>
             {' '}
-            <a href={`/play/${key}`} target="_blank"><Button>Player Screen</Button></a>
+            <a href={`/play/${key}`} target="_blank"><Button>Кнопка игрока</Button></a>
           </div>
           <br/><br/>
           <div className={style.tours}>

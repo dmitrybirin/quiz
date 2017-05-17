@@ -7,6 +7,7 @@ import AdminPlay from 'containers/AdminPlay/AdminPlay'
 import AdminQuestions from 'containers/AdminQuestions/AdminQuestions'
 import App from 'containers/App/App'
 import Game from 'containers/Game/Game'
+import Main from 'containers/Main'
 import NotFound from 'containers/NotFound/NotFound'
 import Player from 'containers/Player/Player'
 
@@ -14,7 +15,7 @@ export default () => {
   return (
     <Route path="/" component={App}>
       { /* Player (main) route */ }
-      <IndexRoute component={Player}/>
+      <IndexRoute component={Main}/>
 
       { /* Routes */ }
       <Route path="admin" component={Admin}/>
