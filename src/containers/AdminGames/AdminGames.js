@@ -84,7 +84,6 @@ export default class AdminGames extends Component {
     const { auth, games } = this.props
     const { name } = this.state
     const uid = path(['uid'], auth)
-    console.log(uid)
 
     const userGames = games && Object.keys(games).filter(gameKey => games[gameKey].owner === uid)
 

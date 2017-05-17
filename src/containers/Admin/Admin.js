@@ -56,7 +56,6 @@ export default class Main extends Component {
         <Grid>
           <Row>
             <Col xs={12}>
-              <br/><br/><br/>
               {isLoggedIn &&
               <div>
                 <p>{profile.displayName}</p>

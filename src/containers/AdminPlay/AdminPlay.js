@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 import { Button } from 'react-bootstrap'
+import { Link } from 'react-router'
 import cx from 'classnames'
 import store from 'store'
 import { firebaseConnect, helpers } from 'react-redux-firebase'
@@ -210,6 +211,8 @@ export default class AdminPlay extends Component {
             <a href={`/games/${key}`} target="_blank"><Button>Табло</Button></a>
             {' '}
             <a href={`/play/${key}`} target="_blank"><Button>Кнопка игрока</Button></a>
+            {' '}
+            <Link to={`/admin/games/${gameKey}`}><Button>Редактировать игру</Button></Link>
           </div>
           <br/><br/>
           <div className={style.tours}>
@@ -227,7 +230,7 @@ export default class AdminPlay extends Component {
             ))}
           </div>
           <div className={style.newGame}>
-            <Button onClick={this.handleNewGameStart}>Новая игра</Button>
+            <Button onClick={this.handleNewGameStart}>Начать игру сначала</Button>
           </div>
         </div>
         {currentQuestionKey && questions &&

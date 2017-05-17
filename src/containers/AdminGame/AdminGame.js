@@ -440,13 +440,13 @@ export default class AdminGame extends Component {
           {currentGamePlays && currentGamePlays.map(playKey => (
             <div key={playKey} className={styles.row}>
               <Button bsStyle="primary" onClick={() => this.handleConinuePlayClick(playKey)}>
-                Продолжить игру {moment(plays[playKey].startedAt).format('DD.MM HH:mm')}
+                Продолжить игру от {moment(plays[playKey].startedAt).format('DD.MM HH:mm')}
               </Button>
             </div>
           ))}
         </div>
         <div className={styles.row}>
-          <Button bsStyle="primary" onClick={this.handlePlayClick}>Начать игру</Button>
+          <Button bsStyle="primary" onClick={this.handlePlayClick}>Начать новую игру</Button>
         </div>
         {game &&
         <div className={styles.game}>
