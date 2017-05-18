@@ -63,7 +63,7 @@ class QuestionForm extends Component {
   handleFilesDrop(files) {
     this.props.firebase.uploadFiles(FILES_PATH, files, FILES_PATH).then(res => {
       if (is(Array, res)) {
-        const file = res[0].getKey()
+        const file = res[0].key
         if (file) {
           this.props.dispatch(this.props.change('question', 'file', file))
         }
