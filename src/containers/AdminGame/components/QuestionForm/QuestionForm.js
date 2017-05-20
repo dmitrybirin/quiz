@@ -17,7 +17,7 @@ const FILES_PATH = 'uploadedFiles'
 
 @reduxForm({
   form: 'question',
-  fields: ['answer', 'file', 'stream', 'text', 'type'],
+  fields: ['answer', 'file', 'url', 'text', 'type'],
   validate: questionFormValidation
 })
 @firebaseConnect([
@@ -51,17 +51,17 @@ class QuestionForm extends Component {
       this.props.initialize('question', {
         answer: question.answer,
         file: question.file,
-        stream: question.stream,
         text: question.text,
         type: question.type,
+        url: question.url,
       })
     } else {
       this.props.initialize('question', {
-        type: type || 'stream',
+        type: type || 'audio',
         answer: '',
         file: '',
-        stream: '',
         text: '',
+        url: '',
       })
     }
   }
@@ -87,58 +87,61 @@ class QuestionForm extends Component {
   render() {
     const styles = require('./QuestionForm.scss')
     const {
-      fields: { answer, file, stream, text, type },
+      fields: { answer, file, text, type, url },
       handleSubmit, uploadedFiles
     } = this.props
     const fileUrl = path([file.value, 'downloadURL'], uploadedFiles)
+
+    const urlPlaceholders = {
+      audio: 'Ссылка на YouTube, SoundCloud или файл',
+      video: 'Ссылка на YouTube, Vimeo или файл',
+      image: 'Ссылка на картинку',
+    }
     return (
       <div>
         <form onSubmit={handleSubmit}>
           <div className={styles.row}>
             <RadioGroup name="type" {...type} onChange={this.handleTypeChange}>
-              <label className={styles.label}><input type="radio" value="stream"/> Аудио</label>
+              <label className={styles.label}><input type="radio" value="audio"/> Аудио</label>
               <label className={styles.label}><input type="radio" value="video"/> Видео</label>
-              <label className={styles.label}><input type="radio" value="sound"/> Файл</label>
               <label className={styles.label}><input type="radio" value="image"/> Картинка</label>
               <label className={styles.label}><input type="radio" value="text"/> Текст</label>
             </RadioGroup>
           </div>
-          {['sound', 'image'].includes(type.value) &&
+
+          {['audio', 'video', 'image'].includes(type.value) &&
+          <div className={styles.row}>
+            <Input type="text" placeholder={urlPlaceholders[type.value]} {...url}/>
+            {url.touched && url.error && <div className="text-danger">{url.error}</div>}
+            {url.value &&
+            <div>
+              {['audio', 'video'].includes(type.value) &&
+              <ReactPlayer url={url.value}
+                           height={200}
+                           controls/>}
+              {type.value === 'image' && <img className={styles.image} src={url.value}/>}
+            </div>}
+          </div>}
+          {['audio', 'image'].includes(type.value) &&
           <div className={styles.row}>
             <Dropzone multiple={false}
                       onDrop={this.handleFilesDrop}
                       className={styles.dropzone}>
               <div>
-                Перетащи сюда файл или просто кликни
+                Или перетащи сюда файл
               </div>
             </Dropzone>
-            {file.touched && file.error && <div className="text-danger">{file.error}</div>}
-            {file.value && fileUrl &&
+            {fileUrl &&
             <div>
-              {type.value === 'sound' &&
+              {type.value === 'audio' &&
               <ReactPlayer url={fileUrl}
+                           height={200}
                            controls/>}
               {type.value === 'image' &&
               <img className={styles.image} src={fileUrl}/>}
             </div>}
           </div>}
-          {type.value === 'video' &&
-          <div className={styles.row}>
-            <Input type="text" placeholder="Ссылка на YouTube или Vimeo" {...stream}/>
-            {stream.touched && stream.error && <div className="text-danger">{stream.error}</div>}
-            {stream.value &&
-            <ReactPlayer url={stream.value}
-                         controls/>}
-          </div>}
-          {type.value === 'stream' &&
-          <div className={styles.row}>
-            <Input type="text" placeholder="Ссылка на YouTube или SoundCloud" {...stream}/>
-            {stream.touched && stream.error && <div className="text-danger">{stream.error}</div>}
-            {stream.value &&
-            <ReactPlayer url={stream.value}
-                         height={200}
-                         controls/>}
-          </div>}
+
           <div className={styles.row}>
             <Input type="textarea" placeholder="Вопрос" {...text}/>
             {text.touched && text.error && <div className="text-danger">{text.error}</div>}

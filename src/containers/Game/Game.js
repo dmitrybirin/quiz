@@ -99,13 +99,15 @@ export default class Game extends Component {
     // Question
     const question = path([currentQuestionKey], questions)
     const questionType = path(['type'], question)
-    const questionStream = path(['stream'], question)
+    const questionUrl = path(['url'], question)
     const questionText = path(['text'], question)
     const questionFile = path([path(['file'], question), 'downloadURL'], uploadedFiles)
     // const questionAnswer = path(['answer'], question)
     // Player
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
+
+    console.log(question)
 
     return (
       <div className={style.container}>
@@ -139,9 +141,9 @@ export default class Game extends Component {
         </div>}
         {currentQuestionKey &&
         <div>
-          {questionType === 'stream' &&
+          {questionType === 'audio' &&
           <div>
-            <ReactPlayer url={questionStream}
+            <ReactPlayer url={questionUrl || questionFile}
                          height={0}
                          playing={preload || isPlaying}
                          vimeoConfig={{ preload: true }}
@@ -149,21 +151,13 @@ export default class Game extends Component {
                          onReady={this.handlePlayerReady}
                          volume={1}/>
           </div>}
-          {questionType === 'sound' &&
-          <div>
-            <ReactPlayer url={questionFile}
-                         height={0}
-                         playing={isPlaying}
-                         fileConfig={{ attributes: { preload: 'auto' } }}
-                         volume={1}/>
-          </div>}
           {questionType === 'image' &&
           <div className={cx({ [style.image]: true, [style.active]: isPlaying })}>
-            <i style={{ backgroundImage: `url(${questionFile})` }}/>
+            <i style={{ backgroundImage: `url(${questionUrl || questionFile})` }}/>
           </div>}
           {questionType === 'video' &&
           <div className={cx({ [style.video]: true, [style.active]: isPlaying })}>
-            <ReactPlayer url={questionStream}
+            <ReactPlayer url={questionUrl}
                          height={window.innerHeight - 100}
                          width={window.innerWidth - 100}
                          playing={preload || isPlaying}

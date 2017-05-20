@@ -61,7 +61,7 @@ export default class AdminGame extends Component {
       addQuestionCategoryKey: null,
       editQuestionKey: null,
       editQuestionCategoryKey: null,
-      questionType: 'stream',
+      questionType: 'audio',
     }
   }
 
@@ -196,9 +196,9 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleAddQuestion(categoryKey, { answer, file = '', stream = '', text, type }) {
+  handleAddQuestion(categoryKey, { answer, file = '', text, type, url = '' }) {
     this.props.firebase.push(QUESTION_PATH, {
-      answer, file, stream, text, type
+      answer, file, text, type, url
     }).then(res => {
       const questionKey = res.getKey()
       const categoryQuestions = path([categoryKey, 'questions'], this.props.categories)
@@ -216,7 +216,7 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleQuestionUp(categoryKey, questionKey) {
+  handleQuestionUp(event, categoryKey, questionKey) {
     const { categories } = this.props
     const questions = categories[categoryKey].questions
     const questionPrice = questions[questionKey].price
@@ -228,9 +228,10 @@ export default class AdminGame extends Component {
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
       price: prevQuestionPrice
     })
+    event.stopPropagation()
   }
 
-  handleQuestionDown(categoryKey, questionKey) {
+  handleQuestionDown(event, categoryKey, questionKey) {
     const { categories } = this.props
     const questions = categories[categoryKey].questions
     const questionPrice = questions[questionKey].price
@@ -242,6 +243,7 @@ export default class AdminGame extends Component {
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
       price: nextQuestionPrice
     })
+    event.stopPropagation()
   }
 
   // Edit question
@@ -253,9 +255,9 @@ export default class AdminGame extends Component {
     })
   }
 
-  handleEditQuestion(questionKey, { answer, file = '', stream = '', text, type, }) {
+  handleEditQuestion(questionKey, { answer, file = '', text, type, url = '' }) {
     this.props.firebase.update(`${QUESTION_PATH}/${questionKey}`, {
-      answer, file, stream, text, type
+      answer, file, text, type, url
     }).then(() => {
       this.handleEditQuestionCancel()
     })
@@ -392,13 +394,13 @@ export default class AdminGame extends Component {
                 {' '}
                 {index !== 0 &&
                 <Button bsSize="small"
-                        onClick={() => this.handleQuestionUp(categoryKey, questionKey)}>
+                        onClick={event => this.handleQuestionUp(event, categoryKey, questionKey)}>
                   <i className="fa fa-arrow-left"/>
                 </Button>}
                 {' '}
                 {index !== filteredCategoryQuestions.length - 1 &&
                 <Button bsSize="small"
-                        onClick={() => this.handleQuestionDown(categoryKey, questionKey)}>
+                        onClick={event => this.handleQuestionDown(event, categoryKey, questionKey)}>
                   <i className="fa fa-arrow-right"/>
                 </Button>}
                 {' '}
