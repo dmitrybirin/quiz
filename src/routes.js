@@ -4,7 +4,6 @@ import Admin from 'containers/Admin/Admin'
 import AdminGame from 'containers/AdminGame/AdminGame'
 import AdminGames from 'containers/AdminGames/AdminGames'
 import AdminPlay from 'containers/AdminPlay/AdminPlay'
-import AdminQuestions from 'containers/AdminQuestions/AdminQuestions'
 import App from 'containers/App/App'
 import Game from 'containers/Game/Game'
 import Main from 'containers/Main'
@@ -22,7 +21,6 @@ export default () => {
       <Route path="admin/games" component={AdminGames}/>
       <Route path="admin/games/:key" component={AdminGame}/>
       <Route path="admin/play/:key" component={AdminPlay}/>
-      <Route path="admin/questions" component={AdminQuestions}/>
       <Route path="games/:key" component={Game}/>
       <Route path="play/:key" component={Player}/>
 

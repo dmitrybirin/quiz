@@ -38,13 +38,15 @@ class QuestionForm extends Component {
     handleSubmit: PropTypes.func,
     initialize: PropTypes.func,
     onCancel: PropTypes.func,
+    onTypeChange: PropTypes.func,
+    type: PropTypes.string,
     question: PropTypes.object,
     resetForm: PropTypes.func,
     uploadedFiles: PropTypes.object
   }
 
   componentDidMount() {
-    const { question } = this.props
+    const { question, type } = this.props
     if (question) {
       this.props.initialize('question', {
         answer: question.answer,
@@ -55,7 +57,11 @@ class QuestionForm extends Component {
       })
     } else {
       this.props.initialize('question', {
-        type: 'stream'
+        type: type || 'stream',
+        answer: '',
+        file: '',
+        stream: '',
+        text: '',
       })
     }
   }
@@ -71,6 +77,13 @@ class QuestionForm extends Component {
     })
   }
 
+  handleTypeChange(value) {
+    this.props.fields.type.onChange(value)
+    if (this.props.onTypeChange) {
+      this.props.onTypeChange(value)
+    }
+  }
+
   render() {
     const styles = require('./QuestionForm.scss')
     const {
@@ -82,7 +95,7 @@ class QuestionForm extends Component {
       <div>
         <form onSubmit={handleSubmit}>
           <div className={styles.row}>
-            <RadioGroup name="type" {...type}>
+            <RadioGroup name="type" {...type} onChange={this.handleTypeChange}>
               <label className={styles.label}><input type="radio" value="stream"/> Аудио</label>
               <label className={styles.label}><input type="radio" value="video"/> Видео</label>
               <label className={styles.label}><input type="radio" value="sound"/> Файл</label>
@@ -134,7 +147,7 @@ class QuestionForm extends Component {
             <Input type="textarea" placeholder="Ответ" {...answer}/>
             {answer.touched && answer.error && <div className="text-danger">{answer.error}</div>}
           </div>
-          <Button bsStyle="primary" type="submit">Добавить</Button>
+          <Button bsStyle="primary" type="submit">Сохранить</Button>
           {' '}
           <Button onClick={this.props.onCancel}>Отмена</Button>
         </form>

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
-import { initialize } from 'redux-form'
 import autobind from 'autobind-decorator'
 import { path } from 'ramda'
 import { push } from 'react-router-redux'
@@ -9,7 +8,7 @@ import moment from 'moment'
 // Components
 import { Button, Col, Input, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
-import QuestionForm from 'components/QuestionForm/QuestionForm'
+import QuestionForm from './components/QuestionForm/QuestionForm'
 import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
 // import AddTourForm from './components/AddTourForm/AddTourForm'
 // Firebase
@@ -39,7 +38,7 @@ const TOURS_PATH = 'tours'
     players: dataToJS(firebase, PLAYERS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
-  }), { initialize, push }
+  }), { push }
 )
 @autobind
 export default class AdminGame extends Component {
@@ -48,7 +47,6 @@ export default class AdminGame extends Component {
     categories: PropTypes.object,
     firebase: PropTypes.object,
     games: PropTypes.object,
-    initialize: PropTypes.func,
     params: PropTypes.object,
     plays: PropTypes.object,
     players: PropTypes.object,
@@ -63,6 +61,7 @@ export default class AdminGame extends Component {
       addQuestionCategoryKey: null,
       editQuestionKey: null,
       editQuestionCategoryKey: null,
+      questionType: 'stream',
     }
   }
 
@@ -192,7 +191,8 @@ export default class AdminGame extends Component {
   // Questions
   handleAddQuestionClick(addQuestionCategoryKey) {
     this.setState({
-      addQuestionCategoryKey
+      addQuestionCategoryKey,
+      editQuestionCategoryKey: null
     })
   }
 
@@ -200,13 +200,6 @@ export default class AdminGame extends Component {
     this.props.firebase.push(QUESTION_PATH, {
       answer, file, stream, text, type
     }).then(res => {
-      this.props.initialize('question', {
-        answer: '',
-        file: '',
-        stream: '',
-        text: '',
-        type,
-      })
       const questionKey = res.getKey()
       const categoryQuestions = path([categoryKey, 'questions'], this.props.categories)
       const price = categoryQuestions ? (Object.keys(categoryQuestions).length + 1) * 100 : 100
@@ -256,6 +249,7 @@ export default class AdminGame extends Component {
     this.setState({
       editQuestionKey,
       editQuestionCategoryKey,
+      addQuestionCategoryKey: null
     })
   }
 
@@ -263,13 +257,6 @@ export default class AdminGame extends Component {
     this.props.firebase.update(`${QUESTION_PATH}/${questionKey}`, {
       answer, file, stream, text, type
     }).then(() => {
-      this.props.initialize('question', {
-        answer: '',
-        file: '',
-        stream: '',
-        text: '',
-        type,
-      })
       this.handleEditQuestionCancel()
     })
   }
@@ -309,7 +296,7 @@ export default class AdminGame extends Component {
 
   renderCategories(tourKey) {
     const { categories, questions, tours } = this.props
-    const { addQuestionCategoryKey, editQuestionCategoryKey, editQuestionKey } = this.state
+    const { addQuestionCategoryKey, editQuestionCategoryKey, editQuestionKey, questionType } = this.state
     const tourCategories = tours[tourKey].categories
     if (!tourCategories || !categories) {
       return null
@@ -362,7 +349,11 @@ export default class AdminGame extends Component {
               </Button>
               {categoryKey === addQuestionCategoryKey &&
               <div className={styles.addQuestionFrom}>
-                <QuestionForm onSubmit={data => this.handleAddQuestion(categoryKey, data)}
+                <QuestionForm type={questionType}
+                              onTypeChange={type => {
+                                this.setState({ questionType: type })
+                              }}
+                              onSubmit={data => this.handleAddQuestion(categoryKey, data)}
                               onCancel={this.handleAddQuestionCancel}/>
               </div>}
             </div>
@@ -428,7 +419,7 @@ export default class AdminGame extends Component {
     const game = path([key], games)
     const gameName = path(['name'], game)
     const gameTours = path(['tours'], game)
-    const currentGamePlays = plays && Object.keys(plays).filter(playKey => plays[playKey].game === key)
+    const currentGamePlays = plays && Object.keys(plays).filter(playKey => plays[playKey] && plays[playKey].game === key)
 
     return (
       <div className="container">
