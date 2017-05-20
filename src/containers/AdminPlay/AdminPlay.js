@@ -177,7 +177,6 @@ export default class AdminPlay extends Component {
       score: score - price
     })
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
-      currentQuestionKey: null,
       player: null
     })
   }
