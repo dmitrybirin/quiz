@@ -1,10 +1,12 @@
 @import "../../theme/variables.scss";
+$border: 10px solid $text-color;
 
 .container {
   padding: 0 20px;
 }
 
 .title {
+  font-weight: bold;
   margin: 0 0 20px;
   text-align: center;
 }
@@ -35,13 +37,15 @@
 }
 
 .table {
-  border: 1px solid #999;
+  border: $border;
+  font-weight: bold;
+  height: 70vh;
   vertical-align: middle;
   width: 100%;
 }
 
 .tableCategory {
-  border: 1px solid #999;
+  border: $border;
   font-size: 32px;
   line-height: 32px;
   height: 12vh;
@@ -51,16 +55,16 @@
 }
 
 .tableCell {
-  border: 1px solid #999;
+  border: $border;
   font-size: 48px;
-  height: 12vh;
+  height: 8vh;
   text-align: center;
   width: 15%;
   &.active {
     background-color: $brand-danger;
   }
   &.completed {
-    color: #333;
+    color: rgba(255, 255, 255, 0.2);
   }
 }
 
@@ -120,5 +124,62 @@
   }
   img {
     height: 100%;
+  }
+}
+
+// Questions
+.video {
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  left: 0;
+  padding: 50px;
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+  width: 100%;
+  &.active {
+    visibility: visible;
+  }
+}
+
+.image {
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  left: 0;
+  padding: 50px;
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+  width: 100%;
+  i {
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 100px;
+    left: 100px;
+    right: 100px;
+    top: 100px;
+  }
+  &.active {
+    visibility: visible;
+  }
+}
+
+.text {
+  background: rgba(0, 0, 0, 0.9);
+  height: 100%;
+  font-size: 8vh;
+  line-height: 11vh;
+  left: 0;
+  padding: 0 50px;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  width: 100%;
+  div {
+    transform: translateY(-50%);
+    position: relative;
+    top: 50%;
   }
 }

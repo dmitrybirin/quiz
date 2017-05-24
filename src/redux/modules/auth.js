@@ -4,7 +4,7 @@ const LOGIN = 'redux-example/auth/LOGIN'
 const LOGOUT = 'redux-example/auth/LOGOUT'
 
 const initialState = {
-  user: null
+  player: null
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -12,19 +12,19 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD:
       return {
         ...state,
-        user: action.user
+        player: action.player
       }
     case LOGIN:
       return {
         ...state,
-        user: {
-          name: action.name
+        player: {
+          key: action.key
         }
       }
     case LOGOUT:
       return {
         ...state,
-        user: null
+        player: null
       }
     default:
       return state
@@ -36,23 +36,23 @@ export function isLoaded(globalState) {
 }
 
 export function load() {
-  const user = store.get('user')
+  const player = store.get('player')
   return {
     type: LOAD,
-    user
+    player
   }
 }
 
-export function login(name) {
-  store.set('user', { name })
+export function login(key) {
+  store.set('player', { key })
   return {
     type: LOGIN,
-    name
+    key
   }
 }
 
 export function logout() {
-  store.remove('user')
+  store.remove('player')
   return {
     type: LOGOUT
   }

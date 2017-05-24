@@ -2,10 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import { path } from 'ramda'
-// Сomponents
-import { Button, Col, Grid, Row } from 'react-bootstrap'
-import { Link } from 'react-router'
 import * as authActions from 'redux/modules/auth'
 import { firebaseConnect, helpers, pathToJS } from 'react-redux-firebase'
 const { dataToJS } = helpers
@@ -38,37 +34,13 @@ export default class Main extends Component {
     profile: PropTypes.object
   }
 
-  handleFacebook() {
-    this.props.firebase.login({
-      provider: 'facebook',
-      type: 'popup',
-    })
-  }
 
   render() {
-    const style = require('./Admin.scss')
-    const { auth, profile } = this.props
-    const isLoggedIn = path(['uid'], auth)
-    const displayName = path(['displayName'], profile)
+    const style = require('./style.scss')
 
     return (
       <div className={style.container}>
         <Helmet title="Йоу"/>
-        <Grid>
-          <Row>
-            <Col xs={12}>
-              {isLoggedIn &&
-              <div>
-                <p>{displayName}</p>
-                <Link to="/admin/games/"><Button>Управление играми</Button></Link>
-              </div>}
-              {!isLoggedIn &&
-              <div>
-                <Button onClick={this.handleFacebook}>Войти через Facebook</Button>
-              </div>}
-            </Col>
-          </Row>
-        </Grid>
       </div>
     )
   }
