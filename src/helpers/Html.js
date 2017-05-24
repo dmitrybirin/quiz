@@ -44,7 +44,7 @@ export default class Html extends Component {
               rel="stylesheet"/>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
         <meta name="apple-mobile-web-app-capable" content="yes"/>
-        <meta name="apple-mobile-web-app-title" content="Своя Херда"/>
+        <meta name="apple-mobile-web-app-title" content="Le Quiz"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
         {/* styles (will be present only in production with webpack extract text plugin) */}
         {Object.keys(assets.styles).map((style, key) =>
