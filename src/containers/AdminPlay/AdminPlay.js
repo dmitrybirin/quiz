@@ -201,6 +201,9 @@ export default class AdminPlay extends Component {
     // Player
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
+    const playPlayers = path(['players'], play)
+    console.log(playPlayers)
+    console.log(players)
 
     return (
       <div className="container">
@@ -272,6 +275,18 @@ export default class AdminPlay extends Component {
           ))}
           </tbody>
         </table>
+        {players && playPlayers &&
+        <table className={style.playersTable}>
+          <tbody>
+          {Object.keys(playPlayers).filter(playerKey => players[playerKey])
+            .sort((key1, key2) => playPlayers[key2].score - playPlayers[key1].score).map(playerKey => (
+              <tr key={playerKey}>
+                <td>{players[playerKey].name}</td>
+                <td>{playPlayers[playerKey].score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>}
       </div>)
   }
 }
