@@ -131,7 +131,7 @@ export default class Game extends Component {
                         [style.active]: questionKey === currentQuestionKey,
                         [style.completed]: completedQuestions[questionKey]
                       })}>
-                    {categories[categoryKey].questions[questionKey].price}
+                    {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
                   </td>
                 ))}
               </tr>
