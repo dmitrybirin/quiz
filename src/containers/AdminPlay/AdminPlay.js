@@ -152,12 +152,15 @@ export default class AdminPlay extends Component {
   }
 
   handleRightAnswer() {
-    const { categories, params: { key }, plays } = this.props
+    const { categories, games, params: { key }, plays } = this.props
     const play = plays[key]
     const player = path(['player'], play)
+    const gameKey = path(['game'], play)
+    const game = path([gameKey], games)
+    const currentTourKey = path(['currentTourKey'], play)
     const currentCategoryKey = path(['currentCategoryKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
-    const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories)
+    const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories) * game.tours[currentTourKey].multiplier
     const score = path(['players', player, 'score'], play)
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
       score: score + price
@@ -166,12 +169,15 @@ export default class AdminPlay extends Component {
   }
 
   handleWrongAnswer() {
-    const { categories, params: { key }, plays } = this.props
+    const { categories, games, params: { key }, plays } = this.props
     const play = plays[key]
     const player = path(['player'], play)
+    const gameKey = path(['game'], play)
+    const game = path([gameKey], games)
+    const currentTourKey = path(['currentTourKey'], play)
     const currentCategoryKey = path(['currentCategoryKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
-    const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories)
+    const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories) * game.tours[currentTourKey].multiplier
     const score = path(['players', player, 'score'], play)
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
       score: score - price
@@ -202,8 +208,6 @@ export default class AdminPlay extends Component {
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
     const playPlayers = path(['players'], play)
-    console.log(playPlayers)
-    console.log(players)
 
     return (
       <div className="container">
@@ -268,7 +272,7 @@ export default class AdminPlay extends Component {
                       [style.completed]: completedQuestions[questionKey]
                     })}
                     onClick={() => this.handleQuestionClick(questionKey, categoryKey)}>
-                  {categories[categoryKey].questions[questionKey].price}
+                  {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
                 </td>
               ))}
             </tr>
