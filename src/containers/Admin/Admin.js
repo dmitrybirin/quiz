@@ -58,7 +58,7 @@ export default class Main extends Component {
 
     return (
       <div className={style.container}>
-        <Helmet title="Привет!"/>
+        <Helmet title="Добро пожаловать"/>
         <Grid>
           <Row>
             <Col xs={12}>

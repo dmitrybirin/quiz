@@ -424,7 +424,7 @@ export default class AdminGame extends Component {
 
     return (
       <div className={styles.container}>
-        <Helmet title="Admin - Games"/>
+        <Helmet title="Редактор игры"/>
         <Grid>
           <Row>
             <Col xs={12}>

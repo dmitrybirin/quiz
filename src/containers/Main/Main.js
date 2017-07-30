@@ -36,11 +36,11 @@ export default class Main extends Component {
 
 
   render() {
-    const style = require('./style.scss')
+    const style = require('./Main.scss')
 
     return (
       <div className={style.container}>
-        <Helmet title="Йоу"/>
+        <Helmet title="Квиз для компании"/>
       </div>
     )
   }

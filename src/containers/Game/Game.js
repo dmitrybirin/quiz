@@ -111,7 +111,7 @@ export default class Game extends Component {
 
     return (
       <div className={style.container}>
-        <Helmet title="Game"/>
+        <Helmet title="Игра"/>
         {game &&
         <div>
           <h1 className={style.title}>{tours && tours[currentTourKey].name}</h1>

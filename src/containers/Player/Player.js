@@ -71,7 +71,7 @@ export default class Player extends Component {
 
     return (
       <div className={style.container}>
-        <Helmet title="Game"/>
+        <Helmet title="Играть"/>
         {!player &&
         <div>
           <form onSubmit={this.handleLoginSubmit}>

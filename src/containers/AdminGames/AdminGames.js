@@ -93,7 +93,7 @@ export default class AdminGames extends Component {
 
     return (
       <div className={style.container}>
-        <Helmet title="Admin - Games"/>
+        <Helmet title="Список игр"/>
         <Grid>
           <div className={style.games}>
             <h3>Игры</h3>
