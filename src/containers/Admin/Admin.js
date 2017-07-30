@@ -8,6 +8,7 @@ import { Button, Col, Grid, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
 import * as authActions from 'redux/modules/auth'
 import { firebaseConnect, helpers, pathToJS } from 'react-redux-firebase'
+
 const { dataToJS } = helpers
 const PLAYS_PATH = 'plays'
 const PLAYERS_PATH = 'players'
@@ -22,7 +23,7 @@ const PLAYERS_PATH = 'players'
     profile: pathToJS(firebase, 'profile'),
     plays: dataToJS(firebase, PLAYS_PATH),
     players: dataToJS(firebase, PLAYERS_PATH),
-    player: auth.player
+    player: auth.player,
   }), authActions)
 @autobind
 export default class Main extends Component {
@@ -35,7 +36,11 @@ export default class Main extends Component {
     plays: PropTypes.object,
     players: PropTypes.object,
     player: PropTypes.object,
-    profile: PropTypes.object
+    profile: PropTypes.object,
+  }
+
+  handleLogout() {
+    this.props.firebase.logout()
   }
 
   handleFacebook() {
@@ -53,13 +58,13 @@ export default class Main extends Component {
 
     return (
       <div className={style.container}>
-        <Helmet title="Йоу"/>
+        <Helmet title="Привет!"/>
         <Grid>
           <Row>
             <Col xs={12}>
               {isLoggedIn &&
               <div>
-                <p>{displayName}</p>
+                <p>{displayName} <Button bsSize="xs" onClick={this.handleLogout}>Выйти</Button></p>
                 <Link to="/admin/games/"><Button>Управление играми</Button></Link>
               </div>}
               {!isLoggedIn &&
