@@ -8,9 +8,7 @@ import moment from 'moment'
 // Components
 import { Button, Col, Grid, Input, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
-import QuestionForm from './components/QuestionForm/QuestionForm'
-import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
-// import AddTourForm from './components/AddTourForm/AddTourForm'
+import { AddCategoryForm, /* AddTourForm, */ QuestionForm } from 'components'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 import styles from './AdminGame.scss'
