@@ -283,6 +283,7 @@ export default class AdminPlay extends Component {
                 ))}
                 </tbody>
               </table>
+              <h4>Игроки:</h4>
               {players && playPlayers &&
               <table className={style.playersTable}>
                 <tbody>
