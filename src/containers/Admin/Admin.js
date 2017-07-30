@@ -65,11 +65,11 @@ export default class Main extends Component {
               {isLoggedIn &&
               <div>
                 <p>{displayName} <Button bsSize="xs" onClick={this.handleLogout}>Выйти</Button></p>
-                <Link to="/admin/games/"><Button>Управление играми</Button></Link>
+                <Link to="/admin/games/"><Button bsStyle="primary">Управление играми</Button></Link>
               </div>}
               {!isLoggedIn &&
               <div>
-                <Button onClick={this.handleFacebook}>Войти через Facebook</Button>
+                <Button bsStyle="primary" onClick={this.handleFacebook}>Войти через Facebook</Button>
               </div>}
             </Col>
           </Row>

@@ -1,0 +1,30 @@
+@import "../../theme/variables.scss";
+
+.header {
+  text-align: center;
+  h1 {
+    font-size: 76px;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: 48px;
+    margin: 0 0 30px;
+  }
+
+  .button {
+    background: $grad-red;
+    border-radius: 10px;
+    color: #fff;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 30px;
+    padding: 20px 40px;
+    text-decoration: none;
+  }
+
+  .img {
+    max-width: 100%;
+  }
+}
