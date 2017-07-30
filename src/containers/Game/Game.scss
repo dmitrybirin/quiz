@@ -1,8 +1,13 @@
 @import "../../theme/variables.scss";
-$border: 10px solid $text-color;
+$border: 10px solid #fff;
 
 .container {
-  padding: 0 20px;
+  background: rgb(255,174,39);
+  background: $grad-red;
+  background-attachment: fixed;
+  color: #fff;
+  padding: 20px 20px 0;
+  height: 100vh;
 }
 
 .title {
@@ -168,6 +173,7 @@ $border: 10px solid $text-color;
 
 .text {
   background: rgba(0, 0, 0, 0.9);
+  color: #fff;
   height: 100%;
   font-size: 8vh;
   line-height: 11vh;

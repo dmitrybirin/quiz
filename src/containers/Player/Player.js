@@ -79,21 +79,22 @@ export default class Player extends Component {
               <input ref="name"
                      className={style.loginInput}
                      type="text"
-                     placeholder="Enter your name"/>
+                     placeholder="Как тебя зовут?"/>
             </div>
             <div>
-              <button type="submit" className={style.loginSubmit}>Play!</button>
+              <button type="submit" className={style.loginSubmit}>Играть!</button>
             </div>
           </form>
         </div>}
         {player &&
         <div>
-          <h1 className={style.name}>{name} / {Number.isInteger(score) && score.toLocaleString('ru-RU')}</h1>
+          <div className={style.name}>{name}</div>
+          <div className={style.score}>{Number.isInteger(score) && score.toLocaleString('ru-RU')}</div>
           <div className={style.buzz}>
             <button className={style.buzzButton} onTouchStart={this.handleBuzz} onMouseDown={this.handleBuzz}/>
           </div>
           <div className={style.logout} onClick={this.props.logout}>
-            Change user
+            Сменить игрока
           </div>
         </div>}
       </div>

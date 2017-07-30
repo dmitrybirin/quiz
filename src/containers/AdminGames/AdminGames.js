@@ -92,7 +92,7 @@ export default class AdminGames extends Component {
     }
 
     return (
-      <div className="container">
+      <div className={style.container}>
         <Helmet title="Admin - Games"/>
         <Grid>
           <div className={style.games}>

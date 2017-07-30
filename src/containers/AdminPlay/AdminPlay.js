@@ -1,11 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
-import { Button } from 'react-bootstrap'
+import { Button, Col, Grid, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
 import cx from 'classnames'
 import store from 'store'
 import { firebaseConnect, helpers } from 'react-redux-firebase'
+
 const { dataToJS } = helpers
 import { path } from 'ramda'
 import autobind from 'autobind-decorator'
@@ -33,7 +34,7 @@ const TOURS_PATH = 'tours'
     players: dataToJS(firebase, PLAYERS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
-  })
+  }),
 )
 @autobind
 export default class AdminPlay extends Component {
@@ -55,7 +56,7 @@ export default class AdminPlay extends Component {
     this.defaultState = {
       currentQuestion: null,
       completedQuestions: [],
-      players: []
+      players: [],
     }
     this.state = Object.assign({}, this.defaultState)
   }
@@ -82,7 +83,7 @@ export default class AdminPlay extends Component {
   // Players
   onUpdatePlayers = ({ players }) => {
     this.setState({
-      players
+      players,
     })
   }
 
@@ -98,14 +99,14 @@ export default class AdminPlay extends Component {
   handleTourChange(currentTourKey) {
     const { params: { key } } = this.props
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
-      currentTourKey
+      currentTourKey,
     })
   }
 
   handleNewGameStart() {
     const { params: { key } } = this.props
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
-      completedQuestions: null
+      completedQuestions: null,
     })
   }
 
@@ -117,7 +118,7 @@ export default class AdminPlay extends Component {
     }
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
       currentCategoryKey: categoryKey,
-      currentQuestionKey: questionKey
+      currentQuestionKey: questionKey,
     })
   }
 
@@ -126,7 +127,7 @@ export default class AdminPlay extends Component {
     socket.emit('plays')
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
       isPlaying: true,
-      player: null
+      player: null,
     })
   }
 
@@ -134,12 +135,12 @@ export default class AdminPlay extends Component {
     const { params: { key }, plays } = this.props
     const { currentQuestionKey } = plays[key]
     this.props.firebase.update(`${PLAYS_PATH}/${key}/completedQuestions`, {
-      [currentQuestionKey]: true
+      [currentQuestionKey]: true,
     })
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
       currentQuestionKey: null,
       isPlaying: false,
-      player: null
+      player: null,
     })
   }
 
@@ -147,7 +148,7 @@ export default class AdminPlay extends Component {
     const { params: { key } } = this.props
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
       currentQuestionKey: null,
-      isPlaying: false
+      isPlaying: false,
     })
   }
 
@@ -163,7 +164,7 @@ export default class AdminPlay extends Component {
     const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories) * game.tours[currentTourKey].multiplier
     const score = path(['players', player, 'score'], play)
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
-      score: score + price
+      score: score + price,
     })
     this.handleCompleteQuestion()
   }
@@ -180,10 +181,10 @@ export default class AdminPlay extends Component {
     const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories) * game.tours[currentTourKey].multiplier
     const score = path(['players', player, 'score'], play)
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
-      score: score - price
+      score: score - price,
     })
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
-      player: null
+      player: null,
     })
   }
 
@@ -210,20 +211,23 @@ export default class AdminPlay extends Component {
     const playPlayers = path(['players'], play)
 
     return (
-      <div className="container">
+      <div className={style.container}>
         <Helmet title="AdminPlay"/>
-        <div className={style.game}>
-          <div>
-            <a href={`/games/${key}`} target="_blank"><Button>Табло</Button></a>
-            {' '}
-            <a href={`/play/${key}`} target="_blank"><Button>Кнопка игрока</Button></a>
-            {' '}
-            <Link to={`/admin/games/${gameKey}`}><Button>Редактировать игру</Button></Link>
-          </div>
-          <br/><br/>
-          <div className={style.tours}>
-            {tours && gameTours && Object.keys(gameTours).map(tourKey => (
-              <span key={tourKey}>
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              <div className={style.game}>
+                <div>
+                  <a href={`/games/${key}`} target="_blank"><Button>Табло</Button></a>
+                  {' '}
+                  <a href={`/play/${key}`} target="_blank"><Button>Кнопка игрока</Button></a>
+                  {' '}
+                  <Link to={`/admin/games/${gameKey}`}><Button>Редактировать игру</Button></Link>
+                </div>
+                <br/><br/>
+                <div className={style.tours}>
+                  {tours && gameTours && Object.keys(gameTours).map(tourKey => (
+                    <span key={tourKey}>
               <Button bsStyle={tourKey === currentTourKey ? 'primary' : 'default'}
                       bsSize="large"
                       onClick={() => {
@@ -231,66 +235,69 @@ export default class AdminPlay extends Component {
                       }}>
               {tours[tourKey].name}
               </Button>
-                {' '}
+                      {' '}
             </span>
-            ))}
-          </div>
-          <div className={style.newGame}>
-            <Button onClick={this.handleNewGameStart}>Начать игру сначала</Button>
-          </div>
-        </div>
-        {currentQuestionKey && questions &&
-        <div>
-          <p><strong>Ответ:</strong> {questions[currentQuestionKey].answer}</p>
-          <div className={style.controls}>
-            <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Играть</Button>
-            {' '}
-            <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
-            {' '}
-            <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Вопрос сыгран</Button>
-          </div>
-        </div>}
-        {playerName &&
-        <div className={style.controls}>
-          Отвечает <strong>{playerName}</strong>
-          <div>
-            <Button bsStyle="success" bsSize="large" onClick={this.handleRightAnswer}>Правильно</Button>
-            <Button bsStyle="danger" bsSize="large" onClick={this.handleWrongAnswer}>Неправильно</Button>
-          </div>
-        </div>}
+                  ))}
+                </div>
+                <div className={style.newGame}>
+                  <Button onClick={this.handleNewGameStart}>Начать игру сначала</Button>
+                </div>
+              </div>
+              {currentQuestionKey && questions &&
+              <div>
+                <p><strong>Ответ:</strong> {questions[currentQuestionKey].answer}</p>
+                <div className={style.controls}>
+                  <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Играть</Button>
+                  {' '}
+                  <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
+                  {' '}
+                  <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Вопрос сыгран</Button>
+                </div>
+              </div>}
+              {playerName &&
+              <div className={style.controls}>
+                Отвечает <strong>{playerName}</strong>
+                <div>
+                  <Button bsStyle="success" bsSize="large" onClick={this.handleRightAnswer}>Правильно</Button>
+                  <Button bsStyle="danger" bsSize="large" onClick={this.handleWrongAnswer}>Неправильно</Button>
+                </div>
+              </div>}
 
-        <table className={style.table}>
-          <tbody>
-          {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
-            <tr key={categoryKey}>
-              <td className={style.tableCategory}>{categories[categoryKey].name}</td>
-              {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
-                <td key={questionKey}
-                    className={cx({
-                      [style.tableCell]: true,
-                      [style.active]: questionKey === currentQuestionKey,
-                      [style.completed]: completedQuestions[questionKey]
-                    })}
-                    onClick={() => this.handleQuestionClick(questionKey, categoryKey)}>
-                  {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
-                </td>
-              ))}
-            </tr>
-          ))}
-          </tbody>
-        </table>
-        {players && playPlayers &&
-        <table className={style.playersTable}>
-          <tbody>
-          {Object.keys(playPlayers).filter(playerKey => players[playerKey])
-            .sort((key1, key2) => playPlayers[key2].score - playPlayers[key1].score).map(playerKey => (
-              <tr key={playerKey}>
-                <td>{players[playerKey].name}</td>
-                <td>{playPlayers[playerKey].score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>}
+              <table className={style.table}>
+                <tbody>
+                {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
+                  <tr key={categoryKey}>
+                    <td className={style.tableCategory}>{categories[categoryKey].name}</td>
+                    {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
+                      <td key={questionKey}
+                          className={cx({
+                            [style.tableCell]: true,
+                            [style.active]: questionKey === currentQuestionKey,
+                            [style.completed]: completedQuestions[questionKey],
+                          })}
+                          onClick={() => this.handleQuestionClick(questionKey, categoryKey)}>
+                        {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+              {players && playPlayers &&
+              <table className={style.playersTable}>
+                <tbody>
+                {Object.keys(playPlayers).filter(playerKey => players[playerKey])
+                  .sort((key1, key2) => playPlayers[key2].score - playPlayers[key1].score).map(playerKey => (
+                    <tr key={playerKey}>
+                      <td>{players[playerKey].name}</td>
+                      <td>{playPlayers[playerKey].score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>}
+            </Col>
+          </Row>
+        </Grid>
       </div>)
   }
 }

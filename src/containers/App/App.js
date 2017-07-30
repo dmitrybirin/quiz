@@ -18,7 +18,7 @@ import { asyncConnect } from 'redux-async-connect'
     }
 
     return Promise.all(promises)
-  }
+  },
 }])
 @connect(
   state => ({ user: state.auth.user }),
@@ -26,11 +26,11 @@ import { asyncConnect } from 'redux-async-connect'
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    loadAuth: PropTypes.func.isRequired
+    loadAuth: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
-    store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
@@ -43,9 +43,7 @@ export default class App extends Component {
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
-        <div className={styles.appContent}>
-          {this.props.children}
-        </div>
+        {this.props.children}
       </div>
     )
   }

@@ -6,7 +6,7 @@ import { path } from 'ramda'
 import { push } from 'react-router-redux'
 import moment from 'moment'
 // Components
-import { Button, Col, Input, Row } from 'react-bootstrap'
+import { Button, Col, Grid, Input, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
 import QuestionForm from './components/QuestionForm/QuestionForm'
 import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
@@ -14,6 +14,7 @@ import AddCategoryForm from './components/AddCategoryForm/AddCategoryForm'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 import styles from './AdminGame.scss'
+
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
 const GAMES_PATH = 'games'
@@ -38,7 +39,7 @@ const TOURS_PATH = 'tours'
     players: dataToJS(firebase, PLAYERS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
-  }), { push }
+  }), { push },
 )
 @autobind
 export default class AdminGame extends Component {
@@ -75,7 +76,7 @@ export default class AdminGame extends Component {
     this.props.firebase.push(PLAYS_PATH, {
       game: key,
       currentTourKey: Object.keys(games[key].tours)[0],
-      startedAt: new Date().getTime()
+      startedAt: new Date().getTime(),
     }).then(res => {
       const playKey = res.getKey()
       this.props.push(`/admin/play/${playKey}`)
@@ -86,7 +87,7 @@ export default class AdminGame extends Component {
   handleEditGameName(event) {
     const { params: { key } } = this.props
     this.props.firebase.update(`${GAMES_PATH}/${key}`, {
-      name: event.target.value
+      name: event.target.value,
     })
   }
 
@@ -94,38 +95,38 @@ export default class AdminGame extends Component {
   handleAddTour({ name }) {
     const { params: { key } } = this.props
     this.props.firebase.push(TOURS_PATH, {
-      name
+      name,
     }).then(res => {
       const tourKey = res.getKey()
       this.props.firebase.update(`${GAMES_PATH}/${key}/tours/${tourKey}`, {
-        order: 0
+        order: 0,
       })
     })
   }
 
   handleEditTourName(event, key) {
     this.props.firebase.update(`${TOURS_PATH}/${key}`, {
-      name: event.target.value
+      name: event.target.value,
     })
   }
 
   // Categories
   handleAddCategory({ name }, tourKey) {
     this.props.firebase.push(CATEGORIES_PATH, {
-      name
+      name,
     }).then(res => {
       const categoryKey = res.getKey()
       const tourCategories = path([tourKey, 'categories'], this.props.tours)
       const order = tourCategories ? (Object.keys(tourCategories).length) : 0
       this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${categoryKey}`, {
-        order
+        order,
       })
     })
   }
 
   handleEditCategoryName(event, key) {
     this.props.firebase.update(`${CATEGORIES_PATH}/${key}`, {
-      name: event.target.value
+      name: event.target.value,
     })
   }
 
@@ -136,10 +137,10 @@ export default class AdminGame extends Component {
     const prevCategoryOrder = categoryOrder - 1
     const prevCategoryKey = Object.keys(categories).find(key => categories[key].order === prevCategoryOrder)
     this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${prevCategoryKey}`, {
-      order: categoryOrder
+      order: categoryOrder,
     })
     this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${categoryKey}`, {
-      order: prevCategoryOrder
+      order: prevCategoryOrder,
     })
   }
 
@@ -150,10 +151,10 @@ export default class AdminGame extends Component {
     const nextCategoryOrder = categoryOrder + 1
     const nextCategoryKey = Object.keys(categories).find(key => categories[key].order === nextCategoryOrder)
     this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${nextCategoryKey}`, {
-      order: categoryOrder
+      order: categoryOrder,
     })
     this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${categoryKey}`, {
-      order: nextCategoryOrder
+      order: nextCategoryOrder,
     })
   }
 
@@ -180,7 +181,7 @@ export default class AdminGame extends Component {
         .forEach(tourCategoryKey => {
           if (tourCategoryKey !== categoryKey) {
             this.props.firebase.update(`${TOURS_PATH}/${tourKey}/categories/${tourCategoryKey}`, {
-              order
+              order,
             })
             order++
           }
@@ -192,19 +193,19 @@ export default class AdminGame extends Component {
   handleAddQuestionClick(addQuestionCategoryKey) {
     this.setState({
       addQuestionCategoryKey,
-      editQuestionCategoryKey: null
+      editQuestionCategoryKey: null,
     })
   }
 
   handleAddQuestion(categoryKey, { answer, file = '', text, type, url = '' }) {
     this.props.firebase.push(QUESTION_PATH, {
-      answer, file, text, type, url
+      answer, file, text, type, url,
     }).then(res => {
       const questionKey = res.getKey()
       const categoryQuestions = path([categoryKey, 'questions'], this.props.categories)
       const price = categoryQuestions ? (Object.keys(categoryQuestions).length + 1) * 100 : 100
       this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
-        price
+        price,
       })
       this.handleAddQuestionCancel()
     })
@@ -223,10 +224,10 @@ export default class AdminGame extends Component {
     const prevQuestionPrice = questionPrice - 100
     const prevQuestionKey = Object.keys(questions).find(key => questions[key].price === prevQuestionPrice)
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${prevQuestionKey}`, {
-      price: questionPrice
+      price: questionPrice,
     })
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
-      price: prevQuestionPrice
+      price: prevQuestionPrice,
     })
     event.stopPropagation()
   }
@@ -238,10 +239,10 @@ export default class AdminGame extends Component {
     const nextQuestionPrice = questionPrice + 100
     const nextQuestionKey = Object.keys(questions).find(key => questions[key].price === nextQuestionPrice)
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${nextQuestionKey}`, {
-      price: questionPrice
+      price: questionPrice,
     })
     this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${questionKey}`, {
-      price: nextQuestionPrice
+      price: nextQuestionPrice,
     })
     event.stopPropagation()
   }
@@ -251,13 +252,13 @@ export default class AdminGame extends Component {
     this.setState({
       editQuestionKey,
       editQuestionCategoryKey,
-      addQuestionCategoryKey: null
+      addQuestionCategoryKey: null,
     })
   }
 
   handleEditQuestion(questionKey, { answer, file = '', text, type, url = '' }) {
     this.props.firebase.update(`${QUESTION_PATH}/${questionKey}`, {
-      answer, file, text, type, url
+      answer, file, text, type, url,
     }).then(() => {
       this.handleEditQuestionCancel()
     })
@@ -288,7 +289,7 @@ export default class AdminGame extends Component {
         .forEach(categoryQuestionKey => {
           if (categoryQuestionKey !== questionKey) {
             this.props.firebase.update(`${CATEGORIES_PATH}/${categoryKey}/questions/${categoryQuestionKey}`, {
-              price
+              price,
             })
             price = price + 100
           }
@@ -424,48 +425,51 @@ export default class AdminGame extends Component {
     const currentGamePlays = plays && Object.keys(plays).filter(playKey => plays[playKey] && plays[playKey].game === key)
 
     return (
-      <div className="container">
+      <div className={styles.container}>
         <Helmet title="Admin - Games"/>
-        <div className={styles.row}>
-          <Link to="/admin/games/">Все игры</Link>
-        </div>
-        <div className={styles.row}>
-          {currentGamePlays && currentGamePlays.map(playKey => (
-            <div key={playKey} className={styles.row}>
-              <Button bsStyle="primary" onClick={() => this.handleConinuePlayClick(playKey)}>
-                Продолжить игру от {moment(plays[playKey].startedAt).format('DD.MM HH:mm')}
-              </Button>
-            </div>
-          ))}
-        </div>
-        <div className={styles.row}>
-          <Button bsStyle="primary" onClick={this.handlePlayClick}>Начать новую игру</Button>
-        </div>
-        {game &&
-        <div className={styles.game}>
-          <div className={styles.row}>
-            <Row>
-              <Col xs={12} md={6}>
-                <Input type="text"
-                       bsSize="large"
-                       value={gameName}
-                       onChange={this.handleEditGameName}
-                       addonBefore={<span>Игра</span>}/>
-              </Col>
-            </Row>
-          </div>
-          <div>
-            {tours && gameTours && Object.keys(gameTours).map(tourKey => (
-              <div key={tourKey}>
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              <div className={styles.row}>
+                <Link to="/admin/games/">Все игры</Link>
+              </div>
+              <div className={styles.row}>
+                {currentGamePlays && currentGamePlays.map(playKey => (
+                  <div key={playKey} className={styles.row}>
+                    <Button bsStyle="primary" onClick={() => this.handleConinuePlayClick(playKey)}>
+                      Продолжить игру от {moment(plays[playKey].startedAt).format('DD.MM HH:mm')}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.row}>
+                <Button bsStyle="primary" onClick={this.handlePlayClick}>Начать новую игру</Button>
+              </div>
+              {game &&
+              <div className={styles.game}>
                 <div className={styles.row}>
                   <Row>
-                    <Col xs={8} md={6}>
+                    <Col xs={12} md={6}>
                       <Input type="text"
-                             value={tours[tourKey].name}
-                             onChange={event => this.handleEditTourName(event, tourKey)}
-                             addonBefore={<span>Тур</span>}/>
+                             bsSize="large"
+                             value={gameName}
+                             onChange={this.handleEditGameName}
+                             addonBefore={<span>Игра</span>}/>
                     </Col>
-                    {/* <Button bsSize="small"
+                  </Row>
+                </div>
+                <div>
+                  {tours && gameTours && Object.keys(gameTours).map(tourKey => (
+                    <div key={tourKey}>
+                      <div className={styles.row}>
+                        <Row>
+                          <Col xs={8} md={6}>
+                            <Input type="text"
+                                   value={tours[tourKey].name}
+                                   onChange={event => this.handleEditTourName(event, tourKey)}
+                                   addonBefore={<span>Тур</span>}/>
+                          </Col>
+                          {/* <Button bsSize="small"
                      onClick={() => this.handleTourUp(tourKey)}>
                      <i className="fa fa-arrow-up"/>
                      </Button>
@@ -479,28 +483,31 @@ export default class AdminGame extends Component {
                      onClick={() => this.handleTourDelete(tourKey)}>
                      <i className="fa fa-trash"/>
                      </Button> */}
-                  </Row>
+                        </Row>
+                      </div>
+                      {tours && tours[tourKey] &&
+                      <div className={styles.tour}>
+                        {this.renderCategories(tourKey)}
+                        <Row>
+                          <Col xs={12} md={6}>
+                            <AddCategoryForm form={`tour-${tourKey}`}
+                                             onSubmit={data => this.handleAddCategory(data, tourKey)}/>
+                          </Col>
+                        </Row>
+                      </div>}
+                      <hr/>
+                    </div>
+                  ))}
                 </div>
-                {tours && tours[tourKey] &&
-                <div className={styles.tour}>
-                  {this.renderCategories(tourKey)}
-                  <Row>
-                    <Col xs={12} md={6}>
-                      <AddCategoryForm form={`tour-${tourKey}`}
-                                       onSubmit={data => this.handleAddCategory(data, tourKey)}/>
-                    </Col>
-                  </Row>
-                </div>}
-                <hr/>
-              </div>
-            ))}
-          </div>
-          {/* <Row>
-           <Col xs={12} md={6}>
-           <AddTourForm onSubmit={this.handleAddTour}/>
-           </Col>
-           </Row >*/}
-        </div>}
+                {/* <Row>
+               <Col xs={12} md={6}>
+               <AddTourForm onSubmit={this.handleAddTour}/>
+               </Col>
+               </Row >*/}
+              </div>}
+            </Col>
+          </Row>
+        </Grid>
       </div>
     )
   }
