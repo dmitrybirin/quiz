@@ -6,8 +6,10 @@ import cx from 'classnames'
 import { path } from 'ramda'
 import autobind from 'autobind-decorator'
 import { Textfit } from 'react-textfit'
+import { ScoreBoard } from 'components'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
+
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
 const FILES_PATH = 'uploadedFiles'
@@ -34,8 +36,8 @@ const TOURS_PATH = 'tours'
     players: dataToJS(firebase, PLAYERS_PATH),
     questions: dataToJS(firebase, QUESTION_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
-    uploadedFiles: dataToJS(firebase, FILES_PATH)
-  })
+    uploadedFiles: dataToJS(firebase, FILES_PATH),
+  }),
 )
 @autobind
 export default class Game extends Component {
@@ -60,17 +62,17 @@ export default class Game extends Component {
       currentQuestion: null,
       questionCat: false,
       questionAuction: false,
-      preload: false
+      preload: false,
     }
   }
 
   handlePlayerReady() {
     this.setState({
-      preload: true
+      preload: true,
     }, () => {
       setTimeout(() => {
         this.setState({
-          preload: false
+          preload: false,
         })
       }, 10)
     })
@@ -86,7 +88,7 @@ export default class Game extends Component {
   render() {
     const style = require('./Game.scss')
     const {
-      questionCat, questionAuction, preload
+      questionCat, questionAuction, preload,
     } = this.state
     const { categories, games, params: { key }, plays, players, questions, tours, uploadedFiles } = this.props
     const play = path([key], plays)
@@ -106,50 +108,56 @@ export default class Game extends Component {
     // Player
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
-
-    console.log(question)
+    const playPlayers = path(['players'], play)
 
     return (
       <div className={style.container}>
         <Helmet title="Игра"/>
         {game &&
-        <div>
-          <h1 className={style.title}>{tours && tours[currentTourKey].name}</h1>
-          <table className={style.table}>
-            <tbody>
-            {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
-              <tr key={categoryKey}>
-                <td className={style.tableCategory}>
-                  <Textfit mode={categories[categoryKey].name.length > 16 ? 'multi' : 'single'}>
-                    {categories[categoryKey].name}
-                  </Textfit>
-                </td>
-                {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
-                  <td key={questionKey}
-                      className={cx({
-                        [style.tableCell]: true,
-                        [style.active]: questionKey === currentQuestionKey,
-                        [style.completed]: completedQuestions[questionKey]
-                      })}>
-                    {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
+        <div className={style.game}>
+          <div className={style.gameBoard}>
+            <h1 className={style.title}>{tours && tours[currentTourKey].name}</h1>
+            <table className={style.table}>
+              <tbody>
+              {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
+                <tr key={categoryKey}>
+                  <td className={style.tableCategory}>
+                    <Textfit mode={categories[categoryKey].name.length > 16 ? 'multi' : 'single'}>
+                      {categories[categoryKey].name}
+                    </Textfit>
                   </td>
-                ))}
-              </tr>
-            ))}
-            </tbody>
-          </table>
+                  {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (
+                    <td key={questionKey}
+                        className={cx({
+                          [style.tableCell]: true,
+                          [style.active]: questionKey === currentQuestionKey,
+                          [style.completed]: completedQuestions[questionKey],
+                        })}>
+                      {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Scores */}
+          <div className={style.gameScores}>
+            <ScoreBoard players={players} playPlayers={playPlayers}/>
+          </div>
         </div>}
         {currentQuestionKey &&
         <div>
           {questionType === 'audio' &&
           <div>
-            <ReactPlayer url={questionUrl || questionFile}
-                         height={0}
-                         playing={preload || isPlaying}
-                         vimeoConfig={{ preload: true }}
-                         youtubeConfig={{ preload: true }}
-                         onReady={this.handlePlayerReady}
-                         volume={1}/>
+            <ReactPlayer
+              url={questionUrl || questionFile}
+              height={0}
+              playing={preload || isPlaying}
+              vimeoConfig={{ preload: true }}
+              youtubeConfig={{ preload: true }}
+              onReady={this.handlePlayerReady}
+              volume={1}/>
           </div>}
           {questionType === 'image' &&
           <div className={cx({ [style.image]: true, [style.active]: isPlaying })}>
@@ -157,14 +165,15 @@ export default class Game extends Component {
           </div>}
           {questionType === 'video' &&
           <div className={cx({ [style.video]: true, [style.active]: isPlaying })}>
-            <ReactPlayer url={questionUrl}
-                         height={window.innerHeight - 100}
-                         width={window.innerWidth - 100}
-                         playing={preload || isPlaying}
-                         vimeoConfig={{ preload: true }}
-                         youtubeConfig={{ preload: true }}
-                         onReady={this.handlePlayerReady}
-                         volume={1}/>
+            <ReactPlayer
+              url={questionUrl}
+              height={window.innerHeight - 100}
+              width={window.innerWidth - 100}
+              playing={preload || isPlaying}
+              vimeoConfig={{ preload: true }}
+              youtubeConfig={{ preload: true }}
+              onReady={this.handlePlayerReady}
+              volume={1}/>
           </div>}
           {questionType === 'text' && isPlaying &&
           <div className={style.text}>
@@ -185,11 +194,12 @@ export default class Game extends Component {
         </div>}
         {player &&
         <div>
-          <ReactPlayer url="/game/horn.mp3"
-                       height={10}
-                       playing={!!player}
-                       fileConfig={{ attributes: { preload: 'auto' } }}
-                       volume={0.7}/>
+          <ReactPlayer
+            url="/game/horn.mp3"
+            height={10}
+            playing={!!player}
+            fileConfig={{ attributes: { preload: 'auto' } }}
+            volume={0.7}/>
         </div>}
       </div>
     )

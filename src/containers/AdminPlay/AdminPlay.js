@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import cx from 'classnames'
 import store from 'store'
 import { firebaseConnect, helpers } from 'react-redux-firebase'
+import { ScoreBoard } from 'components'
 
 const { dataToJS } = helpers
 import { path } from 'ramda'
@@ -284,18 +285,7 @@ export default class AdminPlay extends Component {
                 </tbody>
               </table>
               <h4>Игроки:</h4>
-              {players && playPlayers &&
-              <table className={style.playersTable}>
-                <tbody>
-                {Object.keys(playPlayers).filter(playerKey => players[playerKey])
-                  .sort((key1, key2) => playPlayers[key2].score - playPlayers[key1].score).map(playerKey => (
-                    <tr key={playerKey}>
-                      <td>{players[playerKey].name}</td>
-                      <td>{playPlayers[playerKey].score}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>}
+              <ScoreBoard players={players} playPlayers={playPlayers}/>
             </Col>
           </Row>
         </Grid>
