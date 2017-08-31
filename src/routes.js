@@ -8,6 +8,7 @@ import App from 'containers/App/App'
 import Game from 'containers/Game/Game'
 import Main from 'containers/Main/Main'
 import NotFound from 'containers/NotFound/NotFound'
+import Play from 'containers/Play/Play'
 import Player from 'containers/Player/Player'
 
 export default () => {
@@ -22,6 +23,7 @@ export default () => {
       <Route path="admin/games/:key" component={AdminGame}/>
       <Route path="admin/play/:key" component={AdminPlay}/>
       <Route path="games/:key" component={Game}/>
+      <Route path="play" component={Play}/>
       <Route path="play/:key" component={Player}/>
 
       { /* Catch all route */ }
