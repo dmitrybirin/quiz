@@ -4,6 +4,10 @@ import { change, initialize, reduxForm } from 'redux-form'
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 import autobind from 'autobind-decorator'
 import { is } from 'ramda'
+import fetch from 'isomorphic-fetch'
+import urlParser from 'js-video-url-parser'
+import config from 'config'
+
 const { dataToJS } = helpers
 import questionFormValidation from './questionFormValidation'
 import ReactPlayer from 'react-player'
@@ -18,15 +22,15 @@ const FILES_PATH = 'uploadedFiles'
 @reduxForm({
   form: 'question',
   fields: ['answer', 'file', 'url', 'text', 'type'],
-  validate: questionFormValidation
+  validate: questionFormValidation,
 })
 @firebaseConnect([
-  FILES_PATH
+  FILES_PATH,
 ])
 @connect(
   ({ firebase }) => ({
-    uploadedFiles: dataToJS(firebase, FILES_PATH)
-  }), { change, initialize }
+    uploadedFiles: dataToJS(firebase, FILES_PATH),
+  }), { change, initialize },
 )
 @autobind
 class QuestionForm extends Component {
@@ -42,7 +46,7 @@ class QuestionForm extends Component {
     type: PropTypes.string,
     question: PropTypes.object,
     resetForm: PropTypes.func,
-    uploadedFiles: PropTypes.object
+    uploadedFiles: PropTypes.object,
   }
 
   componentDidMount() {
@@ -64,6 +68,26 @@ class QuestionForm extends Component {
         url: '',
       })
     }
+  }
+
+  componentWillReceiveProps = async (nextProps) => {
+    const { value: url } = nextProps.fields.url
+    const { value: answer, onChange } = nextProps.fields.answer
+    // Get video title from youtube
+    if (!answer && url && url !== this.props.fields.url.value) {
+      const title = await this.getYoutubeTitle(url)
+      if (title) {
+        onChange(title)
+      }
+    }
+  }
+
+  getYoutubeTitle = async (link) => {
+    const { id } = urlParser.parse(link) || {}
+    const url = `https://www.googleapis.com/youtube/v3/videos?id=${id}&key=${config.youtubeApiKey}=items(snippet(title))&part=snippet`
+    const response = await fetch(url)
+    const data = await response.json()
+    return path(['items', 0, 'snippet', 'title'], data)
   }
 
   handleFilesDrop(files) {
@@ -88,7 +112,7 @@ class QuestionForm extends Component {
     const styles = require('./QuestionForm.scss')
     const {
       fields: { answer, file, text, type, url },
-      handleSubmit, uploadedFiles
+      handleSubmit, uploadedFiles,
     } = this.props
     const fileUrl = path([file.value, 'downloadURL'], uploadedFiles)
 

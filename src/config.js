@@ -46,4 +46,5 @@ module.exports = Object.assign({
   firebasePaths: {
     userProfile: '/users'
   },
+  youtubeApiKey: 'AIzaSyApSGrOV_iBZ-VDqQmKucVDNISjHuzT11k&fields'
 }, environment)
