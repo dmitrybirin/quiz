@@ -142,6 +142,7 @@ export default class AdminPlay extends Component {
       currentQuestionKey: null,
       isPlaying: false,
       player: null,
+      blockedPlayers: {},
     })
   }
 
@@ -186,6 +187,10 @@ export default class AdminPlay extends Component {
     })
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
       player: null,
+    })
+    // Block user for the current question
+    this.props.firebase.update(`${PLAYS_PATH}/${key}/blockedPlayers`, {
+      [player]: true,
     })
   }
 

@@ -62,6 +62,9 @@
   &:active {
     top: 10px;
   }
+  &:disabled {
+    background: #ccc;
+  }
 }
 
 .logout {

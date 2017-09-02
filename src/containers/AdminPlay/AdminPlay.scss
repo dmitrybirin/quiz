@@ -3,6 +3,7 @@
 .container {
   padding: 20px 0 0;
 }
+
 .game {
   margin: 0 0 20px;
   overflow: hidden;
@@ -59,6 +60,6 @@
     color: $brand-danger;
   }
   &.completed {
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(#000, 0.2);
   }
 }

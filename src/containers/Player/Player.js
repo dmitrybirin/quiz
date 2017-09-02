@@ -5,6 +5,7 @@ import autobind from 'autobind-decorator'
 import * as authActions from 'redux/modules/auth'
 import { path } from 'ramda'
 import { firebaseConnect, helpers } from 'react-redux-firebase'
+
 const { dataToJS } = helpers
 const PLAYS_PATH = 'plays'
 const PLAYERS_PATH = 'players'
@@ -17,7 +18,7 @@ const PLAYERS_PATH = 'players'
   ({ auth, firebase }) => ({
     plays: dataToJS(firebase, PLAYS_PATH),
     players: dataToJS(firebase, PLAYERS_PATH),
-    player: auth.player
+    player: auth.player,
   }), authActions)
 @autobind
 export default class Player extends Component {
@@ -28,7 +29,7 @@ export default class Player extends Component {
     params: PropTypes.object,
     plays: PropTypes.object,
     players: PropTypes.object,
-    player: PropTypes.object
+    player: PropTypes.object,
   }
 
   handleLoginSubmit(event) {
@@ -36,11 +37,11 @@ export default class Player extends Component {
     const name = this.refs.name.value
     if (name) {
       this.props.firebase.push(PLAYERS_PATH, {
-        name
+        name,
       }).then(res => {
         const playerKey = res.getKey()
         this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${playerKey}`, {
-          score: 0
+          score: 0,
         })
         this.props.login(playerKey)
       })
@@ -57,7 +58,7 @@ export default class Player extends Component {
     if (isPlaying && !currentPlayer) {
       this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
         isPlaying: false,
-        player: playerKey
+        player: playerKey,
       })
     }
   }
@@ -68,6 +69,7 @@ export default class Player extends Component {
     const playerKey = path(['key'], player)
     const name = path([playerKey, 'name'], players)
     const score = path([key, 'players', playerKey, 'score'], plays)
+    const isBlocked = path([key, 'blockedPlayers', playerKey], plays)
 
     return (
       <div className={style.container}>
@@ -76,10 +78,11 @@ export default class Player extends Component {
         <div>
           <form onSubmit={this.handleLoginSubmit}>
             <div>
-              <input ref="name"
-                     className={style.loginInput}
-                     type="text"
-                     placeholder="Как тебя зовут?"/>
+              <input
+                ref="name"
+                className={style.loginInput}
+                type="text"
+                placeholder="Как тебя зовут?"/>
             </div>
             <div>
               <button type="submit" className={style.loginSubmit}>Играть!</button>
@@ -91,7 +94,11 @@ export default class Player extends Component {
           <div className={style.name}>{name}</div>
           <div className={style.score}>{Number.isInteger(score) && score.toLocaleString('ru-RU')}</div>
           <div className={style.buzz}>
-            <button className={style.buzzButton} onTouchStart={this.handleBuzz} onMouseDown={this.handleBuzz}/>
+            <button
+              className={style.buzzButton}
+              disabled={isBlocked}
+              onTouchStart={this.handleBuzz}
+              onMouseDown={this.handleBuzz}/>
           </div>
           <div className={style.logout} onClick={this.props.logout}>
             Сменить игрока
