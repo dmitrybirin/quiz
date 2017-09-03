@@ -201,6 +201,13 @@ export default class AdminPlay extends Component {
     return Object.keys(questions).sort((key1, key2) => questions[key1].price - questions[key2].price)
   }
 
+  handleScoreChange(player, score) {
+    const { params: { key } } = this.props
+    this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
+      score
+    })
+  }
+
   render() {
     const style = require('./AdminPlay.scss')
     const { categories, games, params: { key }, plays, players, questions, tours } = this.props
@@ -290,7 +297,10 @@ export default class AdminPlay extends Component {
                 </tbody>
               </table>
               <h4>Игроки:</h4>
-              <ScoreBoard players={players} playPlayers={playPlayers}/>
+              <ScoreBoard
+                onScoreChange={this.handleScoreChange}
+                players={players}
+                playPlayers={playPlayers}/>
             </Col>
           </Row>
         </Grid>

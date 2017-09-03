@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import style from './ScoreBoard.scss'
 
-function ScoreBoard({ players, playPlayers }) {
+function ScoreBoard({ onScoreChange, players, playPlayers }) {
   const formattedNumber = value => Number.isInteger(value) && value.toLocaleString('ru-RU')
   return (
     <div>
@@ -12,9 +12,17 @@ function ScoreBoard({ players, playPlayers }) {
           .sort((key1, key2) => playPlayers[key2].score - playPlayers[key1].score).map(playerKey => (
             <tr key={playerKey}>
               <td>{players[playerKey].name}</td>
+              {!onScoreChange &&
               <td>
                 {formattedNumber(playPlayers[playerKey].score)}
-              </td>
+              </td>}
+              {onScoreChange &&
+              <td>
+                <input
+                  type="text"
+                  value={playPlayers[playerKey].score}
+                  onChange={event => onScoreChange(playerKey, parseInt(event.target.value, 10))}/>
+              </td>}
             </tr>
           ))}
         </tbody>
