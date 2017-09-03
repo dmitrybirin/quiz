@@ -201,10 +201,19 @@ export default class AdminPlay extends Component {
     return Object.keys(questions).sort((key1, key2) => questions[key1].price - questions[key2].price)
   }
 
+  handleRemovePlayer(player) {
+    const confirm = window.confirm('Точно удаляем?')
+    if (!confirm) {
+      return
+    }
+    const { params: { key } } = this.props
+    this.props.firebase.remove(`${PLAYS_PATH}/${key}/players/${player}`)
+  }
+
   handleScoreChange(player, score) {
     const { params: { key } } = this.props
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
-      score
+      score,
     })
   }
 
@@ -298,6 +307,7 @@ export default class AdminPlay extends Component {
               </table>
               <h4>Игроки:</h4>
               <ScoreBoard
+                onRemovePlayer={this.handleRemovePlayer}
                 onScoreChange={this.handleScoreChange}
                 players={players}
                 playPlayers={playPlayers}/>
