@@ -107,7 +107,9 @@ export default class AdminPlay extends Component {
   handleNewGameStart() {
     const { params: { key } } = this.props
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      blockedPlayers: null,
       completedQuestions: null,
+      player: null,
     })
   }
 
@@ -139,11 +141,17 @@ export default class AdminPlay extends Component {
       [currentQuestionKey]: true,
     })
     this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
-      currentQuestionKey: null,
       isPlaying: false,
+      isAnswerVisible: true,
       player: null,
       blockedPlayers: {},
     })
+    setTimeout(() => {
+      this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+        currentQuestionKey: null,
+        isAnswerVisible: false,
+      })
+    }, 3000)
   }
 
   handleCancelQuestion() {
@@ -164,7 +172,7 @@ export default class AdminPlay extends Component {
     const currentCategoryKey = path(['currentCategoryKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
     const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories) * game.tours[currentTourKey].multiplier
-    const score = path(['players', player, 'score'], play)
+    const score = path(['players', player, 'score'], play) || 0
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
       score: score + price,
     })
@@ -181,7 +189,7 @@ export default class AdminPlay extends Component {
     const currentCategoryKey = path(['currentCategoryKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
     const price = path([currentCategoryKey, 'questions', currentQuestionKey, 'price'], categories) * game.tours[currentTourKey].multiplier
-    const score = path(['players', player, 'score'], play)
+    const score = path(['players', player, 'score'], play) || 0
     this.props.firebase.update(`${PLAYS_PATH}/${key}/players/${player}`, {
       score: score - price,
     })

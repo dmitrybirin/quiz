@@ -97,6 +97,7 @@ export default class Game extends Component {
     const currentTourKey = path(['currentTourKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
     const completedQuestions = path(['completedQuestions'], play) || []
+    const isAnswerVisible = path(['isAnswerVisible'], play)
     const isPlaying = path(['isPlaying'], play)
     // Question
     const question = path([currentQuestionKey], questions)
@@ -104,7 +105,7 @@ export default class Game extends Component {
     const questionUrl = path(['url'], question)
     const questionText = path(['text'], question)
     const questionFile = path([path(['file'], question), 'downloadURL'], uploadedFiles)
-    // const questionAnswer = path(['answer'], question)
+    const answer = path(['answer'], question)
     // Player
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
@@ -179,6 +180,10 @@ export default class Game extends Component {
           <div className={style.text}>
             <div>{questionText}</div>
           </div>}
+        </div>}
+        {isAnswerVisible &&
+        <div className={style.text}>
+          <Textfit mode="multi">{answer}</Textfit>
         </div>}
         {currentQuestionKey && player &&
         <div className={style.text}>
