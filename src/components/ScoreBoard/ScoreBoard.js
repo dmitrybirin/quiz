@@ -20,6 +20,7 @@ function ScoreBoard({ onScoreChange, onRemovePlayer, players, playPlayers }) {
               <td>
                 <input
                   type="text"
+                  style={{width: 150}}
                   value={playPlayers[playerKey].score}
                   onChange={event => onScoreChange(playerKey, parseInt(event.target.value, 10))}/>
               </td>}

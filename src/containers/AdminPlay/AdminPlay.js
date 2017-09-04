@@ -202,6 +202,13 @@ export default class AdminPlay extends Component {
     })
   }
 
+  handleCancelAnswer() {
+    const { params: { key } } = this.props
+    this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
+      player: null,
+    })
+  }
+
   sortQuestions(questions) {
     if (!questions) {
       return []
@@ -282,9 +289,9 @@ export default class AdminPlay extends Component {
                 <div className={style.controls}>
                   <Button bsStyle="primary" bsSize="large" onClick={this.handlePlay}>Играть</Button>
                   {' '}
-                  <Button bsStyle="danger" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
-                  {' '}
                   <Button bsStyle="success" bsSize="large" onClick={this.handleCompleteQuestion}>Вопрос сыгран</Button>
+                  {' '}
+                  <Button bsStyle="warning" bsSize="large" onClick={this.handleCancelQuestion}>Отмена</Button>
                 </div>
               </div>}
               {playerName &&
@@ -292,7 +299,10 @@ export default class AdminPlay extends Component {
                 Отвечает <strong>{playerName}</strong>
                 <div>
                   <Button bsStyle="success" bsSize="large" onClick={this.handleRightAnswer}>Правильно</Button>
+                  {' '}
                   <Button bsStyle="danger" bsSize="large" onClick={this.handleWrongAnswer}>Неправильно</Button>
+                  {' '}
+                  <Button bsStyle="warning" bsSize="large" onClick={this.handleCancelAnswer}>Отмена</Button>
                 </div>
               </div>}
 
@@ -316,7 +326,6 @@ export default class AdminPlay extends Component {
                 ))}
                 </tbody>
               </table>
-              <h4>Игроки:</h4>
               <ScoreBoard
                 onRemovePlayer={this.handleRemovePlayer}
                 onScoreChange={this.handleScoreChange}

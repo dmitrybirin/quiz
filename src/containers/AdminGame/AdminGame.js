@@ -340,9 +340,10 @@ export default class AdminGame extends Component {
               {this.renderQuestions(categoryKey)}
               {categoryKey === editQuestionCategoryKey &&
               <div className={styles.addQuestionFrom}>
-                <QuestionForm question={questions[editQuestionKey]}
-                              onSubmit={data => this.handleEditQuestion(editQuestionKey, data)}
-                              onCancel={this.handleEditQuestionCancel}/>
+                <QuestionForm
+                  question={questions[editQuestionKey]}
+                  onSubmit={data => this.handleEditQuestion(editQuestionKey, data)}
+                  onCancel={this.handleEditQuestionCancel}/>
               </div>}
               <Button bsStyle="primary"
                       onClick={() => this.handleAddQuestionClick(categoryKey)}>
@@ -350,12 +351,13 @@ export default class AdminGame extends Component {
               </Button>
               {categoryKey === addQuestionCategoryKey &&
               <div className={styles.addQuestionFrom}>
-                <QuestionForm type={questionType}
-                              onTypeChange={type => {
-                                this.setState({ questionType: type })
-                              }}
-                              onSubmit={data => this.handleAddQuestion(categoryKey, data)}
-                              onCancel={this.handleAddQuestionCancel}/>
+                <QuestionForm
+                  type={questionType}
+                  onTypeChange={type => {
+                    this.setState({ questionType: type })
+                  }}
+                  onSubmit={data => this.handleAddQuestion(categoryKey, data)}
+                  onCancel={this.handleAddQuestionCancel}/>
               </div>}
             </div>
           </div>
@@ -421,6 +423,7 @@ export default class AdminGame extends Component {
     const gameName = path(['name'], game)
     const gameTours = path(['tours'], game)
     const currentGamePlays = plays && Object.keys(plays).filter(playKey => plays[playKey] && plays[playKey].game === key)
+      .sort((playKey1, playKey2) => plays[playKey1].startedAt - plays[playKey2].startedAt)
 
     return (
       <div className={styles.container}>

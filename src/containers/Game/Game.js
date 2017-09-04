@@ -211,7 +211,7 @@ export default class Game extends Component {
             height={10}
             playing={!!player}
             fileConfig={{ attributes: { preload: 'auto' } }}
-            volume={0.6}/>
+            volume={0.5}/>
         </div>}
       </div>
     )
