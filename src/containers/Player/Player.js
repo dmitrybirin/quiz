@@ -54,8 +54,9 @@ export default class Player extends Component {
     const { player } = this.props
     const playerKey = path(['key'], player)
     const isPlaying = path([key, 'isPlaying'], plays)
-    // const currentPlayer = path([key, 'player'], plays)
-    if (isPlaying) {
+    const currentPlayer = path([key, 'player'], plays)
+    const isBlocked = path([key, 'blockedPlayers', playerKey], plays)
+    if (!isBlocked && !currentPlayer && isPlaying) {
       this.props.firebase.update(`${PLAYS_PATH}/${key}`, {
         isPlaying: false,
         player: playerKey,

@@ -129,6 +129,7 @@ export default class Game extends Component {
                   <td className={style.tableCategory}>
                     <Textfit
                       mode={categories[categoryKey].name.length > 16 ? 'multi' : 'single'}
+                      min={30}
                       max={60}>
                       {categories[categoryKey].name}
                     </Textfit>
@@ -189,11 +190,11 @@ export default class Game extends Component {
         </div>}
         {isAnswerVisible &&
         <div className={style.text}>
-          <Textfit mode="multi" max={200}>{answer}</Textfit>
+          <Textfit mode="multi" min={100} max={200}>{answer}</Textfit>
         </div>}
         {currentQuestionKey && player &&
         <div className={style.text}>
-          <Textfit mode="single" max={200}>{playerName}</Textfit>
+          <Textfit mode="multi" min={100} max={200}>{playerName}</Textfit>
         </div>}
         {questionCat &&
         <div className={cx({ [style.cat]: true, [style.active]: questionCat })}>
