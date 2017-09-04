@@ -235,6 +235,9 @@ export default class AdminPlay extends Component {
     const currentTourKey = path(['currentTourKey'], play)
     const currentQuestionKey = path(['currentQuestionKey'], play)
     const completedQuestions = path(['completedQuestions'], play) || []
+    // Categories
+    const tourCategories = path([currentTourKey, 'categories'], tours) || []
+    const sortedTourCategories = Object.keys(tourCategories).sort((key1, key2) => tourCategories[key1].order - tourCategories[key2].order)
     // Player
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
@@ -295,7 +298,7 @@ export default class AdminPlay extends Component {
 
               <table className={style.table}>
                 <tbody>
-                {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
+                {sortedTourCategories.map(categoryKey => (
                   <tr key={categoryKey}>
                     <td className={style.tableCategory}>{categories[categoryKey].name}</td>
                     {this.sortQuestions(categories[categoryKey].questions).map(questionKey => (

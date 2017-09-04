@@ -99,6 +99,9 @@ export default class Game extends Component {
     const completedQuestions = path(['completedQuestions'], play) || []
     const isAnswerVisible = path(['isAnswerVisible'], play)
     const isPlaying = path(['isPlaying'], play)
+    // Categories
+    const tourCategories = path([currentTourKey, 'categories'], tours) || []
+    const sortedTourCategories = Object.keys(tourCategories).sort((key1, key2) => tourCategories[key1].order - tourCategories[key2].order)
     // Question
     const question = path([currentQuestionKey], questions)
     const questionType = path(['type'], question)
@@ -121,7 +124,7 @@ export default class Game extends Component {
             <h1 className={style.title}>{tours && tours[currentTourKey].name}</h1>
             <table className={style.table}>
               <tbody>
-              {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
+              {sortedTourCategories.map(categoryKey => (
                 <tr key={categoryKey}>
                   <td className={style.tableCategory}>
                     <Textfit
@@ -207,7 +210,7 @@ export default class Game extends Component {
             height={10}
             playing={!!player}
             fileConfig={{ attributes: { preload: 'auto' } }}
-            volume={0.7}/>
+            volume={0.6}/>
         </div>}
       </div>
     )
