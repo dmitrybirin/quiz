@@ -186,11 +186,11 @@ export default class Game extends Component {
         </div>}
         {isAnswerVisible &&
         <div className={style.text}>
-          <Textfit mode="multi">{answer}</Textfit>
+          <Textfit mode="multi" max={200}>{answer}</Textfit>
         </div>}
         {currentQuestionKey && player &&
         <div className={style.text}>
-          <Textfit mode="single">{playerName}</Textfit>
+          <Textfit mode="single" max={200}>{playerName}</Textfit>
         </div>}
         {questionCat &&
         <div className={cx({ [style.cat]: true, [style.active]: questionCat })}>
