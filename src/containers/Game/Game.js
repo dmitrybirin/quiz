@@ -107,12 +107,13 @@ export default class Game extends Component {
     const questionFile = path([path(['file'], question), 'downloadURL'], uploadedFiles)
     const answer = path(['answer'], question)
     // Player
+    const multiplier = path(['tours', currentTourKey, 'multiplier'], game)
     const player = path(['player'], play)
     const playerName = path([player, 'name'], players)
     const playPlayers = path(['players'], play)
 
     return (
-      <div className={style.container}>
+      <div className={cx(style.container, style[`tour-${multiplier}`])}>
         <Helmet title="Игра"/>
         {game &&
         <div className={style.game}>
@@ -123,7 +124,9 @@ export default class Game extends Component {
               {categories && tours && tours[currentTourKey].categories && Object.keys(tours[currentTourKey].categories).map(categoryKey => (
                 <tr key={categoryKey}>
                   <td className={style.tableCategory}>
-                    <Textfit mode={categories[categoryKey].name.length > 16 ? 'multi' : 'single'}>
+                    <Textfit
+                      mode={categories[categoryKey].name.length > 16 ? 'multi' : 'single'}
+                      max={60}>
                       {categories[categoryKey].name}
                     </Textfit>
                   </td>
@@ -134,7 +137,7 @@ export default class Game extends Component {
                           [style.active]: questionKey === currentQuestionKey,
                           [style.completed]: completedQuestions[questionKey],
                         })}>
-                      {categories[categoryKey].questions[questionKey].price * game.tours[currentTourKey].multiplier}
+                      {categories[categoryKey].questions[questionKey].price * multiplier}
                     </td>
                   ))}
                 </tr>

@@ -3,12 +3,17 @@
 $border: 10px solid #fff;
 
 .container {
-  background: rgb(255, 174, 39);
-  background: $grad-red;
+  background: $grad-4;
   background-attachment: fixed;
   color: #fff;
   padding: 20px 20px 0;
   height: 100vh;
+  &.tour-2 {
+    background: $grad-3;
+  }
+  &.tour-3 {
+    background: $grad-1;
+  }
 }
 
 .title {
@@ -22,12 +27,12 @@ $border: 10px solid #fff;
 }
 
 .gameBoard {
-
+  width: 75%;
 }
 
 .gameScores {
   padding: 50px 30px 0 50px;
-  max-width: 30%;
+  width: 25%;
 }
 
 .modal {
@@ -186,10 +191,11 @@ $border: 10px solid #fff;
 }
 
 .text {
-  background: rgba(0, 0, 0, 0.9);
+  background: inherit;
   color: #fff;
   height: 100%;
   font-size: 8vh;
+  font-weight: 700;
   line-height: 11vh;
   left: 0;
   padding: 0 50px;
