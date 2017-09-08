@@ -9,12 +9,15 @@ import moment from 'moment'
 import { Button, Col, Grid, Input, Row } from 'react-bootstrap'
 import { Link } from 'react-router'
 import { AddCategoryForm, /* AddTourForm, */ QuestionForm } from 'components'
+import FinalTour from './components/FinalTour/FinalTour'
 // Firebase
 import { firebaseConnect, helpers } from 'react-redux-firebase'
 import styles from './AdminGame.scss'
 
 const { dataToJS } = helpers
 const CATEGORIES_PATH = 'categories'
+const FINAL_TOURS_PATH = 'finalTours'
+const FINAL_TOUR_QUESTIONS_PATH = 'finalTourQuestions'
 const GAMES_PATH = 'games'
 const PLAYS_PATH = 'plays'
 const PLAYERS_PATH = 'players'
@@ -23,6 +26,8 @@ const TOURS_PATH = 'tours'
 
 @firebaseConnect(({ params }) => ([
   CATEGORIES_PATH,
+  FINAL_TOURS_PATH,
+  FINAL_TOUR_QUESTIONS_PATH,
   `${GAMES_PATH}/${params.key}`,
   PLAYS_PATH,
   PLAYERS_PATH,
@@ -32,6 +37,8 @@ const TOURS_PATH = 'tours'
 @connect(
   ({ firebase }) => ({
     categories: dataToJS(firebase, CATEGORIES_PATH),
+    finalTours: dataToJS(firebase, FINAL_TOURS_PATH),
+    finalTourQuestions: dataToJS(firebase, FINAL_TOUR_QUESTIONS_PATH),
     games: dataToJS(firebase, GAMES_PATH),
     plays: dataToJS(firebase, PLAYS_PATH),
     players: dataToJS(firebase, PLAYERS_PATH),
@@ -44,6 +51,8 @@ export default class AdminGame extends Component {
 
   static propTypes = {
     categories: PropTypes.object,
+    finalTours: PropTypes.object,
+    finalTourQuestions: PropTypes.object,
     firebase: PropTypes.object,
     games: PropTypes.object,
     params: PropTypes.object,
@@ -418,12 +427,14 @@ export default class AdminGame extends Component {
   }
 
   render() {
-    const { games, params: { key }, plays, tours } = this.props
+    const { finalTours, finalTourQuestions, firebase, games, params: { key }, plays, tours } = this.props
     const game = path([key], games)
     const gameName = path(['name'], game)
     const gameTours = path(['tours'], game)
     const currentGamePlays = plays && Object.keys(plays).filter(playKey => plays[playKey] && plays[playKey].game === key)
       .sort((playKey1, playKey2) => plays[playKey1].startedAt - plays[playKey2].startedAt)
+
+    const finalTourKey = path(['finalTour'], game)
 
     return (
       <div className={styles.container}>
@@ -451,11 +462,12 @@ export default class AdminGame extends Component {
                 <div className={styles.row}>
                   <Row>
                     <Col xs={12} md={6}>
-                      <Input type="text"
-                             bsSize="large"
-                             value={gameName}
-                             onChange={this.handleEditGameName}
-                             addonBefore={<span>Игра</span>}/>
+                      <Input
+                        type="text"
+                        bsSize="large"
+                        value={gameName}
+                        onChange={this.handleEditGameName}
+                        addonBefore={<span>Игра</span>}/>
                     </Col>
                   </Row>
                 </div>
@@ -465,25 +477,12 @@ export default class AdminGame extends Component {
                       <div className={styles.row}>
                         <Row>
                           <Col xs={8} md={6}>
-                            <Input type="text"
-                                   value={tours[tourKey].name}
-                                   onChange={event => this.handleEditTourName(event, tourKey)}
-                                   addonBefore={<span>Тур</span>}/>
+                            <Input
+                              type="text"
+                              value={tours[tourKey].name}
+                              onChange={event => this.handleEditTourName(event, tourKey)}
+                              addonBefore={<span>Тур</span>}/>
                           </Col>
-                          {/* <Button bsSize="small"
-                     onClick={() => this.handleTourUp(tourKey)}>
-                     <i className="fa fa-arrow-up"/>
-                     </Button>
-                     {' '}
-                     <Button bsSize="small"
-                     onClick={() => this.handleTourDown(tourKey)}>
-                     <i className="fa fa-arrow-down"/>
-                     </Button>
-                     {' '}
-                     <Button bsSize="small"
-                     onClick={() => this.handleTourDelete(tourKey)}>
-                     <i className="fa fa-trash"/>
-                     </Button> */}
                         </Row>
                       </div>
                       {tours && tours[tourKey] &&
@@ -491,8 +490,9 @@ export default class AdminGame extends Component {
                         {this.renderCategories(tourKey)}
                         <Row>
                           <Col xs={12} md={6}>
-                            <AddCategoryForm form={`tour-${tourKey}`}
-                                             onSubmit={data => this.handleAddCategory(data, tourKey)}/>
+                            <AddCategoryForm
+                              form={`tour-${tourKey}`}
+                              onSubmit={data => this.handleAddCategory(data, tourKey)}/>
                           </Col>
                         </Row>
                       </div>}
@@ -500,11 +500,11 @@ export default class AdminGame extends Component {
                     </div>
                   ))}
                 </div>
-                {/* <Row>
-               <Col xs={12} md={6}>
-               <AddTourForm onSubmit={this.handleAddTour}/>
-               </Col>
-               </Row >*/}
+                <FinalTour
+                  firebase={firebase}
+                  finalTours={finalTours}
+                  finalTourKey={finalTourKey}
+                  finalTourQuestions={finalTourQuestions}/>
               </div>}
             </Col>
           </Row>

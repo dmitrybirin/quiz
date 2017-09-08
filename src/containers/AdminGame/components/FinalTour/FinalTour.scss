@@ -1,0 +1,22 @@
+.answers {
+  display: flex;
+  margin: 0 0 20px;
+}
+
+.answersItem {
+  margin: 0 20px 0 0;
+  width: 30%;
+}
+
+.questions {
+  display: flex;
+  margin: 0 0 20px;
+}
+
+.questionsItem {
+  margin: 0 20px 0 0;
+  width: 20%;
+  &:last-child {
+    margin: 0;
+  }
+}

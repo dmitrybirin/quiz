@@ -14,8 +14,10 @@ const { dataToJS } = helpers
 
 const GAMES_PATH = 'games'
 const TOURS_PATH = 'tours'
+const FINAL_TOURS_PATH = 'finalTours'
 
 @firebaseConnect([
+  FINAL_TOURS_PATH,
   GAMES_PATH,
   TOURS_PATH,
 ])
@@ -24,7 +26,7 @@ const TOURS_PATH = 'tours'
     auth: pathToJS(firebase, 'auth'),
     games: dataToJS(firebase, GAMES_PATH),
     tours: dataToJS(firebase, TOURS_PATH),
-  }), { push }
+  }), { push },
 )
 @autobind
 export default class AdminGames extends Component {
@@ -40,13 +42,13 @@ export default class AdminGames extends Component {
   constructor() {
     super()
     this.state = {
-      name: ''
+      name: '',
     }
   }
 
   handleGameNameChange(event) {
     this.setState({
-      name: event.target.value
+      name: event.target.value,
     })
   }
 
@@ -59,20 +61,27 @@ export default class AdminGames extends Component {
 
     this.props.firebase.push(GAMES_PATH, {
       name,
-      owner: uid
+      owner: uid,
     }).then(gameRes => {
       const gameKey = gameRes.getKey()
+      // Add tours
       tours.forEach(tour => {
         this.props.firebase.push(TOURS_PATH, {
-          name: `Тур ${tour}`
+          name: `Тур ${tour}`,
         }).then(tourRes => {
           const tourKey = tourRes.getKey()
           this.props.firebase.update(`${GAMES_PATH}/${gameKey}/tours`, {
             [tourKey]: {
-              multiplier: tour
-            }
+              multiplier: tour,
+            },
           })
         })
+      })
+      this.props.firebase.push(FINAL_TOURS_PATH, {
+        createdAt: new Date().getTime(),
+      }).then(finalTourRes => {
+        const finalTourKey = finalTourRes.getKey()
+        this.props.firebase.update(`${GAMES_PATH}/${gameKey}`, { finalTour: finalTourKey })
       })
       this.props.push(`/admin/games/${gameKey}`)
     })
