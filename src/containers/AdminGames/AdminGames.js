@@ -105,7 +105,8 @@ export default class AdminGames extends Component {
                          onChange={this.handleGameNameChange}
                          buttonAfter={<Button type="submit" bsStyle="primary">
                            <i className="fa fa-plus"/> Добавить игру
-                         </Button>}/>
+                         </Button>}
+                         required/>
                 </form>
               </Col>
             </Row>
